@@ -202,3 +202,28 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 	visibility: hidden;
   }
 }
+
+.CodeMirror .CodeMirror-code .cm-header-1{
+	font-size:200%;
+	line-height:200%;
+}
+
+.CodeMirror .CodeMirror-code .cm-header-2{
+	font-size:160%;
+	line-height:160%;
+}
+
+.CodeMirror .CodeMirror-code .cm-header-3{
+	font-size:125%;
+	line-height:125%;
+}
+
+.CodeMirror .CodeMirror-code .cm-header-4{
+	font-size:110%;
+	line-height:110%;
+}
+
+.CodeMirror .CodeMirror-code .cm-comment{
+	background:#eee;
+	border-radius:2px;
+}
