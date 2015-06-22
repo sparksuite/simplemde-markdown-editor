@@ -55,3 +55,17 @@ new Markdownify({
   tools: false,
 });
 ```
+
+### What's changed?
+As mentioned earlier, Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor). So you might be wondering, what's changed? Quite a bit actually. Here's some notable changes:
+
+- Upgraded from CodeMirror 3 to CodeMirror 5
+- Many changes to the style, appearance, and userfriendliness
+- Interface more closely resembles Bootstrap
+- Now mobile friendly
+- The text editor now automatically grows as you type more
+- Fixed a large amount of bugs
+- Switched to Font Awesome icons
+- Improved preview rendering in many ways
+- Improved as-you-type appearance of headers and code blocks
+- Simplified the toolbar
