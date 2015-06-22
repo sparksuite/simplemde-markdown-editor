@@ -418,16 +418,16 @@ var toolbar = [{
 ];
 
 /**
- * Interface of Markdownify.
+ * Interface of SimpleMDE.
  */
-function Markdownify(options) {
+function SimpleMDE(options) {
 	options = options || {};
 
 	if (options.element) {
 		this.element = options.element;
 	}
 
-	options.toolbar = options.toolbar || Markdownify.toolbar;
+	options.toolbar = options.toolbar || SimpleMDE.toolbar;
 	// you can customize toolbar with object
 	// [{name: 'bold', shortcut: 'Ctrl-B', className: 'icon-bold'}]
 
@@ -446,12 +446,12 @@ function Markdownify(options) {
 /**
  * Default toolbar elements.
  */
-Markdownify.toolbar = toolbar;
+SimpleMDE.toolbar = toolbar;
 
 /**
  * Default markdown render.
  */
-Markdownify.markdown = function(text) {
+SimpleMDE.markdown = function(text) {
 	if (window.marked) {
 		// use marked as markdown parser
 		return marked(text);
@@ -461,7 +461,7 @@ Markdownify.markdown = function(text) {
 /**
  * Render editor to the given element.
  */
-Markdownify.prototype.render = function(el) {
+SimpleMDE.prototype.render = function(el) {
 	if (!el) {
 		el = this.element || document.getElementsByTagName('textarea')[0];
 	}
@@ -510,7 +510,7 @@ Markdownify.prototype.render = function(el) {
 	this._rendered = this.element;
 };
 
-Markdownify.prototype.createToolbar = function(items) {
+SimpleMDE.prototype.createToolbar = function(items) {
 	items = items || this.options.toolbar;
 
 	if (!items || items.length === 0) {
@@ -573,7 +573,7 @@ Markdownify.prototype.createToolbar = function(items) {
 	return bar;
 };
 
-Markdownify.prototype.createStatusbar = function(status) {
+SimpleMDE.prototype.createStatusbar = function(status) {
 	status = status || this.options.status;
 
 	if (!status || status.length === 0) return;
@@ -614,7 +614,7 @@ Markdownify.prototype.createStatusbar = function(status) {
 /**
  * Get or set the text content.
  */
-Markdownify.prototype.value = function(val) {
+SimpleMDE.prototype.value = function(val) {
 	if (val) {
 		this.codemirror.getDoc().setValue(val);
 		return this;
@@ -627,51 +627,51 @@ Markdownify.prototype.value = function(val) {
 /**
  * Bind static methods for exports.
  */
-Markdownify.toggleBold = toggleBold;
-Markdownify.toggleItalic = toggleItalic;
-Markdownify.toggleBlockquote = toggleBlockquote;
-Markdownify.toggleUnOrderedList = toggleUnOrderedList;
-Markdownify.toggleOrderedList = toggleOrderedList;
-Markdownify.drawLink = drawLink;
-Markdownify.drawImage = drawImage;
-Markdownify.undo = undo;
-Markdownify.redo = redo;
-Markdownify.togglePreview = togglePreview;
-Markdownify.toggleFullScreen = toggleFullScreen;
+SimpleMDE.toggleBold = toggleBold;
+SimpleMDE.toggleItalic = toggleItalic;
+SimpleMDE.toggleBlockquote = toggleBlockquote;
+SimpleMDE.toggleUnOrderedList = toggleUnOrderedList;
+SimpleMDE.toggleOrderedList = toggleOrderedList;
+SimpleMDE.drawLink = drawLink;
+SimpleMDE.drawImage = drawImage;
+SimpleMDE.undo = undo;
+SimpleMDE.redo = redo;
+SimpleMDE.togglePreview = togglePreview;
+SimpleMDE.toggleFullScreen = toggleFullScreen;
 
 /**
  * Bind instance methods for exports.
  */
-Markdownify.prototype.toggleBold = function() {
+SimpleMDE.prototype.toggleBold = function() {
 	toggleBold(this);
 };
-Markdownify.prototype.toggleItalic = function() {
+SimpleMDE.prototype.toggleItalic = function() {
 	toggleItalic(this);
 };
-Markdownify.prototype.toggleBlockquote = function() {
+SimpleMDE.prototype.toggleBlockquote = function() {
 	toggleBlockquote(this);
 };
-Markdownify.prototype.toggleUnOrderedList = function() {
+SimpleMDE.prototype.toggleUnOrderedList = function() {
 	toggleUnOrderedList(this);
 };
-Markdownify.prototype.toggleOrderedList = function() {
+SimpleMDE.prototype.toggleOrderedList = function() {
 	toggleOrderedList(this);
 };
-Markdownify.prototype.drawLink = function() {
+SimpleMDE.prototype.drawLink = function() {
 	drawLink(this);
 };
-Markdownify.prototype.drawImage = function() {
+SimpleMDE.prototype.drawImage = function() {
 	drawImage(this);
 };
-Markdownify.prototype.undo = function() {
+SimpleMDE.prototype.undo = function() {
 	undo(this);
 };
-Markdownify.prototype.redo = function() {
+SimpleMDE.prototype.redo = function() {
 	redo(this);
 };
-Markdownify.prototype.togglePreview = function() {
+SimpleMDE.prototype.togglePreview = function() {
 	togglePreview(this);
 };
-Markdownify.prototype.toggleFullScreen = function() {
+SimpleMDE.prototype.toggleFullScreen = function() {
 	toggleFullScreen(this);
 };
