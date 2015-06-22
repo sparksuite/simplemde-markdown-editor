@@ -3,10 +3,10 @@ A drop-in JavaScript textarea replacement for writing beautiful and understandab
 
 ![Preview](http://i.imgur.com/l5antiW.png)
 
-### How it works
+## How it works
 Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor) and includes a great many number of changes. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and [Font Awesome](http://fortawesome.github.io/Font-Awesome/).
 
-### Quickstart
+## Quickstart
 
 ```
 <link rel="stylesheet" href="/PATH/TO/markdownify.min.css">
@@ -20,7 +20,7 @@ var markdownify = new Markdownify();
 markdownify.render();
 ```
 
-##### Use a specific textarea
+#### Use a specific textarea
 
 Pure JavaScript method
 
