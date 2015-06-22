@@ -56,7 +56,7 @@ new Markdownify({
 });
 ```
 
-### What's changed?
+## What's changed?
 As mentioned earlier, Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor). So you might be wondering, what's changed? Quite a bit actually. Here's some notable changes:
 
 - Upgraded from CodeMirror 3 to CodeMirror 5
