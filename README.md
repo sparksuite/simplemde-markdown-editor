@@ -3,11 +3,6 @@ A drop-in JavaScript textarea replacement for writing beautiful and understandab
 
 ![Preview](http://i.imgur.com/l5antiW.png)
 
-## How it works
-Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor) and includes a great many number of changes. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and [Font Awesome](http://fortawesome.github.io/Font-Awesome/).
-
-CodeMirror is the backbone of the project and parses much of the markdown syntax as it's being written. This allows us to add styles to the markdown that's being written. Additionally, a toolbar and statusbar has been added to the top and bottom, respectively. Previews are rendered by [Marked](https://github.com/chjj/marked).
-
 ## Quickstart
 
 ```
@@ -57,6 +52,11 @@ new Markdownify({
   tools: false,
 });
 ```
+
+## How it works
+Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor) and includes a great many number of changes. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and [Font Awesome](http://fortawesome.github.io/Font-Awesome/).
+
+CodeMirror is the backbone of the project and parses much of the markdown syntax as it's being written. This allows us to add styles to the markdown that's being written. Additionally, a toolbar and statusbar has been added to the top and bottom, respectively. Previews are rendered by [Marked](https://github.com/chjj/marked).
 
 ## What's changed?
 As mentioned earlier, Markdownify is an improvement of [lepture's Editor project](https://github.com/lepture/editor). So you might be wondering, what's changed? Quite a bit actually. Here's some notable changes:
