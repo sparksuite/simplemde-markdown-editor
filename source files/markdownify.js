@@ -334,8 +334,13 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 			ch: 99999999999999
 		});
 
-		startPoint.ch -= 2;
-		endPoint.ch -= 2;
+		if (type == "bold") {
+			startPoint.ch -= 2;
+			endPoint.ch -= 2;
+		} else if (type == "italic") {
+			startPoint.ch -= 1;
+			endPoint.ch -= 1;
+		}
 	} else {
 		text = cm.getSelection();
 		if (type == "bold") {
