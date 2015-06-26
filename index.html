@@ -67,8 +67,12 @@ Unordered lists can be started using the toolbar or by typing `* `, `- `, or `+ 
 	<script src="http://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 	
 	<script>
-	var simplemde = new SimpleMDE();
-	simplemde.render();
+	new SimpleMDE({
+		autosave: {
+			enabled: true,
+			unique_id: "demo_editor",
+		},
+	});
 	</script>
 	
 	<script>
