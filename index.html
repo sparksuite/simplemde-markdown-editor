@@ -39,7 +39,7 @@
 	<section class="main-content">
 	  <h1><a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h1>
 
-<textarea># Intro
+<textarea id="demo1"># Intro
 Go ahead, play around with the editor! Be sure to check out **bold** and *italic* styling, or even [links](http://google.com). You can type the Markdown syntax, use the toolbar, or use shortcuts like `cmd-b` or `ctrl-b`.
 
 ## Lists
@@ -57,6 +57,12 @@ Unordered lists can be started using the toolbar or by typing `* `, `- `, or `+ 
 ## What about images?
 ![Yes](http://i.imgur.com/sZlktY7.png)</textarea>
 
+<textarea id="demo2"># This one autosaves!
+By default, it saves every 10 seconds, but this can be changed. When this textarea is included in a form, it will automatically forget the saved value when the form is submitted.</textarea>
+
+<textarea id="demo3"># This one is bare
+You can also choose to hide the statusbar and/or toolbar for a simple and clean appearance.</textarea>
+
 	  <footer class="site-footer">
 		<span class="site-footer-credits"><a href="https://github.com/NextStepWebs/simplemde-markdown-editor">SimpleMDE Markdown Editor</a> is maintained by <a href="https://github.com/NextStepWebs">NextStepWebs</a>.</span>
 	  </footer>
@@ -69,10 +75,21 @@ Unordered lists can be started using the toolbar or by typing `* `, `- `, or `+ 
 	
 	<script>
 	new SimpleMDE({
+		element: $("#demo1")[0],
+	});
+	
+	new SimpleMDE({
+		element: $("#demo2")[0],
 		autosave: {
 			enabled: true,
-			unique_id: "demo_editor",
+			unique_id: "demo2",
 		},
+	});
+	
+	new SimpleMDE({
+		element: $("#demo3")[0],
+		status: false,
+		toolbar: false,
 	});
 	</script>
 	
