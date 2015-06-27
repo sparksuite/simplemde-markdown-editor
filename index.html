@@ -75,11 +75,11 @@ You can also choose to hide the statusbar and/or toolbar for a simple and clean 
 	
 	<script>
 	new SimpleMDE({
-		element: $("#demo1")[0],
+		element: document.getElementById("demo1"),
 	});
 	
 	new SimpleMDE({
-		element: $("#demo2")[0],
+		element: document.getElementById("demo2"),
 		autosave: {
 			enabled: true,
 			unique_id: "demo2",
@@ -87,7 +87,7 @@ You can also choose to hide the statusbar and/or toolbar for a simple and clean 
 	});
 	
 	new SimpleMDE({
-		element: $("#demo3")[0],
+		element: document.getElementById("demo3"),
 		status: false,
 		toolbar: false,
 	});
