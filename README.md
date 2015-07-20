@@ -45,8 +45,10 @@ simplemde.render();
 
 ## Get the content
 
-```JavaScript
+```HTML
+<script>
 simplemde.value();
+</script>
 ```
 
 ## Configuration
@@ -66,7 +68,8 @@ simplemde.value();
   - **unique_id**: You must set a unique identifier so that SimpleMDE can autosave. Something that separates this from other textareas.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
 
-```JavaScript
+```HTML
+<script>
 var simplemde = new SimpleMDE({
 	element: document.getElementById("MyID"),
 	status: false,
@@ -82,6 +85,7 @@ var simplemde = new SimpleMDE({
 		delay: 1000,
 	},
 });
+</script>
 ```
 
 #### Toolbar icons
@@ -104,7 +108,8 @@ guide | [This link](http://nextstepwebs.github.io/simplemde-markdown-editor/mark
 
 Customize the toolbar using the `toolbar` option like:
 
-```JavaScript
+```HTML
+<script>
 var simplemde = new SimpleMDE({
 	toolbar: [{
 			name: "bold",
@@ -116,6 +121,7 @@ var simplemde = new SimpleMDE({
 		...
 	],
 });
+</script>
 ```
 
 #### Height
@@ -139,11 +145,13 @@ Or, you can keep the height static:
 ## Event handling
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events
 
-```
+```HTML
+<script>
 var simplemde = new SimpleMDE();
 simplemde.codemirror.on("change", function(){
 	console.log(simplemde.value());
 });
+</script>
 ```
 
 ## How it works
