@@ -66,7 +66,7 @@ By default, it saves every 10 seconds, but this can be changed. When this textar
 <h1><a id="h1_demo3" class="anchor" href="#h1_demo3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hidden toolbar and status bar</h1>
 
 <textarea id="demo3"># This one is bare
-You can also choose to hide the statusbar and/or toolbar for a simple and clean appearance.</textarea>
+You can also choose to hide the statusbar and/or toolbar for a simple and clean appearance. This one also checks for misspelled words as you type!</textarea>
 
 	  <footer class="site-footer">
 		<span class="site-footer-credits"><a href="https://github.com/NextStepWebs/simplemde-markdown-editor">SimpleMDE Markdown Editor</a> is created and maintained by <a href="https://github.com/NextStepWebs">Next Step Webs</a></span>
@@ -81,10 +81,12 @@ You can also choose to hide the statusbar and/or toolbar for a simple and clean 
 	<script>
 	new SimpleMDE({
 		element: document.getElementById("demo1"),
+		spellChecker: false,
 	});
 	
 	new SimpleMDE({
 		element: document.getElementById("demo2"),
+		spellChecker: false,
 		autosave: {
 			enabled: true,
 			unique_id: "demo2",
