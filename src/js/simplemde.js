@@ -417,7 +417,7 @@ var toolbar = [{
 		className: "fa fa-link",
 		title: "Create Link (Ctrl+K)",
 	}, {
-		name: "quote",
+		name: "image",
 		action: drawImage,
 		className: "fa fa-picture-o",
 		title: "Insert Image (Ctrl+Alt+I)",
