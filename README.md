@@ -83,6 +83,7 @@ simplemde.value("This text will appear in the editor");
   - **unique_id**: You must set a unique identifier so that SimpleMDE can autosave. Something that separates this from other textareas.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
+- **codeMirrorModeConfig**: Additional CodeMirror config options to pass through to gfm and markdown modes.
 
 ```JavaScript
 var simplemde = new SimpleMDE({
@@ -113,6 +114,9 @@ var simplemde = new SimpleMDE({
 		}, 250);
 		
 		return "Loading...";
+	},
+	codeMirrorModeConfig: {
+		highlightFormatting: true, taskLists: false
 	}
 });
 ```
