@@ -761,6 +761,8 @@ function SimpleMDE(options) {
 		}
 	}
 
+	options.codeMirrorModeConfig = options.codeMirrorModeConfig || {};
+
 	// Update this options
 	this.options = options;
 
@@ -836,12 +838,14 @@ SimpleMDE.prototype.render = function(el) {
 		if(cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
 	};
 
-	var mode = "spell-checker";
-	var backdrop = "gfm";
-
+	var mode, backdrop;
 	if(options.spellChecker === false) {
-		mode = "gfm";
-		backdrop = undefined;
+		mode = options.codeMirrorModeConfig;
+		mode.name = 'gfm';
+	} else {
+		mode = 'spell-checker';
+		backdrop = options.codeMirrorModeConfig;
+		backdrop.name = 'gfm';
 	}
 
 	this.codemirror = CodeMirror.fromTextArea(el, {
