@@ -17,7 +17,7 @@ npm install simplemde --save
 SimpleMDE is also available on [jsDelivr](http://www.jsdelivr.com/#!simplemde). *Please note, jsDelivr may take a few days to update to the latest release.*
 
 ```HTML
-<link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
 <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 ```
 
