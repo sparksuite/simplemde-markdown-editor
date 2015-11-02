@@ -287,7 +287,7 @@ function drawHorizontalRule(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	_replaceSelection(cm, stat.image, options.replaceTexts.HorizontalRule);}
+	_replaceSelection(cm, stat.image, options.replaceTexts.horizontalRule);}
 
 
 /**
