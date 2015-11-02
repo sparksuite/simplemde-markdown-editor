@@ -266,7 +266,7 @@ function toggleOrderedList(editor) {
 function drawLink(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
-   var options = editor.options;
+	var options = editor.options;
 	_replaceSelection(cm, stat.link, options.replaceTexts.link);
 }
 
@@ -276,8 +276,8 @@ function drawLink(editor) {
 function drawImage(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
-   var options = editor.options;
-   _replaceSelection(cm, stat.image, options.replaceTexts.image);
+	var options = editor.options;
+	_replaceSelection(cm, stat.image, options.replaceTexts.image);
 }
 
 /**
@@ -286,8 +286,8 @@ function drawImage(editor) {
 function drawHorizontalRule(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
-	_replaceSelection(cm, stat.image, "", "\n\n-----\n\n");
-}
+	var options = editor.options;
+	_replaceSelection(cm, stat.image, options.replaceTexts.HorizontalRule);}
 
 
 /**
@@ -792,7 +792,8 @@ var toolbarBuiltInButtons = {
 
 var replaceTexts = {
    link: ["[", "](http://)"],
-   image: ["![](http://", ")"]
+   image: ["![](http://", ")"],
+   horizontalRule: ["", "\n\n-----\n\n"]
 };
 
 /**
