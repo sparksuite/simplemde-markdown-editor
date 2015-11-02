@@ -604,6 +604,50 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 	cm.focus();
 }
 
+/**
+ * Merge the properties of one object into another.
+ *
+ * @param {Object} target The object where the properties will be copied
+ * @param {Object} source The object whose properties will be copied
+ *
+ * @returns {Object}
+ */
+function _mergeProperties(target, source) {
+   for(var property in source) {
+      if (source.hasOwnProperty(property)) {
+         if (source[property] instanceof Array) {
+            target[property] = source[property].concat(target[property] instanceof Array ? target[property] : []);
+         } else if (
+               source[property] !== null &&
+               typeof source[property] === 'object' &&
+               source[property].constructor === Object
+            ) {
+            target[property] = mergeProperties(target[property] || {}, source[property]);
+         } else {
+            target[property] = source[property];
+         }
+      }
+   }
+
+   return target;
+}
+
+/**
+ * Merge an arbitrary number of objects into one.
+ * This function modifies the <code>target</code> object but also returns it.
+ *
+ * @param {Object} target The target object of the merge
+ *
+ * @returns {Object}
+ */
+function extend(target) {
+   for(var i = 1; i < arguments.length; i++) {
+      target = _mergeProperties(target, arguments[i]);
+   }
+
+   return target;
+}
+
 
 /* The right word count in respect for CJK. */
 function wordCount(data) {
