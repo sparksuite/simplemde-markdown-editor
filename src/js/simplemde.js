@@ -260,16 +260,15 @@ function toggleOrderedList(editor) {
 	_toggleLine(cm, "ordered-list");
 }
 
-
 /**
  * Action for drawing a link.
  */
 function drawLink(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
-	_replaceSelection(cm, stat.link, "[", "](http://)");
+   var options = editor.options;
+	_replaceSelection(cm, stat.link, options.replaceTexts.link);
 }
-
 
 /**
  * Action for drawing an img.
@@ -277,9 +276,9 @@ function drawLink(editor) {
 function drawImage(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
-	_replaceSelection(cm, stat.image, "![](http://", ")");
+   var options = editor.options;
+   _replaceSelection(cm, stat.image, options.replaceTexts.image);
 }
-
 
 /**
  * Action for drawing a horizontal rule.
@@ -399,11 +398,13 @@ function togglePreview(editor) {
 		toggleSideBySide(editor);
 }
 
-function _replaceSelection(cm, active, start, end) {
+function _replaceSelection(cm, active, startEnd) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var text;
+	var start = startEnd[0];
+	var end = startEnd[1];
 	var startPoint = cm.getCursor("start");
 	var endPoint = cm.getCursor("end");
 	if(active) {
@@ -789,6 +790,10 @@ var toolbarBuiltInButtons = {
 	}
 };
 
+var replaceTexts = {
+   link: ["[", "](http://)"],
+   image: ["![](http://", ")"]
+};
 
 /**
  * Interface of SimpleMDE.
@@ -859,6 +864,10 @@ function SimpleMDE(options) {
 
 	// Set default options for parsing config
 	options.parsingConfig = options.parsingConfig || {};
+
+
+	// Merging the replaceTexts, with the given options
+	options.replaceTexts = extend({}, replaceTexts, options.replaceTexts || {});
 
 
 	// Update this options
