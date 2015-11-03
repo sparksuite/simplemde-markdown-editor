@@ -836,7 +836,7 @@ function SimpleMDE(options) {
 /**
  * Default toolbar elements.
  */
-SimpleMDE.toolbar = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "side-by-side", "fullscreen", "guide"];
+SimpleMDE.toolbar = ["bold", "italic", "heading", "|", "code", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "side-by-side", "fullscreen", "guide"];
 
 /**
  * Default markdown render.
