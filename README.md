@@ -57,12 +57,29 @@ var simplemde = new SimpleMDE({ element: $("#MyID")[0] });
 
 ## Get/set the content
 
+Get the content
+
 ```JavaScript
-simplemde.value();
+var val = simplemde.value();
 ```
+
+Set the content
 
 ```JavaScript
 simplemde.value("This text will appear in the editor");
+```
+
+## Working with forms
+
+By listening to the `blur` function of codemirror you can ensure, that the value of the underlying textarea in your form always corresponds to the value of your SimpleMDE and vice versa.
+
+```JavaScript
+var textarea = $("#MyID");
+var simplemde = new SimpleMDE({element: textarea[0]});
+simplemde.value(textarea.text());
+simplemde.codemirror.on("blur", function() {
+   textarea.text(simplemde.value());
+});
 ```
 
 ## Configuration
