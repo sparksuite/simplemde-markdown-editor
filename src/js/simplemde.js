@@ -6,6 +6,7 @@ require("./codemirror/tablist");
 require("codemirror/addon/display/fullscreen.js");
 require("codemirror/mode/markdown/markdown.js");
 require("codemirror/addon/mode/overlay.js");
+require("codemirror/addon/display/placeholder.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
 require("spell-checker");
@@ -15,18 +16,39 @@ var marked = require("marked");
 // Some variables
 var isMac = /Mac/.test(navigator.platform);
 
+// Mapping of actions that can be bound to keyboard shortcuts
+var bindings = {
+	"toggleBold": toggleBold,
+	"toggleItalic": toggleItalic,
+	"drawLink": drawLink,
+	"toggleHeadingSmaller": toggleHeadingSmaller,
+	"toggleHeadingBigger": toggleHeadingBigger,
+	"drawImage": drawImage,
+	"toggleBlockquote": toggleBlockquote,
+	"toggleOrderedList": toggleOrderedList,
+	"toggleUnorderedList": toggleUnorderedList,
+	"toggleCodeBlock": toggleCodeBlock,
+	"togglePreview": togglePreview,
+	// the two below are handled manually during SimpleMDE's initialization
+	// phase and the null value tells the bootstrapper to skip them
+	"toggleSideBySide": null,
+	"toggleFullScreen": null
+};
+
 var shortcuts = {
-	"Cmd-B": toggleBold,
-	"Cmd-I": toggleItalic,
-	"Cmd-K": drawLink,
-	"Cmd-H": toggleHeadingSmaller,
-	"Shift-Cmd-H": toggleHeadingBigger,
-	"Cmd-Alt-I": drawImage,
-	"Cmd-'": toggleBlockquote,
-	"Cmd-Alt-L": toggleOrderedList,
-	"Cmd-L": toggleUnorderedList,
-	"Cmd-Alt-C": toggleCodeBlock,
-	"Cmd-P": togglePreview
+	"toggleBold": "Cmd-B",
+	"toggleItalic": "Cmd-I",
+	"drawLink": "Cmd-K",
+	"toggleHeadingSmaller": "Cmd-H",
+	"toggleHeadingBigger": "Shift-Cmd-H",
+	"drawImage": "Cmd-Alt-I",
+	"toggleBlockquote": "Cmd-'",
+	"toggleOrderedList": "Cmd-Alt-L",
+	"toggleUnorderedList": "Cmd-L",
+	"toggleCodeBlock": "Cmd-Alt-C",
+	"togglePreview": "Cmd-P",
+	"toggleSideBySide": "F9",
+	"toggleFullScreen": "F11"
 };
 
 var isMobile = function() {
@@ -54,13 +76,17 @@ function fixShortcut(name) {
 /**
  * Create icon element for toolbar.
  */
-function createIcon(options, enableTooltips) {
+function createIcon(options, enableTooltips, shortcuts) {
 	options = options || {};
 	var el = document.createElement("a");
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
-		el.title = options.title;
+		el.title = options.title[0];
+
+		if(shortcuts[options.title[1]]) {
+			el.title = options.title[0] + " (" + fixShortcut(shortcuts[options.title[1]]) + ")";
+		}
 
 		if(isMac) {
 			el.title = el.title.replace("Ctrl", "⌘");
@@ -333,7 +359,7 @@ function toggleSideBySide(editor) {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
-
+	var useSideBySideListener = false;
 	if(/editor-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active-side\s*/g, ""
@@ -351,6 +377,7 @@ function toggleSideBySide(editor) {
 		}, 1);
 		toolbarButton.className += " active";
 		wrapper.className += " CodeMirror-sided";
+		useSideBySideListener = true;
 	}
 
 	// Hide normal preview if active
@@ -365,13 +392,20 @@ function toggleSideBySide(editor) {
 		toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
 	}
 
-	// Start preview with the current text
-	preview.innerHTML = editor.options.previewRender(editor.value(), preview);
-
-	// Updates preview
-	cm.on("update", function() {
+	var sideBySideRenderingFunction = function() {
 		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
-	});
+	};
+
+	if(!cm.sideBySideRenderingFunction) {
+		cm.sideBySideRenderingFunction = sideBySideRenderingFunction;
+	}
+
+	if(useSideBySideListener) {
+		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
+		cm.on("update", cm.sideBySideRenderingFunction);
+	} else {
+		cm.off("update", cm.sideBySideRenderingFunction);
+	}
 }
 
 
@@ -671,58 +705,58 @@ var toolbarBuiltInButtons = {
 		name: "bold",
 		action: toggleBold,
 		className: "fa fa-bold",
-		title: "Bold (Ctrl+B)",
+		title: ["Bold", "toggleBold"],
 		default: true
 	},
 	"italic": {
 		name: "italic",
 		action: toggleItalic,
 		className: "fa fa-italic",
-		title: "Italic (Ctrl+I)",
+		title: ["Italic", "toggleItalic"],
 		default: true
 	},
 	"strikethrough": {
 		name: "strikethrough",
 		action: toggleStrikethrough,
 		className: "fa fa-strikethrough",
-		title: "Strikethrough"
+		title: ["Strikethrough", "toggleStrikethrough"]
 	},
 	"heading": {
 		name: "heading",
 		action: toggleHeadingSmaller,
 		className: "fa fa-header",
-		title: "Heading (Ctrl+H)",
+		title: ["Heading", "toggleHeadingSmaller"],
 		default: true
 	},
 	"heading-smaller": {
 		name: "heading-smaller",
 		action: toggleHeadingSmaller,
 		className: "fa fa-header fa-header-x fa-header-smaller",
-		title: "Smaller Heading (Ctrl+H)"
+		title: ["Smaller Heading", "toggleHeadingSmaller"]
 	},
 	"heading-bigger": {
 		name: "heading-bigger",
 		action: toggleHeadingBigger,
 		className: "fa fa-header fa-header-x fa-header-bigger",
-		title: "Bigger Heading (Shift+Ctrl+H)"
+		title: ["Bigger Heading", "toggleHeadingBigger"]
 	},
 	"heading-1": {
 		name: "heading-1",
 		action: toggleHeading1,
 		className: "fa fa-header fa-header-x fa-header-1",
-		title: "Big Heading"
+		title: ["Big Heading", "toggleHeading1"]
 	},
 	"heading-2": {
 		name: "heading-2",
 		action: toggleHeading2,
 		className: "fa fa-header fa-header-x fa-header-2",
-		title: "Medium Heading"
+		title: ["Medium Heading", "toggleHeading2"]
 	},
 	"heading-3": {
 		name: "heading-3",
 		action: toggleHeading3,
 		className: "fa fa-header fa-header-x fa-header-3",
-		title: "Small Heading"
+		title: ["Small Heading", "toggleHeading3"]
 	},
 	"separator-1": {
 		name: "separator-1"
@@ -731,27 +765,27 @@ var toolbarBuiltInButtons = {
 		name: "code",
 		action: toggleCodeBlock,
 		className: "fa fa-code",
-		title: "Code (Ctrl+Alt+C)"
+		title: ["Code", "toggleCodeBlock"]
 	},
 	"quote": {
 		name: "quote",
 		action: toggleBlockquote,
 		className: "fa fa-quote-left",
-		title: "Quote (Ctrl+')",
+		title: ["Quote", "toggleBlockquote"],
 		default: true
 	},
 	"unordered-list": {
 		name: "unordered-list",
 		action: toggleUnorderedList,
 		className: "fa fa-list-ul",
-		title: "Generic List (Ctrl+L)",
+		title: ["Generic List", "toggleUnorderedList"],
 		default: true
 	},
 	"ordered-list": {
 		name: "ordered-list",
 		action: toggleOrderedList,
 		className: "fa fa-list-ol",
-		title: "Numbered List (Ctrl+Alt+L)",
+		title: ["Numbered List", "toggleOrderedList"],
 		default: true
 	},
 	"separator-2": {
@@ -761,27 +795,27 @@ var toolbarBuiltInButtons = {
 		name: "link",
 		action: drawLink,
 		className: "fa fa-link",
-		title: "Create Link (Ctrl+K)",
+		title: ["Create Link", "drawLink"],
 		default: true
 	},
 	"image": {
 		name: "image",
 		action: drawImage,
 		className: "fa fa-picture-o",
-		title: "Insert Image (Ctrl+Alt+I)",
+		title: ["Insert Image", "drawImage"],
 		default: true
 	},
 	"table": {
 		name: "table",
 		action: drawTable,
 		className: "fa fa-table",
-		title: "Insert Table"
+		title: ["Insert Table", "drawTable"]
 	},
 	"horizontal-rule": {
 		name: "horizontal-rule",
 		action: drawHorizontalRule,
 		className: "fa fa-minus",
-		title: "Insert Horizontal Line"
+		title: ["Insert Horizontal Line", "drawHorizontalRule"]
 	},
 	"separator-3": {
 		name: "separator-3"
@@ -790,36 +824,51 @@ var toolbarBuiltInButtons = {
 		name: "preview",
 		action: togglePreview,
 		className: "fa fa-eye no-disable",
-		title: "Toggle Preview (Ctrl+P)",
+		title: ["Toggle Preview", "togglePreview"],
 		default: true
 	},
 	"side-by-side": {
 		name: "side-by-side",
 		action: toggleSideBySide,
 		className: "fa fa-columns no-disable no-mobile",
-		title: "Toggle Side by Side (F9)",
+		title: ["Toggle Side by Side", "toggleSideBySide"],
 		default: true
 	},
 	"fullscreen": {
 		name: "fullscreen",
 		action: toggleFullScreen,
 		className: "fa fa-arrows-alt no-disable no-mobile",
-		title: "Toggle Fullscreen (F11)",
+		title: ["Toggle Fullscreen", "toggleFullScreen"],
 		default: true
 	},
 	"guide": {
 		name: "guide",
 		action: "http://nextstepwebs.github.io/simplemde-markdown-editor/markdown-guide",
 		className: "fa fa-question-circle",
-		title: "Markdown Guide",
+		title: ["Markdown Guide", null],
 		default: true
+	},
+	"separator-4": {
+		name: "separator-4"
+	},
+	"undo": {
+		name: "undo",
+		action: undo,
+		className: "fa fa-undo no-disable",
+		title: ["Undo", "undo"]
+	},
+	"redo": {
+		name: "redo",
+		action: redo,
+		className: "fa fa-repeat no-disable",
+		title: ["Redo", "redo"]
 	}
 };
 
 var insertTexts = {
 	link: ["[", "](http://)"],
 	image: ["![](http://", ")"],
-	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
+	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
 
@@ -925,6 +974,10 @@ function SimpleMDE(options) {
 	options.blockStyles = extend({}, blockStyles, options.blockStyles || {});
 
 
+	// Merging the shortcuts, with the given options
+	options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
+
+
 	// Change unique_id to uniqueId for backwards compatibility
 	if(options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
 		options.autosave.uniqueId = options.autosave.unique_id;
@@ -995,13 +1048,17 @@ SimpleMDE.prototype.render = function(el) {
 	var self = this;
 	var keyMaps = {};
 
-	for(var key in shortcuts) {
-		(function(key) {
-			keyMaps[fixShortcut(key)] = function() {
-				shortcuts[key](self);
-			};
-		})(key);
+	for(var key in options.shortcuts) {
+		// null stands for "do not bind this command"
+		if(options.shortcuts[key] !== null && bindings[key] !== null) {
+			(function(key) {
+				keyMaps[fixShortcut(options.shortcuts[key])] = function() {
+					bindings[key](self);
+				};
+			})(key);
+		}
 	}
+
 
 	keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
 	keyMaps["Tab"] = "tabAndIndentMarkdownList";
@@ -1047,7 +1104,8 @@ SimpleMDE.prototype.render = function(el) {
 		autofocus: (options.autofocus === true) ? true : false,
 		extraKeys: keyMaps,
 		lineWrapping: (options.lineWrapping === false) ? false : true,
-		allowDropFileTypes: ["text/plain"]
+		allowDropFileTypes: ["text/plain"],
+		placeholder: options.placeholder || el.getAttribute("placeholder") || ""
 	});
 
 	if(options.toolbar !== false) {
@@ -1210,7 +1268,7 @@ SimpleMDE.prototype.createToolbar = function(items) {
 			if(item === "|") {
 				el = createSep();
 			} else {
-				el = createIcon(item, self.options.toolbarTips);
+				el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
 			}
 
 			// bind events, special for info
@@ -1270,6 +1328,11 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 				el.innerHTML = "0";
 				cm.on("update", function() {
 					el.innerHTML = wordCount(cm.getValue());
+				});
+			} else if(name == "characters") {
+				el.innerHTML = "0";
+				cm.on("update", function() {
+					el.innerHTML = cm.getValue().length;
 				});
 			} else if(name === "lines") {
 				el.innerHTML = "0";
