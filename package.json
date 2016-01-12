@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "codemirror": "codemirror/CodeMirror",
-    "codemirror-spell-checker": "nextstepwebs/codemirror-spell-checker",
     "marked": "0.3.5"
   },
   "devDependencies": {
