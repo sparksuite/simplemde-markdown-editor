@@ -1,5 +1,5 @@
 /**
- * simplemde v1.9.0
+ * simplemde v1.9.1
  * Copyright Next Step Webs, Inc.
  * @link https://github.com/NextStepWebs/simplemde-markdown-editor
  * @license MIT
@@ -171,7 +171,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 
 /* The fake, visible scrollbars. Used to force redraw during scrolling
-   before actuall scrolling happens, thus preventing shaking and
+   before actual scrolling happens, thus preventing shaking and
    flickering artifacts. */
 .CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
   position: absolute;
@@ -658,7 +658,4 @@ span.CodeMirror-selectedtext { background: none; }
 
 .CodeMirror .CodeMirror-code .cm-strikethrough {
 	text-decoration: line-through;
-}
-.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
-	 background: rgba(255, 0, 0, .15);
 }
