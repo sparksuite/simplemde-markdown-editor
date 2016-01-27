@@ -14,6 +14,9 @@
 	if(window.location.href.indexOf("nextstepwebs.github.io") !== -1) {
 		window.location.href = "https://simplemde.com/";
 	}
+	
+	if(window.location.protocol != "https:")
+		window.location.href = "https:"+window.location.href.substring(window.location.protocol.length);
 	</script>
 	
 	<style>
