@@ -166,6 +166,9 @@ var simplemde = new SimpleMDE({
 		}
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	tabSize: 4,
+	text: {
+		'preview': 'Vorschau' // Deutsch
+	} // Allows text for the Toolbar tooltips and statusbar items to be changed - only items to be changed need be included - use the name of the item as the key
 	toolbar: false,
 	toolbarTips: false,
 });

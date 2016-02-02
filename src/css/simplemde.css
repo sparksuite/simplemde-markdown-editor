@@ -13,6 +13,11 @@
 	min-height: 300px
 }
 
+[dir='rtl'] .CodeMirror-scroll {
+	margin-right: 0;
+	margin-left: -30px;
+}
+
 .CodeMirror-fullscreen {
 	background: #fff;
 	position: fixed !important;
@@ -196,22 +201,23 @@
 	text-align: right;
 }
 
-.editor-statusbar span {
+[dir='rtl'] .editor-statusbar {
+	text-align: left;
+}
+
+.editor-statusbar .wrapper {
 	display: inline-block;
 	min-width: 4em;
 	margin-left: 1em;
 }
 
-.editor-statusbar .lines:before {
-	content: 'lines: '
+[dir='rtl'] .editor-statusbar .wrapper {
+	margin-left: 0;
+	margin-right: 1em;
 }
 
-.editor-statusbar .words:before {
-	content: 'words: '
-}
-
-.editor-statusbar .characters:before {
-	content: 'characters: '
+.editor-statusbar .value:before {
+	content: ': ';
 }
 
 .editor-preview {

@@ -1349,6 +1349,10 @@ SimpleMDE.prototype.createToolbar = function(items) {
 			if(item === "|") {
 				el = createSep();
 			} else {
+				var icon = item.name;
+				if(self.options.text[icon] !== undefined) {
+					item.title = self.options.text[icon];
+				}
 				el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
 			}
 
@@ -1455,7 +1459,7 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 			}
 
 			items.push({
-				className: name,
+				name: name,
 				defaultValue: defaultValue,
 				onUpdate: onUpdate
 			});
@@ -1476,8 +1480,7 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 
 		// Create span element
 		var el = document.createElement("span");
-		el.className = item.className;
-
+		el.className = "value";
 
 		// Ensure the defaultValue is a function
 		if(typeof item.defaultValue === "function") {
@@ -1495,9 +1498,18 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 			}(el, item)));
 		}
 
+		// Create span element to hold the item's text
+		var wrapper = document.createElement("span");
+		wrapper.className = "wrapper";
+		if(options.text[item.name] !== undefined) {
+			wrapper.innerHTML = options.text[item.name];
+		} else {
+			wrapper.innerHTML = item.name;
+		}
+		wrapper.appendChild(el);
 
 		// Append the item to the status bar
-		bar.appendChild(el);
+		bar.appendChild(wrapper);
 	}
 
 
