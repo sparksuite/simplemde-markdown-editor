@@ -1,5 +1,5 @@
 /**
- * simplemde v1.10.0
+ * simplemde v1.11.0
  * Copyright Next Step Webs, Inc.
  * @link https://github.com/NextStepWebs/simplemde-markdown-editor
  * @license MIT
@@ -14059,6 +14059,13 @@ SimpleMDE.prototype.render = function(el) {
 		allowDropFileTypes: ["text/plain"],
 		placeholder: options.placeholder || el.getAttribute("placeholder") || ""
 	});
+
+	if(options.forceSynch !== false) {
+		var cm = this.codemirror;
+		cm.on("change", function() {
+			cm.save();
+		});
+	}
 
 	if(options.toolbar !== false) {
 		this.createToolbar();
