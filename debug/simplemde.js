@@ -7,7 +7,7 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SimpleMDE = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
-; Typo = global.Typo = require("D:\\My Web Sites\\simplemde-markdown-editor\\node_modules\\codemirror-spell-checker\\src\\js\\typo.js");
+; Typo = global.Typo = require("/Users/cbadke/git/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
 CodeMirror = global.CodeMirror = require("codemirror");
 ; var __browserify_shim_require__=require;(function browserifyShim(module, define, require) {
 // Initialize data globally to reduce memory consumption
@@ -105,7 +105,7 @@ if(!String.prototype.includes) {
 }).call(global, module, undefined, undefined);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"D:\\My Web Sites\\simplemde-markdown-editor\\node_modules\\codemirror-spell-checker\\src\\js\\typo.js":2,"codemirror":7}],2:[function(require,module,exports){
+},{"/Users/cbadke/git/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":7}],2:[function(require,module,exports){
 (function (global){
 ; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 'use strict';
@@ -1140,7 +1140,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
   else if (typeof define == "function" && define.amd) // AMD
     return define([], mod);
   else // Plain browser env
-    this.CodeMirror = mod();
+    (this || window).CodeMirror = mod();
 })(function() {
   "use strict";
 
@@ -2221,10 +2221,6 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     if (!cm.state.focused) { cm.display.input.focus(); onFocus(cm); }
   }
 
-  function isReadOnly(cm) {
-    return cm.options.readOnly || cm.doc.cantEdit;
-  }
-
   // This will be set to an array of strings when copying, so that,
   // when pasting, we know what kind of selections the copied text
   // was made out of.
@@ -2279,7 +2275,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     var pasted = e.clipboardData && e.clipboardData.getData("text/plain");
     if (pasted) {
       e.preventDefault();
-      if (!isReadOnly(cm) && !cm.options.disableInput)
+      if (!cm.isReadOnly() && !cm.options.disableInput)
         runInOp(cm, function() { applyTextInput(cm, pasted, 0, null, "paste"); });
       return true;
     }
@@ -2382,13 +2378,14 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       });
 
       on(te, "paste", function(e) {
-        if (handlePaste(e, cm)) return true;
+        if (signalDOMEvent(cm, e) || handlePaste(e, cm)) return
 
         cm.state.pasteIncoming = true;
         input.fastPoll();
       });
 
       function prepareCopyCut(e) {
+        if (signalDOMEvent(cm, e)) return
         if (cm.somethingSelected()) {
           lastCopied = cm.getSelections();
           if (input.inaccurateSelection) {
@@ -2416,7 +2413,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       on(te, "copy", prepareCopyCut);
 
       on(display.scroller, "paste", function(e) {
-        if (eventInWidget(display, e)) return;
+        if (eventInWidget(display, e) || signalDOMEvent(cm, e)) return;
         cm.state.pasteIncoming = true;
         input.focus();
       });
@@ -2550,7 +2547,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       // in which case reading its value would be expensive.
       if (this.contextMenuPending || !cm.state.focused ||
           (hasSelection(input) && !prevInput && !this.composing) ||
-          isReadOnly(cm) || cm.options.disableInput || cm.state.keySeq)
+          cm.isReadOnly() || cm.options.disableInput || cm.state.keySeq)
         return false;
 
       var text = input.value;
@@ -2612,10 +2609,11 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       if (reset && cm.doc.sel.contains(pos) == -1)
         operation(cm, setSelection)(cm.doc, simpleSelection(pos), sel_dontScroll);
 
-      var oldCSS = te.style.cssText;
-      input.wrapper.style.position = "absolute";
-      te.style.cssText = "position: fixed; width: 30px; height: 30px; top: " + (e.clientY - 5) +
-        "px; left: " + (e.clientX - 5) + "px; z-index: 1000; background: " +
+      var oldCSS = te.style.cssText, oldWrapperCSS = input.wrapper.style.cssText;
+      input.wrapper.style.cssText = "position: absolute"
+      var wrapperBox = input.wrapper.getBoundingClientRect()
+      te.style.cssText = "position: absolute; width: 30px; height: 30px; top: " + (e.clientY - wrapperBox.top - 5) +
+        "px; left: " + (e.clientX - wrapperBox.left - 5) + "px; z-index: 1000; background: " +
         (ie ? "rgba(255, 255, 255, .05)" : "transparent") +
         "; outline: none; border-width: 0; outline: none; overflow: hidden; opacity: .05; filter: alpha(opacity=5);";
       if (webkit) var oldScrollY = window.scrollY; // Work around Chrome issue (#2712)
@@ -2646,7 +2644,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       }
       function rehide() {
         input.contextMenuPending = false;
-        input.wrapper.style.position = "relative";
+        input.wrapper.style.cssText = oldWrapperCSS
         te.style.cssText = oldCSS;
         if (ie && ie_version < 9) display.scrollbars.setScrollTop(display.scroller.scrollTop = scrollPos);
 
@@ -2701,7 +2699,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       var div = input.div = display.lineDiv;
       disableBrowserMagic(div);
 
-      on(div, "paste", function(e) { handlePaste(e, cm); })
+      on(div, "paste", function(e) {
+        if (!signalDOMEvent(cm, e)) handlePaste(e, cm);
+      })
 
       on(div, "compositionstart", function(e) {
         var data = e.data;
@@ -2739,11 +2739,12 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
       on(div, "input", function() {
         if (input.composing) return;
-        if (isReadOnly(cm) || !input.pollContent())
+        if (cm.isReadOnly() || !input.pollContent())
           runInOp(input.cm, function() {regChange(cm);});
       });
 
       function onCopyCut(e) {
+        if (signalDOMEvent(cm, e)) return
         if (cm.somethingSelected()) {
           lastCopied = cm.getSelections();
           if (e.type == "cut") cm.replaceSelection("", null, "cut");
@@ -2819,8 +2820,13 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       try { var rng = range(start.node, start.offset, end.offset, end.node); }
       catch(e) {} // Our model of the DOM might be outdated, in which case the range we try to set can be impossible
       if (rng) {
-        sel.removeAllRanges();
-        sel.addRange(rng);
+        if (!gecko && this.cm.state.focused) {
+          sel.collapse(start.node, start.offset);
+          if (!rng.collapsed) sel.addRange(rng);
+        } else {
+          sel.removeAllRanges();
+          sel.addRange(rng);
+        }
         if (old && sel.anchorNode == null) sel.addRange(old);
         else if (gecko) this.startGracePeriod();
       }
@@ -2964,7 +2970,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       this.div.focus();
     },
     applyComposition: function(composing) {
-      if (isReadOnly(this.cm))
+      if (this.cm.isReadOnly())
         operation(this.cm, regChange)(this.cm)
       else if (composing.data && composing.data != composing.startData)
         operation(this.cm, applyTextInput)(this.cm, composing.data, 0, composing.sel);
@@ -2976,7 +2982,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
     onKeyPress: function(e) {
       e.preventDefault();
-      if (!isReadOnly(this.cm))
+      if (!this.cm.isReadOnly())
         operation(this.cm, applyTextInput)(this.cm, String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode), 0);
     },
 
@@ -3281,7 +3287,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   // Give beforeSelectionChange handlers a change to influence a
   // selection update.
-  function filterSelectionChange(doc, sel) {
+  function filterSelectionChange(doc, sel, options) {
     var obj = {
       ranges: sel.ranges,
       update: function(ranges) {
@@ -3289,7 +3295,8 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         for (var i = 0; i < ranges.length; i++)
           this.ranges[i] = new Range(clipPos(doc, ranges[i].anchor),
                                      clipPos(doc, ranges[i].head));
-      }
+      },
+      origin: options && options.origin
     };
     signal(doc, "beforeSelectionChange", doc, obj);
     if (doc.cm) signal(doc.cm, "beforeSelectionChange", doc.cm, obj);
@@ -3315,7 +3322,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   function setSelectionNoUndo(doc, sel, options) {
     if (hasHandler(doc, "beforeSelectionChange") || doc.cm && hasHandler(doc.cm, "beforeSelectionChange"))
-      sel = filterSelectionChange(doc, sel);
+      sel = filterSelectionChange(doc, sel, options);
 
     var bias = options && options.bias ||
       (cmp(sel.primary().head, doc.sel.primary().head) < 0 ? -1 : 1);
@@ -4260,7 +4267,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       display.scroller.scrollTop = doc.scrollTop;
     }
     if (op.scrollLeft != null && (display.scroller.scrollLeft != op.scrollLeft || op.forceScroll)) {
-      doc.scrollLeft = Math.max(0, Math.min(display.scroller.scrollWidth - displayWidth(cm), op.scrollLeft));
+      doc.scrollLeft = Math.max(0, Math.min(display.scroller.scrollWidth - display.scroller.clientWidth, op.scrollLeft));
       display.scrollbars.setScrollLeft(doc.scrollLeft);
       display.scroller.scrollLeft = doc.scrollLeft;
       alignHorizontally(cm);
@@ -4556,7 +4563,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       return dx * dx + dy * dy > 20 * 20;
     }
     on(d.scroller, "touchstart", function(e) {
-      if (!isMouseLikeTouchEvent(e)) {
+      if (!signalDOMEvent(cm, e) && !isMouseLikeTouchEvent(e)) {
         clearTimeout(touchFinished);
         var now = +new Date;
         d.activeTouch = {start: now, moved: false,
@@ -4685,7 +4692,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
   // not interfere with, such as a scrollbar or widget.
   function onMouseDown(e) {
     var cm = this, display = cm.display;
-    if (display.activeTouch && display.input.supportsTouch() || signalDOMEvent(cm, e)) return;
+    if (signalDOMEvent(cm, e) || display.activeTouch && display.input.supportsTouch()) return;
     display.shift = e.shiftKey;
 
     if (eventInWidget(display, e)) {
@@ -4741,7 +4748,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     }
 
     var sel = cm.doc.sel, modifier = mac ? e.metaKey : e.ctrlKey, contained;
-    if (cm.options.dragDrop && dragAndDrop && !isReadOnly(cm) &&
+    if (cm.options.dragDrop && dragAndDrop && !cm.isReadOnly() &&
         type == "single" && (contained = sel.contains(start)) > -1 &&
         (cmp((contained = sel.ranges[contained]).from(), start) < 0 || start.xRel > 0) &&
         (cmp(contained.to(), start) > 0 || start.xRel < 0))
@@ -4965,7 +4972,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     e_preventDefault(e);
     if (ie) lastDrop = +new Date;
     var pos = posFromMouse(cm, e, true), files = e.dataTransfer.files;
-    if (!pos || isReadOnly(cm)) return;
+    if (!pos || cm.isReadOnly()) return;
     // Might be a file drop, in which case we simply extract the text
     // and insert it.
     if (files && files.length && window.FileReader && window.File) {
@@ -5204,7 +5211,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     cm.display.input.ensurePolled();
     var prevShift = cm.display.shift, done = false;
     try {
-      if (isReadOnly(cm)) cm.state.suppressEdits = true;
+      if (cm.isReadOnly()) cm.state.suppressEdits = true;
       if (dropShift) cm.display.shift = false;
       done = bound(cm) != Pass;
     } finally {
@@ -5937,10 +5944,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
   function findPosH(doc, pos, dir, unit, visually) {
     var line = pos.line, ch = pos.ch, origDir = dir;
     var lineObj = getLine(doc, line);
-    var possible = true;
     function findNextLine() {
       var l = line + dir;
-      if (l < doc.first || l >= doc.first + doc.size) return (possible = false);
+      if (l < doc.first || l >= doc.first + doc.size) return false
       line = l;
       return lineObj = getLine(doc, l);
     }
@@ -5950,14 +5956,16 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         if (!boundToLine && findNextLine()) {
           if (visually) ch = (dir < 0 ? lineRight : lineLeft)(lineObj);
           else ch = dir < 0 ? lineObj.text.length : 0;
-        } else return (possible = false);
+        } else return false
       } else ch = next;
       return true;
     }
 
-    if (unit == "char") moveOnce();
-    else if (unit == "column") moveOnce(true);
-    else if (unit == "word" || unit == "group") {
+    if (unit == "char") {
+      moveOnce()
+    } else if (unit == "column") {
+      moveOnce(true)
+    } else if (unit == "word" || unit == "group") {
       var sawType = null, group = unit == "group";
       var helper = doc.cm && doc.cm.getHelper(pos, "wordChars");
       for (var first = true;; first = false) {
@@ -5978,7 +5986,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       }
     }
     var result = skipAtomic(doc, Pos(line, ch), pos, origDir, true);
-    if (!possible) result.hitSide = true;
+    if (!cmp(pos, result)) result.hitSide = true;
     return result;
   }
 
@@ -6365,6 +6373,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       signal(this, "overwriteToggle", this, this.state.overwrite);
     },
     hasFocus: function() { return this.display.input.getField() == activeElt(); },
+    isReadOnly: function() { return !!(this.options.readOnly || this.doc.cantEdit); },
 
     scrollTo: methodOp(function(x, y) {
       if (x != null || y != null) resolveScrollToPos(this);
@@ -8211,7 +8220,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       if (nextChange == pos) { // Update current marker set
         spanStyle = spanEndStyle = spanStartStyle = title = css = "";
         collapsed = null; nextChange = Infinity;
-        var foundBookmarks = [];
+        var foundBookmarks = [], endStyles
         for (var j = 0; j < spans.length; ++j) {
           var sp = spans[j], m = sp.marker;
           if (m.type == "bookmark" && sp.from == pos && m.widgetNode) {
@@ -8224,7 +8233,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
             if (m.className) spanStyle += " " + m.className;
             if (m.css) css = (css ? css + ";" : "") + m.css;
             if (m.startStyle && sp.from == pos) spanStartStyle += " " + m.startStyle;
-            if (m.endStyle && sp.to == nextChange) spanEndStyle += " " + m.endStyle;
+            if (m.endStyle && sp.to == nextChange) (endStyles || (endStyles = [])).push(m.endStyle, sp.to)
             if (m.title && !title) title = m.title;
             if (m.collapsed && (!collapsed || compareCollapsedMarkers(collapsed.marker, m) < 0))
               collapsed = sp;
@@ -8232,14 +8241,17 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
             nextChange = sp.from;
           }
         }
+        if (endStyles) for (var j = 0; j < endStyles.length; j += 2)
+          if (endStyles[j + 1] == nextChange) spanEndStyle += " " + endStyles[j]
+
+        if (!collapsed || collapsed.from == pos) for (var j = 0; j < foundBookmarks.length; ++j)
+          buildCollapsedSpan(builder, 0, foundBookmarks[j]);
         if (collapsed && (collapsed.from || 0) == pos) {
           buildCollapsedSpan(builder, (collapsed.to == null ? len + 1 : collapsed.to) - pos,
                              collapsed.marker, collapsed.from == null);
           if (collapsed.to == null) return;
           if (collapsed.to == pos) collapsed = false;
         }
-        if (!collapsed && foundBookmarks.length) for (var j = 0; j < foundBookmarks.length; ++j)
-          buildCollapsedSpan(builder, 0, foundBookmarks[j]);
       }
       if (pos >= len) break;
 
@@ -8579,10 +8591,11 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       extendSelection(this, clipPos(this, head), other && clipPos(this, other), options);
     }),
     extendSelections: docMethodOp(function(heads, options) {
-      extendSelections(this, clipPosArray(this, heads, options));
+      extendSelections(this, clipPosArray(this, heads), options);
     }),
     extendSelectionsBy: docMethodOp(function(f, options) {
-      extendSelections(this, map(this.sel.ranges, f), options);
+      var heads = map(this.sel.ranges, f);
+      extendSelections(this, clipPosArray(this, heads), options);
     }),
     setSelections: docMethodOp(function(ranges, primary, options) {
       if (!ranges.length) return;
@@ -9999,7 +10012,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   // THE END
 
-  CodeMirror.version = "5.9.1";
+  CodeMirror.version = "5.11.1";
 
   return CodeMirror;
 });
@@ -10194,8 +10207,6 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
   if (modeCfg.tokenTypeOverrides === undefined)
     modeCfg.tokenTypeOverrides = {};
 
-  var codeDepth = 0;
-
   var tokenTypes = {
     header: "header",
     code: "comment",
@@ -10354,7 +10365,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       if (state.localMode) state.localState = state.localMode.startState();
       state.f = state.block = local;
       if (modeCfg.highlightFormatting) state.formatting = "code-block";
-      state.code = true;
+      state.code = -1
       return getType(state);
     }
 
@@ -10374,7 +10385,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
   }
 
   function local(stream, state) {
-    if (stream.sol() && state.fencedChars && stream.match(state.fencedChars, false)) {
+    if (state.fencedChars && stream.match(state.fencedChars, false)) {
       state.localMode = state.localState = null;
       state.f = state.block = leavingLocal;
       return null;
@@ -10392,9 +10403,9 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     state.f = inlineNormal;
     state.fencedChars = null;
     if (modeCfg.highlightFormatting) state.formatting = "code-block";
-    state.code = true;
+    state.code = 1
     var returnType = getType(state);
-    state.code = false;
+    state.code = 0
     return returnType;
   }
 
@@ -10517,15 +10528,6 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
 
     var ch = stream.next();
 
-    if (ch === '\\') {
-      stream.next();
-      if (modeCfg.highlightFormatting) {
-        var type = getType(state);
-        var formattingEscape = tokenTypes.formatting + "-escape";
-        return type ? type + " " + formattingEscape : formattingEscape;
-      }
-    }
-
     // Matches link titles present on next line
     if (state.linkTitle) {
       state.linkTitle = false;
@@ -10544,24 +10546,30 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     if (ch === '`') {
       var previousFormatting = state.formatting;
       if (modeCfg.highlightFormatting) state.formatting = "code";
-      var t = getType(state);
-      var before = stream.pos;
       stream.eatWhile('`');
-      var difference = 1 + stream.pos - before;
-      if (!state.code) {
-        codeDepth = difference;
-        state.code = true;
-        return getType(state);
+      var count = stream.current().length
+      if (state.code == 0) {
+        state.code = count
+        return getType(state)
+      } else if (count == state.code) { // Must be exact
+        var t = getType(state)
+        state.code = 0
+        return t
       } else {
-        if (difference === codeDepth) { // Must be exact
-          state.code = false;
-          return t;
-        }
-        state.formatting = previousFormatting;
-        return getType(state);
+        state.formatting = previousFormatting
+        return getType(state)
       }
     } else if (state.code) {
       return getType(state);
+    }
+
+    if (ch === '\\') {
+      stream.next();
+      if (modeCfg.highlightFormatting) {
+        var type = getType(state);
+        var formattingEscape = tokenTypes.formatting + "-escape";
+        return type ? type + " " + formattingEscape : formattingEscape;
+      }
     }
 
     if (ch === '!' && stream.match(/\[[^\]]*\] ?(?:\(|\[)/, false)) {
@@ -10759,7 +10767,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
   }
 
   function footnoteLink(stream, state) {
-    if (stream.match(/^[^\]]*\]:/, false)) {
+    if (stream.match(/^([^\]\\]|\\.)*\]:/, false)) {
       state.f = footnoteLinkInside;
       stream.next(); // Consume [
       if (modeCfg.highlightFormatting) state.formatting = "link";
@@ -10778,7 +10786,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       return returnType;
     }
 
-    stream.match(/^[^\]]+/, true);
+    stream.match(/^([^\]\\]|\\.)+/, true);
 
     return tokenTypes.linkText;
   }
@@ -10831,6 +10839,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
         linkText: false,
         linkHref: false,
         linkTitle: false,
+        code: 0,
         em: false,
         strong: false,
         header: 0,
@@ -10966,12 +10975,14 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "Cobol", mime: "text/x-cobol", mode: "cobol", ext: ["cob", "cpy"]},
     {name: "C#", mime: "text/x-csharp", mode: "clike", ext: ["cs"], alias: ["csharp"]},
     {name: "Clojure", mime: "text/x-clojure", mode: "clojure", ext: ["clj"]},
+    {name: "ClojureScript", mime: "text/x-clojurescript", mode: "clojure", ext: ["cljs"]},
     {name: "Closure Stylesheets (GSS)", mime: "text/x-gss", mode: "css", ext: ["gss"]},
     {name: "CMake", mime: "text/x-cmake", mode: "cmake", ext: ["cmake", "cmake.in"], file: /^CMakeLists.txt$/},
     {name: "CoffeeScript", mime: "text/x-coffeescript", mode: "coffeescript", ext: ["coffee"], alias: ["coffee", "coffee-script"]},
     {name: "Common Lisp", mime: "text/x-common-lisp", mode: "commonlisp", ext: ["cl", "lisp", "el"], alias: ["lisp"]},
     {name: "Cypher", mime: "application/x-cypher-query", mode: "cypher", ext: ["cyp", "cypher"]},
     {name: "Cython", mime: "text/x-cython", mode: "python", ext: ["pyx", "pxd", "pxi"]},
+    {name: "Crystal", mime: "text/x-crystal", mode: "crystal", ext: ["cr"]},
     {name: "CSS", mime: "text/css", mode: "css", ext: ["css"]},
     {name: "CQL", mime: "text/x-cassandra", mode: "sql", ext: ["cql"]},
     {name: "D", mime: "text/x-d", mode: "d", ext: ["d"]},
@@ -10989,6 +11000,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "Embedded Ruby", mime: "application/x-erb", mode: "htmlembedded", ext: ["erb"]},
     {name: "Erlang", mime: "text/x-erlang", mode: "erlang", ext: ["erl"]},
     {name: "Factor", mime: "text/x-factor", mode: "factor", ext: ["factor"]},
+    {name: "FCL", mime: "text/x-fcl", mode: "fcl"},
     {name: "Forth", mime: "text/x-forth", mode: "forth", ext: ["forth", "fth", "4th"]},
     {name: "Fortran", mime: "text/x-fortran", mode: "fortran", ext: ["f", "for", "f77", "f90"]},
     {name: "F#", mime: "text/x-fsharp", mode: "mllike", ext: ["fs"], alias: ["fsharp"]},
@@ -10999,6 +11011,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "Groovy", mime: "text/x-groovy", mode: "groovy", ext: ["groovy"]},
     {name: "HAML", mime: "text/x-haml", mode: "haml", ext: ["haml"]},
     {name: "Haskell", mime: "text/x-haskell", mode: "haskell", ext: ["hs"]},
+    {name: "Haskell (Literate)", mime: "text/x-literate-haskell", mode: "haskell-literate", ext: ["lhs"]},
     {name: "Haxe", mime: "text/x-haxe", mode: "haxe", ext: ["hx"]},
     {name: "HXML", mime: "text/x-hxml", mode: "haxe", ext: ["hxml"]},
     {name: "ASP.NET", mime: "application/x-aspx", mode: "htmlembedded", ext: ["aspx"], alias: ["asp", "aspx"]},
@@ -11012,6 +11025,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
      mode: "javascript", ext: ["js"], alias: ["ecmascript", "js", "node"]},
     {name: "JSON", mimes: ["application/json", "application/x-json"], mode: "javascript", ext: ["json", "map"], alias: ["json5"]},
     {name: "JSON-LD", mime: "application/ld+json", mode: "javascript", ext: ["jsonld"], alias: ["jsonld"]},
+    {name: "JSX", mime: "text/jsx", mode: "jsx", ext: ["jsx"]},
     {name: "Jinja2", mime: "null", mode: "jinja2"},
     {name: "Julia", mime: "text/x-julia", mode: "julia", ext: ["jl"]},
     {name: "Kotlin", mime: "text/x-kotlin", mode: "clike", ext: ["kt"]},
@@ -11154,54 +11168,56 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 })(function(CodeMirror) {
 "use strict";
 
-CodeMirror.defineMode("xml", function(config, parserConfig) {
-  var indentUnit = config.indentUnit;
-  var multilineTagIndentFactor = parserConfig.multilineTagIndentFactor || 1;
-  var multilineTagIndentPastTag = parserConfig.multilineTagIndentPastTag;
-  if (multilineTagIndentPastTag == null) multilineTagIndentPastTag = true;
+var htmlConfig = {
+  autoSelfClosers: {'area': true, 'base': true, 'br': true, 'col': true, 'command': true,
+                    'embed': true, 'frame': true, 'hr': true, 'img': true, 'input': true,
+                    'keygen': true, 'link': true, 'meta': true, 'param': true, 'source': true,
+                    'track': true, 'wbr': true, 'menuitem': true},
+  implicitlyClosed: {'dd': true, 'li': true, 'optgroup': true, 'option': true, 'p': true,
+                     'rp': true, 'rt': true, 'tbody': true, 'td': true, 'tfoot': true,
+                     'th': true, 'tr': true},
+  contextGrabbers: {
+    'dd': {'dd': true, 'dt': true},
+    'dt': {'dd': true, 'dt': true},
+    'li': {'li': true},
+    'option': {'option': true, 'optgroup': true},
+    'optgroup': {'optgroup': true},
+    'p': {'address': true, 'article': true, 'aside': true, 'blockquote': true, 'dir': true,
+          'div': true, 'dl': true, 'fieldset': true, 'footer': true, 'form': true,
+          'h1': true, 'h2': true, 'h3': true, 'h4': true, 'h5': true, 'h6': true,
+          'header': true, 'hgroup': true, 'hr': true, 'menu': true, 'nav': true, 'ol': true,
+          'p': true, 'pre': true, 'section': true, 'table': true, 'ul': true},
+    'rp': {'rp': true, 'rt': true},
+    'rt': {'rp': true, 'rt': true},
+    'tbody': {'tbody': true, 'tfoot': true},
+    'td': {'td': true, 'th': true},
+    'tfoot': {'tbody': true},
+    'th': {'td': true, 'th': true},
+    'thead': {'tbody': true, 'tfoot': true},
+    'tr': {'tr': true}
+  },
+  doNotIndent: {"pre": true},
+  allowUnquoted: true,
+  allowMissing: true,
+  caseFold: true
+}
 
-  var Kludges = parserConfig.htmlMode ? {
-    autoSelfClosers: {'area': true, 'base': true, 'br': true, 'col': true, 'command': true,
-                      'embed': true, 'frame': true, 'hr': true, 'img': true, 'input': true,
-                      'keygen': true, 'link': true, 'meta': true, 'param': true, 'source': true,
-                      'track': true, 'wbr': true, 'menuitem': true},
-    implicitlyClosed: {'dd': true, 'li': true, 'optgroup': true, 'option': true, 'p': true,
-                       'rp': true, 'rt': true, 'tbody': true, 'td': true, 'tfoot': true,
-                       'th': true, 'tr': true},
-    contextGrabbers: {
-      'dd': {'dd': true, 'dt': true},
-      'dt': {'dd': true, 'dt': true},
-      'li': {'li': true},
-      'option': {'option': true, 'optgroup': true},
-      'optgroup': {'optgroup': true},
-      'p': {'address': true, 'article': true, 'aside': true, 'blockquote': true, 'dir': true,
-            'div': true, 'dl': true, 'fieldset': true, 'footer': true, 'form': true,
-            'h1': true, 'h2': true, 'h3': true, 'h4': true, 'h5': true, 'h6': true,
-            'header': true, 'hgroup': true, 'hr': true, 'menu': true, 'nav': true, 'ol': true,
-            'p': true, 'pre': true, 'section': true, 'table': true, 'ul': true},
-      'rp': {'rp': true, 'rt': true},
-      'rt': {'rp': true, 'rt': true},
-      'tbody': {'tbody': true, 'tfoot': true},
-      'td': {'td': true, 'th': true},
-      'tfoot': {'tbody': true},
-      'th': {'td': true, 'th': true},
-      'thead': {'tbody': true, 'tfoot': true},
-      'tr': {'tr': true}
-    },
-    doNotIndent: {"pre": true},
-    allowUnquoted: true,
-    allowMissing: true,
-    caseFold: true
-  } : {
-    autoSelfClosers: {},
-    implicitlyClosed: {},
-    contextGrabbers: {},
-    doNotIndent: {},
-    allowUnquoted: false,
-    allowMissing: false,
-    caseFold: false
-  };
-  var alignCDATA = parserConfig.alignCDATA;
+var xmlConfig = {
+  autoSelfClosers: {},
+  implicitlyClosed: {},
+  contextGrabbers: {},
+  doNotIndent: {},
+  allowUnquoted: false,
+  allowMissing: false,
+  caseFold: false
+}
+
+CodeMirror.defineMode("xml", function(editorConf, config_) {
+  var indentUnit = editorConf.indentUnit
+  var config = {}
+  var defaults = config_.htmlMode ? htmlConfig : xmlConfig
+  for (var prop in defaults) config[prop] = defaults[prop]
+  for (var prop in config_) config[prop] = config_[prop]
 
   // Return variables for tokenizers
   var type, setStyle;
@@ -11331,7 +11347,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     this.tagName = tagName;
     this.indent = state.indented;
     this.startOfLine = startOfLine;
-    if (Kludges.doNotIndent.hasOwnProperty(tagName) || (state.context && state.context.noIndent))
+    if (config.doNotIndent.hasOwnProperty(tagName) || (state.context && state.context.noIndent))
       this.noIndent = true;
   }
   function popContext(state) {
@@ -11344,8 +11360,8 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         return;
       }
       parentTagName = state.context.tagName;
-      if (!Kludges.contextGrabbers.hasOwnProperty(parentTagName) ||
-          !Kludges.contextGrabbers[parentTagName].hasOwnProperty(nextTagName)) {
+      if (!config.contextGrabbers.hasOwnProperty(parentTagName) ||
+          !config.contextGrabbers[parentTagName].hasOwnProperty(nextTagName)) {
         return;
       }
       popContext(state);
@@ -11376,7 +11392,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     if (type == "word") {
       var tagName = stream.current();
       if (state.context && state.context.tagName != tagName &&
-          Kludges.implicitlyClosed.hasOwnProperty(state.context.tagName))
+          config.implicitlyClosed.hasOwnProperty(state.context.tagName))
         popContext(state);
       if (state.context && state.context.tagName == tagName) {
         setStyle = "tag";
@@ -11412,7 +11428,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       var tagName = state.tagName, tagStart = state.tagStart;
       state.tagName = state.tagStart = null;
       if (type == "selfcloseTag" ||
-          Kludges.autoSelfClosers.hasOwnProperty(tagName)) {
+          config.autoSelfClosers.hasOwnProperty(tagName)) {
         maybePopContext(state, tagName);
       } else {
         maybePopContext(state, tagName);
@@ -11425,12 +11441,12 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   }
   function attrEqState(type, stream, state) {
     if (type == "equals") return attrValueState;
-    if (!Kludges.allowMissing) setStyle = "error";
+    if (!config.allowMissing) setStyle = "error";
     return attrState(type, stream, state);
   }
   function attrValueState(type, stream, state) {
     if (type == "string") return attrContinuedState;
-    if (type == "word" && Kludges.allowUnquoted) {setStyle = "string"; return attrState;}
+    if (type == "word" && config.allowUnquoted) {setStyle = "string"; return attrState;}
     setStyle = "error";
     return attrState(type, stream, state);
   }
@@ -11440,12 +11456,14 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   }
 
   return {
-    startState: function() {
-      return {tokenize: inText,
-              state: baseState,
-              indented: 0,
-              tagName: null, tagStart: null,
-              context: null};
+    startState: function(baseIndent) {
+      var state = {tokenize: inText,
+                   state: baseState,
+                   indented: baseIndent || 0,
+                   tagName: null, tagStart: null,
+                   context: null}
+      if (baseIndent != null) state.baseIndent = baseIndent
+      return state
     },
 
     token: function(stream, state) {
@@ -11478,19 +11496,19 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         return fullLine ? fullLine.match(/^(\s*)/)[0].length : 0;
       // Indent the starts of attribute names.
       if (state.tagName) {
-        if (multilineTagIndentPastTag)
+        if (config.multilineTagIndentPastTag !== false)
           return state.tagStart + state.tagName.length + 2;
         else
-          return state.tagStart + indentUnit * multilineTagIndentFactor;
+          return state.tagStart + indentUnit * (config.multilineTagIndentFactor || 1);
       }
-      if (alignCDATA && /<!\[CDATA\[/.test(textAfter)) return 0;
+      if (config.alignCDATA && /<!\[CDATA\[/.test(textAfter)) return 0;
       var tagAfter = textAfter && /^<(\/)?([\w_:\.-]*)/.exec(textAfter);
       if (tagAfter && tagAfter[1]) { // Closing tag spotted
         while (context) {
           if (context.tagName == tagAfter[2]) {
             context = context.prev;
             break;
-          } else if (Kludges.implicitlyClosed.hasOwnProperty(context.tagName)) {
+          } else if (config.implicitlyClosed.hasOwnProperty(context.tagName)) {
             context = context.prev;
           } else {
             break;
@@ -11498,25 +11516,30 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         }
       } else if (tagAfter) { // Opening tag spotted
         while (context) {
-          var grabbers = Kludges.contextGrabbers[context.tagName];
+          var grabbers = config.contextGrabbers[context.tagName];
           if (grabbers && grabbers.hasOwnProperty(tagAfter[2]))
             context = context.prev;
           else
             break;
         }
       }
-      while (context && !context.startOfLine)
+      while (context && context.prev && !context.startOfLine)
         context = context.prev;
       if (context) return context.indent + indentUnit;
-      else return 0;
+      else return state.baseIndent || 0;
     },
 
     electricInput: /<\/[\s\w:]+>$/,
     blockCommentStart: "<!--",
     blockCommentEnd: "-->",
 
-    configuration: parserConfig.htmlMode ? "html" : "xml",
-    helperType: parserConfig.htmlMode ? "html" : "xml"
+    configuration: config.htmlMode ? "html" : "xml",
+    helperType: config.htmlMode ? "html" : "xml",
+
+    skipAttribute: function(state) {
+      if (state.state == attrValueState)
+        state.state = attrState
+    }
   };
 });
 
