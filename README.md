@@ -78,7 +78,7 @@ simplemde.value("This text will appear in the editor");
   - **code** Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic** Can be set to `*` or `_`. Defaults to `*`.
 - **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
-- **forceFullscreen**: If set to `true`, force enter fullscreen mode when toggle side by side mode. Defaults to `false`.
+- **forceFullscreen**: If set to `true`, force enter fullscreen mode when toggle side by side mode. Defaults to `true`.
 - **forceSync**: If set to `true`, force text changes made in SimpleMDE to be immediately stored in original textarea. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
 - **indentWithTabs**: If set to `false`, indent using spaces instead of tabs. Defaults to `true`.
