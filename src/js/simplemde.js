@@ -693,6 +693,7 @@ function toggleSideBySide(editor) {
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
 	var useSideBySideListener = false;
+	var options = editor.options;
 	if(/editor-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active-side\s*/g, ""
@@ -703,8 +704,9 @@ function toggleSideBySide(editor) {
 		// When the preview button is clicked for the first time,
 		// give some time for the transition from editor.css to fire and the view to slide from right to left,
 		// instead of just appearing.
+		forceFullscreen = (options.forceFullscreen != undefined) ? options.forceFullscreen : true;
 		setTimeout(function() {
-			if(!cm.getOption("fullScreen"))
+			if(forceFullscreen && !cm.getOption("fullScreen"))
 				toggleFullScreen(editor);
 			preview.className += " editor-preview-active-side";
 		}, 1);
