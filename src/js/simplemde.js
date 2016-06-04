@@ -9,6 +9,8 @@ require("codemirror/addon/mode/overlay.js");
 require("codemirror/addon/display/placeholder.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
+require("codemirror/mode/yaml/yaml.js");
+require("codemirror/mode/yaml-frontmatter/yaml-frontmatter.js");
 require("spell-checker");
 var marked = require("marked");
 
@@ -1463,11 +1465,11 @@ SimpleMDE.prototype.render = function(el) {
 	if(options.spellChecker !== false) {
 		mode = "spell-checker";
 		backdrop = options.parsingConfig;
-		backdrop.name = "gfm";
+		backdrop.name = options.mode || "gfm";
 		backdrop.gitHubSpice = false;
 	} else {
 		mode = options.parsingConfig;
-		mode.name = "gfm";
+		mode.name = options.mode || "gfm";
 		mode.gitHubSpice = false;
 	}
 
