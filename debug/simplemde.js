@@ -5,11 +5,6 @@
  * @license MIT
  */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SimpleMDE = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-
-; Typo = global.Typo = require("/home/prostoandrei/Projects/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
-CodeMirror = global.CodeMirror = require("codemirror");
-; var __browserify_shim_require__=require;(function browserifyShim(module, define, require) {
 // Initialize data globally to reduce memory consumption
 var num_loaded = 0;
 var aff_loading = false;
@@ -102,784 +97,7 @@ if(!String.prototype.includes) {
 		return String.prototype.indexOf.apply(this, arguments) !== -1;
 	};
 }
-}).call(global, module, undefined, undefined);
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/prostoandrei/Projects/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":7}],2:[function(require,module,exports){
-(function (global){
-; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
-'use strict';
-
-/**
- * Typo is a JavaScript implementation of a spellchecker using hunspell-style
- * dictionaries.
- */
-
-/**
- * Typo constructor.
- *
- * @param {String} [dictionary] The locale code of the dictionary being used. e.g.,
- *                              "en_US". This is only used to auto-load dictionaries.
- * @param {String} [affData] The data from the dictionary's .aff file. If omitted
- *                           and the first argument is supplied, in "chrome" platform,
- *                           the .aff file will be loaded automatically from
- *                           lib/typo/dictionaries/[dictionary]/[dictionary].aff
- *                           In other platform, it will be loaded from
- *                           [setting.path]/dictionaries/[dictionary]/[dictionary].aff
- * @param {String} [wordsData] The data from the dictionary's .dic file. If omitted,
- *                           and the first argument is supplied, in "chrome" platform,
- *                           the .dic file will be loaded automatically from
- *                           lib/typo/dictionaries/[dictionary]/[dictionary].dic
- *                           In other platform, it will be loaded from
- *                           [setting.path]/dictionaries/[dictionary]/[dictionary].dic
- * @param {Object} [settings] Constructor settings. Available properties are:
- *                            {String} [platform]: "chrome" for Chrome Extension or other
- *                              value for the usual web.
- *                            {String} [dictionaryPath]: path to load dictionary from in non-chrome
- *                              environment.
- *                            {Object} [flags]: flag information.
- *
- *
- * @returns {Typo} A Typo object.
- */
-
-var Typo = function (dictionary, affData, wordsData, settings) {
-	settings = settings || {};
-	
-	/** Determines the method used for auto-loading .aff and .dic files. **/
-	this.platform = settings.platform || "chrome";
-	
-	this.dictionary = null;
-	
-	this.rules = {};
-	this.dictionaryTable = {};
-	
-	this.compoundRules = [];
-	this.compoundRuleCodes = {};
-	
-	this.replacementTable = [];
-	
-	this.flags = settings.flags || {};
-	
-	if (dictionary) {
-		this.dictionary = dictionary;
-		
-		if (this.platform == "chrome") {
-			if (!affData) affData = this._readFile(chrome.extension.getURL("lib/typo/dictionaries/" + dictionary + "/" + dictionary + ".aff"));
-			if (!wordsData) wordsData = this._readFile(chrome.extension.getURL("lib/typo/dictionaries/" + dictionary + "/" + dictionary + ".dic"));
-		} else {
-			var path = settings.dictionaryPath || '';
-			
-			if (!affData) affData = this._readFile(path + "/" + dictionary + "/" + dictionary + ".aff");
-			if (!wordsData) wordsData = this._readFile(path + "/" + dictionary + "/" + dictionary + ".dic");
-		}
-		
-		this.rules = this._parseAFF(affData);
-		
-		// Save the rule codes that are used in compound rules.
-		this.compoundRuleCodes = {};
-		
-		for (var i = 0, _len = this.compoundRules.length; i < _len; i++) {
-			var rule = this.compoundRules[i];
-			
-			for (var j = 0, _jlen = rule.length; j < _jlen; j++) {
-				this.compoundRuleCodes[rule[j]] = [];
-			}
-		}
-		
-		// If we add this ONLYINCOMPOUND flag to this.compoundRuleCodes, then _parseDIC
-		// will do the work of saving the list of words that are compound-only.
-		if ("ONLYINCOMPOUND" in this.flags) {
-			this.compoundRuleCodes[this.flags.ONLYINCOMPOUND] = [];
-		}
-		
-		this.dictionaryTable = this._parseDIC(wordsData);
-		
-		// Get rid of any codes from the compound rule codes that are never used
-		// (or that were special regex characters).  Not especially necessary...
-		for (var i in this.compoundRuleCodes) {
-			if (this.compoundRuleCodes[i].length == 0) {
-				delete this.compoundRuleCodes[i];
-			}
-		}
-		
-		// Build the full regular expressions for each compound rule.
-		// I have a feeling (but no confirmation yet) that this method of
-		// testing for compound words is probably slow.
-		for (var i = 0, _len = this.compoundRules.length; i < _len; i++) {
-			var ruleText = this.compoundRules[i];
-			
-			var expressionText = "";
-			
-			for (var j = 0, _jlen = ruleText.length; j < _jlen; j++) {
-				var character = ruleText[j];
-				
-				if (character in this.compoundRuleCodes) {
-					expressionText += "(" + this.compoundRuleCodes[character].join("|") + ")";
-				}
-				else {
-					expressionText += character;
-				}
-			}
-			
-			this.compoundRules[i] = new RegExp(expressionText, "i");
-		}
-	}
-	
-	return this;
-};
-
-Typo.prototype = {
-	/**
-	 * Loads a Typo instance from a hash of all of the Typo properties.
-	 *
-	 * @param object obj A hash of Typo properties, probably gotten from a JSON.parse(JSON.stringify(typo_instance)).
-	 */
-	
-	load : function (obj) {
-		for (var i in obj) {
-			this[i] = obj[i];
-		}
-		
-		return this;
-	},
-	
-	/**
-	 * Read the contents of a file.
-	 *
-	 * @param {String} path The path (relative) to the file.
-	 * @param {String} [charset="ISO8859-1"] The expected charset of the file
-	 * @returns string The file data.
-	 */
-	
-	_readFile : function (path, charset) {
-		if (!charset) charset = "ISO8859-1";
-		
-		var req = new XMLHttpRequest();
-		req.open("GET", path, false);
-		
-		if (req.overrideMimeType)
-			req.overrideMimeType("text/plain; charset=" + charset);
-		
-		req.send(null);
-		
-		return req.responseText;
-	},
-	
-	/**
-	 * Parse the rules out from a .aff file.
-	 *
-	 * @param {String} data The contents of the affix file.
-	 * @returns object The rules from the file.
-	 */
-	
-	_parseAFF : function (data) {
-		var rules = {};
-		
-		// Remove comment lines
-		data = this._removeAffixComments(data);
-		
-		var lines = data.split("\n");
-		
-		for (var i = 0, _len = lines.length; i < _len; i++) {
-			var line = lines[i];
-			
-			var definitionParts = line.split(/\s+/);
-			
-			var ruleType = definitionParts[0];
-			
-			if (ruleType == "PFX" || ruleType == "SFX") {
-				var ruleCode = definitionParts[1];
-				var combineable = definitionParts[2];
-				var numEntries = parseInt(definitionParts[3], 10);
-				
-				var entries = [];
-				
-				for (var j = i + 1, _jlen = i + 1 + numEntries; j < _jlen; j++) {
-					var line = lines[j];
-					
-					var lineParts = line.split(/\s+/);
-					var charactersToRemove = lineParts[2];
-					
-					var additionParts = lineParts[3].split("/");
-					
-					var charactersToAdd = additionParts[0];
-					if (charactersToAdd === "0") charactersToAdd = "";
-					
-					var continuationClasses = this.parseRuleCodes(additionParts[1]);
-					
-					var regexToMatch = lineParts[4];
-					
-					var entry = {};
-					entry.add = charactersToAdd;
-					
-					if (continuationClasses.length > 0) entry.continuationClasses = continuationClasses;
-					
-					if (regexToMatch !== ".") {
-						if (ruleType === "SFX") {
-							entry.match = new RegExp(regexToMatch + "$");
-						}
-						else {
-							entry.match = new RegExp("^" + regexToMatch);
-						}
-					}
-					
-					if (charactersToRemove != "0") {
-						if (ruleType === "SFX") {
-							entry.remove = new RegExp(charactersToRemove  + "$");
-						}
-						else {
-							entry.remove = charactersToRemove;
-						}
-					}
-					
-					entries.push(entry);
-				}
-				
-				rules[ruleCode] = { "type" : ruleType, "combineable" : (combineable == "Y"), "entries" : entries };
-				
-				i += numEntries;
-			}
-			else if (ruleType === "COMPOUNDRULE") {
-				var numEntries = parseInt(definitionParts[1], 10);
-				
-				for (var j = i + 1, _jlen = i + 1 + numEntries; j < _jlen; j++) {
-					var line = lines[j];
-					
-					var lineParts = line.split(/\s+/);
-					this.compoundRules.push(lineParts[1]);
-				}
-				
-				i += numEntries;
-			}
-			else if (ruleType === "REP") {
-				var lineParts = line.split(/\s+/);
-				
-				if (lineParts.length === 3) {
-					this.replacementTable.push([ lineParts[1], lineParts[2] ]);
-				}
-			}
-			else {
-				// ONLYINCOMPOUND
-				// COMPOUNDMIN
-				// FLAG
-				// KEEPCASE
-				// NEEDAFFIX
-				
-				this.flags[ruleType] = definitionParts[1];
-			}
-		}
-		
-		return rules;
-	},
-	
-	/**
-	 * Removes comment lines and then cleans up blank lines and trailing whitespace.
-	 *
-	 * @param {String} data The data from an affix file.
-	 * @return {String} The cleaned-up data.
-	 */
-	
-	_removeAffixComments : function (data) {
-		// Remove comments
-		data = data.replace(/#.*$/mg, "");
-		
-		// Trim each line
-		data = data.replace(/^\s\s*/m, '').replace(/\s\s*$/m, '');
-		
-		// Remove blank lines.
-		data = data.replace(/\n{2,}/g, "\n");
-		
-		// Trim the entire string
-		data = data.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-		
-		return data;
-	},
-	
-	/**
-	 * Parses the words out from the .dic file.
-	 *
-	 * @param {String} data The data from the dictionary file.
-	 * @returns object The lookup table containing all of the words and
-	 *                 word forms from the dictionary.
-	 */
-	
-	_parseDIC : function (data) {
-		data = this._removeDicComments(data);
-		
-		var lines = data.split("\n");
-		var dictionaryTable = {};
-		
-		function addWord(word, rules) {
-			// Some dictionaries will list the same word multiple times with different rule sets.
-			if (!(word in dictionaryTable) || typeof dictionaryTable[word] != 'object') {
-				dictionaryTable[word] = [];
-			}
-			
-			dictionaryTable[word].push(rules);
-		}
-		
-		// The first line is the number of words in the dictionary.
-		for (var i = 1, _len = lines.length; i < _len; i++) {
-			var line = lines[i];
-			
-			var parts = line.split("/", 2);
-			
-			var word = parts[0];
-
-			// Now for each affix rule, generate that form of the word.
-			if (parts.length > 1) {
-				var ruleCodesArray = this.parseRuleCodes(parts[1]);
-				
-				// Save the ruleCodes for compound word situations.
-				if (!("NEEDAFFIX" in this.flags) || ruleCodesArray.indexOf(this.flags.NEEDAFFIX) == -1) {
-					addWord(word, ruleCodesArray);
-				}
-				
-				for (var j = 0, _jlen = ruleCodesArray.length; j < _jlen; j++) {
-					var code = ruleCodesArray[j];
-					
-					var rule = this.rules[code];
-					
-					if (rule) {
-						var newWords = this._applyRule(word, rule);
-						
-						for (var ii = 0, _iilen = newWords.length; ii < _iilen; ii++) {
-							var newWord = newWords[ii];
-							
-							addWord(newWord, []);
-							
-							if (rule.combineable) {
-								for (var k = j + 1; k < _jlen; k++) {
-									var combineCode = ruleCodesArray[k];
-									
-									var combineRule = this.rules[combineCode];
-									
-									if (combineRule) {
-										if (combineRule.combineable && (rule.type != combineRule.type)) {
-											var otherNewWords = this._applyRule(newWord, combineRule);
-											
-											for (var iii = 0, _iiilen = otherNewWords.length; iii < _iiilen; iii++) {
-												var otherNewWord = otherNewWords[iii];
-												addWord(otherNewWord, []);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					if (code in this.compoundRuleCodes) {
-						this.compoundRuleCodes[code].push(word);
-					}
-				}
-			}
-			else {
-				addWord(word.trim(), []);
-			}
-		}
-		
-		return dictionaryTable;
-	},
-	
-	
-	/**
-	 * Removes comment lines and then cleans up blank lines and trailing whitespace.
-	 *
-	 * @param {String} data The data from a .dic file.
-	 * @return {String} The cleaned-up data.
-	 */
-	
-	_removeDicComments : function (data) {
-		// I can't find any official documentation on it, but at least the de_DE
-		// dictionary uses tab-indented lines as comments.
-		
-		// Remove comments
-		data = data.replace(/^\t.*$/mg, "");
-		
-		return data;
-		
-		// Trim each line
-		data = data.replace(/^\s\s*/m, '').replace(/\s\s*$/m, '');
-		
-		// Remove blank lines.
-		data = data.replace(/\n{2,}/g, "\n");
-		
-		// Trim the entire string
-		data = data.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-		
-		return data;
-	},
-	
-	parseRuleCodes : function (textCodes) {
-		if (!textCodes) {
-			return [];
-		}
-		else if (!("FLAG" in this.flags)) {
-			return textCodes.split("");
-		}
-		else if (this.flags.FLAG === "long") {
-			var flags = [];
-			
-			for (var i = 0, _len = textCodes.length; i < _len; i += 2) {
-				flags.push(textCodes.substr(i, 2));
-			}
-			
-			return flags;
-		}
-		else if (this.flags.FLAG === "num") {
-			return textCode.split(",");
-		}
-	},
-	
-	/**
-	 * Applies an affix rule to a word.
-	 *
-	 * @param {String} word The base word.
-	 * @param {Object} rule The affix rule.
-	 * @returns {String[]} The new words generated by the rule.
-	 */
-	
-	_applyRule : function (word, rule) {
-		var entries = rule.entries;
-		var newWords = [];
-		
-		for (var i = 0, _len = entries.length; i < _len; i++) {
-			var entry = entries[i];
-			
-			if (!entry.match || word.match(entry.match)) {
-				var newWord = word;
-				
-				if (entry.remove) {
-					newWord = newWord.replace(entry.remove, "");
-				}
-				
-				if (rule.type === "SFX") {
-					newWord = newWord + entry.add;
-				}
-				else {
-					newWord = entry.add + newWord;
-				}
-				
-				newWords.push(newWord);
-				
-				if ("continuationClasses" in entry) {
-					for (var j = 0, _jlen = entry.continuationClasses.length; j < _jlen; j++) {
-						var continuationRule = this.rules[entry.continuationClasses[j]];
-						
-						if (continuationRule) {
-							newWords = newWords.concat(this._applyRule(newWord, continuationRule));
-						}
-						/*
-						else {
-							// This shouldn't happen, but it does, at least in the de_DE dictionary.
-							// I think the author mistakenly supplied lower-case rule codes instead
-							// of upper-case.
-						}
-						*/
-					}
-				}
-			}
-		}
-		
-		return newWords;
-	},
-	
-	/**
-	 * Checks whether a word or a capitalization variant exists in the current dictionary.
-	 * The word is trimmed and several variations of capitalizations are checked.
-	 * If you want to check a word without any changes made to it, call checkExact()
-	 *
-	 * @see http://blog.stevenlevithan.com/archives/faster-trim-javascript re:trimming function
-	 *
-	 * @param {String} aWord The word to check.
-	 * @returns {Boolean}
-	 */
-	
-	check : function (aWord) {
-		// Remove leading and trailing whitespace
-		var trimmedWord = aWord.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-		
-		if (this.checkExact(trimmedWord)) {
-			return true;
-		}
-		
-		// The exact word is not in the dictionary.
-		if (trimmedWord.toUpperCase() === trimmedWord) {
-			// The word was supplied in all uppercase.
-			// Check for a capitalized form of the word.
-			var capitalizedWord = trimmedWord[0] + trimmedWord.substring(1).toLowerCase();
-			
-			if (this.hasFlag(capitalizedWord, "KEEPCASE")) {
-				// Capitalization variants are not allowed for this word.
-				return false;
-			}
-			
-			if (this.checkExact(capitalizedWord)) {
-				return true;
-			}
-		}
-		
-		var lowercaseWord = trimmedWord.toLowerCase();
-		
-		if (lowercaseWord !== trimmedWord) {
-			if (this.hasFlag(lowercaseWord, "KEEPCASE")) {
-				// Capitalization variants are not allowed for this word.
-				return false;
-			}
-			
-			// Check for a lowercase form
-			if (this.checkExact(lowercaseWord)) {
-				return true;
-			}
-		}
-		
-		return false;
-	},
-	
-	/**
-	 * Checks whether a word exists in the current dictionary.
-	 *
-	 * @param {String} word The word to check.
-	 * @returns {Boolean}
-	 */
-	
-	checkExact : function (word) {
-		var ruleCodes = this.dictionaryTable[word];
-		
-		if (typeof ruleCodes === 'undefined') {
-			// Check if this might be a compound word.
-			if ("COMPOUNDMIN" in this.flags && word.length >= this.flags.COMPOUNDMIN) {
-				for (var i = 0, _len = this.compoundRules.length; i < _len; i++) {
-					if (word.match(this.compoundRules[i])) {
-						return true;
-					}
-				}
-			}
-			
-			return false;
-		}
-		else {
-			for (var i = 0, _len = ruleCodes.length; i < _len; i++) {
-				if (!this.hasFlag(word, "ONLYINCOMPOUND", ruleCodes[i])) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
-	},
-	
-	/**
-	 * Looks up whether a given word is flagged with a given flag.
-	 *
-	 * @param {String} word The word in question.
-	 * @param {String} flag The flag in question.
-	 * @return {Boolean}
-	 */
-	 
-	hasFlag : function (word, flag, wordFlags) {
-		if (flag in this.flags) {
-			if (typeof wordFlags === 'undefined') {
-				var wordFlags = Array.prototype.concat.apply([], this.dictionaryTable[word]);
-			}
-			
-			if (wordFlags && wordFlags.indexOf(this.flags[flag]) !== -1) {
-				return true;
-			}
-		}
-		
-		return false;
-	},
-	
-	/**
-	 * Returns a list of suggestions for a misspelled word.
-	 *
-	 * @see http://www.norvig.com/spell-correct.html for the basis of this suggestor.
-	 * This suggestor is primitive, but it works.
-	 *
-	 * @param {String} word The misspelling.
-	 * @param {Number} [limit=5] The maximum number of suggestions to return.
-	 * @returns {String[]} The array of suggestions.
-	 */
-	
-	alphabet : "",
-	
-	suggest : function (word, limit) {
-		if (!limit) limit = 5;
-		
-		if (this.check(word)) return [];
-		
-		// Check the replacement table.
-		for (var i = 0, _len = this.replacementTable.length; i < _len; i++) {
-			var replacementEntry = this.replacementTable[i];
-			
-			if (word.indexOf(replacementEntry[0]) !== -1) {
-				var correctedWord = word.replace(replacementEntry[0], replacementEntry[1]);
-				
-				if (this.check(correctedWord)) {
-					return [ correctedWord ];
-				}
-			}
-		}
-		
-		var self = this;
-		self.alphabet = "abcdefghijklmnopqrstuvwxyz";
-		
-		/*
-		if (!self.alphabet) {
-			// Use the alphabet as implicitly defined by the words in the dictionary.
-			var alphaHash = {};
-			
-			for (var i in self.dictionaryTable) {
-				for (var j = 0, _len = i.length; j < _len; j++) {
-					alphaHash[i[j]] = true;
-				}
-			}
-			
-			for (var i in alphaHash) {
-				self.alphabet += i;
-			}
-			
-			var alphaArray = self.alphabet.split("");
-			alphaArray.sort();
-			self.alphabet = alphaArray.join("");
-		}
-		*/
-		
-		function edits1(words) {
-			var rv = [];
-			
-			for (var ii = 0, _iilen = words.length; ii < _iilen; ii++) {
-				var word = words[ii];
-				
-				var splits = [];
-			
-				for (var i = 0, _len = word.length + 1; i < _len; i++) {
-					splits.push([ word.substring(0, i), word.substring(i, word.length) ]);
-				}
-			
-				var deletes = [];
-			
-				for (var i = 0, _len = splits.length; i < _len; i++) {
-					var s = splits[i];
-				
-					if (s[1]) {
-						deletes.push(s[0] + s[1].substring(1));
-					}
-				}
-			
-				var transposes = [];
-			
-				for (var i = 0, _len = splits.length; i < _len; i++) {
-					var s = splits[i];
-				
-					if (s[1].length > 1) {
-						transposes.push(s[0] + s[1][1] + s[1][0] + s[1].substring(2));
-					}
-				}
-			
-				var replaces = [];
-			
-				for (var i = 0, _len = splits.length; i < _len; i++) {
-					var s = splits[i];
-				
-					if (s[1]) {
-						for (var j = 0, _jlen = self.alphabet.length; j < _jlen; j++) {
-							replaces.push(s[0] + self.alphabet[j] + s[1].substring(1));
-						}
-					}
-				}
-			
-				var inserts = [];
-			
-				for (var i = 0, _len = splits.length; i < _len; i++) {
-					var s = splits[i];
-				
-					if (s[1]) {
-						for (var j = 0, _jlen = self.alphabet.length; j < _jlen; j++) {
-							replaces.push(s[0] + self.alphabet[j] + s[1]);
-						}
-					}
-				}
-			
-				rv = rv.concat(deletes);
-				rv = rv.concat(transposes);
-				rv = rv.concat(replaces);
-				rv = rv.concat(inserts);
-			}
-			
-			return rv;
-		}
-		
-		function known(words) {
-			var rv = [];
-			
-			for (var i = 0; i < words.length; i++) {
-				if (self.check(words[i])) {
-					rv.push(words[i]);
-				}
-			}
-			
-			return rv;
-		}
-		
-		function correct(word) {
-			// Get the edit-distance-1 and edit-distance-2 forms of this word.
-			var ed1 = edits1([word]);
-			var ed2 = edits1(ed1);
-			
-			var corrections = known(ed1).concat(known(ed2));
-			
-			// Sort the edits based on how many different ways they were created.
-			var weighted_corrections = {};
-			
-			for (var i = 0, _len = corrections.length; i < _len; i++) {
-				if (!(corrections[i] in weighted_corrections)) {
-					weighted_corrections[corrections[i]] = 1;
-				}
-				else {
-					weighted_corrections[corrections[i]] += 1;
-				}
-			}
-			
-			var sorted_corrections = [];
-			
-			for (var i in weighted_corrections) {
-				sorted_corrections.push([ i, weighted_corrections[i] ]);
-			}
-			
-			function sorter(a, b) {
-				if (a[1] < b[1]) {
-					return -1;
-				}
-				
-				return 1;
-			}
-			
-			sorted_corrections.sort(sorter).reverse();
-			
-			var rv = [];
-			
-			for (var i = 0, _len = Math.min(limit, sorted_corrections.length); i < _len; i++) {
-				if (!self.hasFlag(sorted_corrections[i][0], "NOSUGGEST")) {
-					rv.push(sorted_corrections[i][0]);
-				}
-			}
-			
-			return rv;
-		}
-		
-		return correct(word);
-	}
-};
-; browserify_shim__define__module__export__(typeof Typo != "undefined" ? Typo : window.Typo);
-
-}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -922,7 +140,7 @@ Typo.prototype = {
   }
 });
 
-},{"../../lib/codemirror":7}],4:[function(require,module,exports){
+},{"../../lib/codemirror":7}],3:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -986,7 +204,7 @@ Typo.prototype = {
   }
 });
 
-},{"../../lib/codemirror":7}],5:[function(require,module,exports){
+},{"../../lib/codemirror":7}],4:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -1039,7 +257,7 @@ Typo.prototype = {
   };
 });
 
-},{"../../lib/codemirror":7}],6:[function(require,module,exports){
+},{"../../lib/codemirror":7}],5:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -1126,6 +344,126 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
 });
 
+},{"../../lib/codemirror":7}],6:[function(require,module,exports){
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+// Because sometimes you need to mark the selected *text*.
+//
+// Adds an option 'styleSelectedText' which, when enabled, gives
+// selected text the CSS class given as option value, or
+// "CodeMirror-selectedtext" when the value is not a string.
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+  "use strict";
+
+  CodeMirror.defineOption("styleSelectedText", false, function(cm, val, old) {
+    var prev = old && old != CodeMirror.Init;
+    if (val && !prev) {
+      cm.state.markedSelection = [];
+      cm.state.markedSelectionStyle = typeof val == "string" ? val : "CodeMirror-selectedtext";
+      reset(cm);
+      cm.on("cursorActivity", onCursorActivity);
+      cm.on("change", onChange);
+    } else if (!val && prev) {
+      cm.off("cursorActivity", onCursorActivity);
+      cm.off("change", onChange);
+      clear(cm);
+      cm.state.markedSelection = cm.state.markedSelectionStyle = null;
+    }
+  });
+
+  function onCursorActivity(cm) {
+    cm.operation(function() { update(cm); });
+  }
+
+  function onChange(cm) {
+    if (cm.state.markedSelection.length)
+      cm.operation(function() { clear(cm); });
+  }
+
+  var CHUNK_SIZE = 8;
+  var Pos = CodeMirror.Pos;
+  var cmp = CodeMirror.cmpPos;
+
+  function coverRange(cm, from, to, addAt) {
+    if (cmp(from, to) == 0) return;
+    var array = cm.state.markedSelection;
+    var cls = cm.state.markedSelectionStyle;
+    for (var line = from.line;;) {
+      var start = line == from.line ? from : Pos(line, 0);
+      var endLine = line + CHUNK_SIZE, atEnd = endLine >= to.line;
+      var end = atEnd ? to : Pos(endLine, 0);
+      var mark = cm.markText(start, end, {className: cls});
+      if (addAt == null) array.push(mark);
+      else array.splice(addAt++, 0, mark);
+      if (atEnd) break;
+      line = endLine;
+    }
+  }
+
+  function clear(cm) {
+    var array = cm.state.markedSelection;
+    for (var i = 0; i < array.length; ++i) array[i].clear();
+    array.length = 0;
+  }
+
+  function reset(cm) {
+    clear(cm);
+    var ranges = cm.listSelections();
+    for (var i = 0; i < ranges.length; i++)
+      coverRange(cm, ranges[i].from(), ranges[i].to());
+  }
+
+  function update(cm) {
+    if (!cm.somethingSelected()) return clear(cm);
+    if (cm.listSelections().length > 1) return reset(cm);
+
+    var from = cm.getCursor("start"), to = cm.getCursor("end");
+
+    var array = cm.state.markedSelection;
+    if (!array.length) return coverRange(cm, from, to);
+
+    var coverStart = array[0].find(), coverEnd = array[array.length - 1].find();
+    if (!coverStart || !coverEnd || to.line - from.line < CHUNK_SIZE ||
+        cmp(from, coverEnd.to) >= 0 || cmp(to, coverStart.from) <= 0)
+      return reset(cm);
+
+    while (cmp(from, coverStart.from) > 0) {
+      array.shift().clear();
+      coverStart = array[0].find();
+    }
+    if (cmp(from, coverStart.from) < 0) {
+      if (coverStart.to.line - from.line < CHUNK_SIZE) {
+        array.shift().clear();
+        coverRange(cm, from, coverStart.to, 0);
+      } else {
+        coverRange(cm, from, coverStart.from, 0);
+      }
+    }
+
+    while (cmp(to, coverEnd.to) < 0) {
+      array.pop().clear();
+      coverEnd = array[array.length - 1].find();
+    }
+    if (cmp(to, coverEnd.to) > 0) {
+      if (to.line - coverEnd.from.line < CHUNK_SIZE) {
+        array.pop().clear();
+        coverRange(cm, coverEnd.from, to);
+      } else {
+        coverRange(cm, coverEnd.to, to);
+      }
+    }
+  }
+});
+
 },{"../../lib/codemirror":7}],7:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
@@ -1170,6 +508,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
   // This is woefully incomplete. Suggestions for alternative methods welcome.
   var mobile = ios || /Android|webOS|BlackBerry|Opera Mini|Opera Mobi|IEMobile/i.test(userAgent);
   var mac = ios || /Mac/.test(platform);
+  var chromeOS = /\bCrOS\b/.test(userAgent);
   var windows = /win/i.test(platform);
 
   var presto_version = presto && userAgent.match(/Version\/(\d*\.\d*)/);
@@ -2224,9 +1563,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     if (!cm.state.focused) { cm.display.input.focus(); onFocus(cm); }
   }
 
-  // This will be set to an array of strings when copying, so that,
-  // when pasting, we know what kind of selections the copied text
-  // was made out of.
+  // This will be set to a {lineWise: bool, text: [string]} object, so
+  // that, when pasting, we know what kind of selections the copied
+  // text was made out of.
   var lastCopied = null;
 
   function applyTextInput(cm, inserted, deleted, sel, origin) {
@@ -2235,14 +1574,14 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     if (!sel) sel = doc.sel;
 
     var paste = cm.state.pasteIncoming || origin == "paste";
-    var textLines = doc.splitLines(inserted), multiPaste = null;
+    var textLines = doc.splitLines(inserted), multiPaste = null
     // When pasing N lines into N selections, insert one line per selection
     if (paste && sel.ranges.length > 1) {
-      if (lastCopied && lastCopied.join("\n") == inserted) {
-        if (sel.ranges.length % lastCopied.length == 0) {
+      if (lastCopied && lastCopied.text.join("\n") == inserted) {
+        if (sel.ranges.length % lastCopied.text.length == 0) {
           multiPaste = [];
-          for (var i = 0; i < lastCopied.length; i++)
-            multiPaste.push(doc.splitLines(lastCopied[i]));
+          for (var i = 0; i < lastCopied.text.length; i++)
+            multiPaste.push(doc.splitLines(lastCopied.text[i]));
         }
       } else if (textLines.length == sel.ranges.length) {
         multiPaste = map(textLines, function(l) { return [l]; });
@@ -2258,6 +1597,8 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
           from = Pos(from.line, from.ch - deleted);
         else if (cm.state.overwrite && !paste) // Handle overwrite
           to = Pos(to.line, Math.min(getLine(doc, to.line).text.length, to.ch + lst(textLines).length));
+        else if (lastCopied && lastCopied.lineWise && lastCopied.text.join("\n") == inserted)
+          from = to = Pos(from.line, 0)
       }
       var updateInput = cm.curOp.updateInput;
       var changeEvent = {from: from, to: to, text: multiPaste ? multiPaste[i % multiPaste.length] : textLines,
@@ -2390,18 +1731,18 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       function prepareCopyCut(e) {
         if (signalDOMEvent(cm, e)) return
         if (cm.somethingSelected()) {
-          lastCopied = cm.getSelections();
+          lastCopied = {lineWise: false, text: cm.getSelections()};
           if (input.inaccurateSelection) {
             input.prevInput = "";
             input.inaccurateSelection = false;
-            te.value = lastCopied.join("\n");
+            te.value = lastCopied.text.join("\n");
             selectInput(te);
           }
         } else if (!cm.options.lineWiseCopyCut) {
           return;
         } else {
           var ranges = copyableRanges(cm);
-          lastCopied = ranges.text;
+          lastCopied = {lineWise: true, text: ranges.text};
           if (e.type == "cut") {
             cm.setSelections(ranges.ranges, null, sel_dontScroll);
           } else {
@@ -2749,13 +2090,13 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       function onCopyCut(e) {
         if (signalDOMEvent(cm, e)) return
         if (cm.somethingSelected()) {
-          lastCopied = cm.getSelections();
+          lastCopied = {lineWise: false, text: cm.getSelections()};
           if (e.type == "cut") cm.replaceSelection("", null, "cut");
         } else if (!cm.options.lineWiseCopyCut) {
           return;
         } else {
           var ranges = copyableRanges(cm);
-          lastCopied = ranges.text;
+          lastCopied = {lineWise: true, text: ranges.text};
           if (e.type == "cut") {
             cm.operation(function() {
               cm.setSelections(ranges.ranges, 0, sel_dontScroll);
@@ -2767,12 +2108,12 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         if (e.clipboardData && !ios) {
           e.preventDefault();
           e.clipboardData.clearData();
-          e.clipboardData.setData("text/plain", lastCopied.join("\n"));
+          e.clipboardData.setData("text/plain", lastCopied.text.join("\n"));
         } else {
           // Old-fashioned briefly-focus-a-textarea hack
           var kludge = hiddenTextarea(), te = kludge.firstChild;
           cm.display.lineSpace.insertBefore(kludge, cm.display.lineSpace.firstChild);
-          te.value = lastCopied.join("\n");
+          te.value = lastCopied.text.join("\n");
           var hadFocus = document.activeElement;
           selectInput(te);
           setTimeout(function() {
@@ -2791,9 +2132,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       return result;
     },
 
-    showSelection: function(info) {
+    showSelection: function(info, takeFocus) {
       if (!info || !this.cm.display.view.length) return;
-      if (info.focus) this.showPrimarySelection();
+      if (info.focus || takeFocus) this.showPrimarySelection();
       this.showMultipleSelections(info);
     },
 
@@ -4229,7 +3570,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     }
 
     if (op.updatedDisplay || op.selectionChanged)
-      op.preparedSelection = display.input.prepareSelection();
+      op.preparedSelection = display.input.prepareSelection(op.focus);
   }
 
   function endOperation_W2(op) {
@@ -4242,8 +3583,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       cm.display.maxLineChanged = false;
     }
 
+    var takeFocus = op.focus && op.focus == activeElt() && (!document.hasFocus || document.hasFocus())
     if (op.preparedSelection)
-      cm.display.input.showSelection(op.preparedSelection);
+      cm.display.input.showSelection(op.preparedSelection, takeFocus);
     if (op.updatedDisplay || op.startHeight != cm.doc.height)
       updateScrollbars(cm, op.barMeasure);
     if (op.updatedDisplay)
@@ -4253,8 +3595,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
     if (cm.state.focused && op.updateInput)
       cm.display.input.reset(op.typing);
-    if (op.focus && op.focus == activeElt() && (!document.hasFocus || document.hasFocus()))
-      ensureFocus(op.cm);
+    if (takeFocus) ensureFocus(op.cm);
   }
 
   function endOperation_finish(op) {
@@ -4809,7 +4150,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       ourIndex = doc.sel.primIndex;
     }
 
-    if (e.altKey) {
+    if (chromeOS ? e.shiftKey && e.metaKey : e.altKey) {
       type = "rect";
       if (!addNew) ourRange = new Range(start, start);
       start = posFromMouse(cm, e, true, true);
@@ -5034,6 +4375,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     if (signalDOMEvent(cm, e) || eventInWidget(cm.display, e)) return;
 
     e.dataTransfer.setData("Text", cm.getSelection());
+    e.dataTransfer.effectAllowed = "copyMove"
 
     // Use dummy image instead of default browsers image.
     // Recent Safari (~6.0.2) have a tendency to segfault when this happens, so we don't do it there.
@@ -6519,7 +5861,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     for (var i = newBreaks.length - 1; i >= 0; i--)
       replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length))
   });
-  option("specialChars", /[\t\u0000-\u0019\u00ad\u200b-\u200f\u2028\u2029\ufeff]/g, function(cm, val, old) {
+  option("specialChars", /[\u0000-\u001f\u007f\u00ad\u200b-\u200f\u2028\u2029\ufeff]/g, function(cm, val, old) {
     cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
     if (old != CodeMirror.Init) cm.refresh();
   });
@@ -6848,7 +6190,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       for (var i = 0; i < ranges.length; i++) {
         var pos = ranges[i].from();
         var col = countColumn(cm.getLine(pos.line), pos.ch, tabSize);
-        spaces.push(new Array(tabSize - col % tabSize + 1).join(" "));
+        spaces.push(spaceStr(tabSize - col % tabSize));
       }
       cm.replaceSelections(spaces);
     },
@@ -6891,6 +6233,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         ensureCursorVisible(cm);
       });
     },
+    openLine: function(cm) {cm.replaceSelection("\n", "start")},
     toggleOverwrite: function(cm) {cm.toggleOverwrite();}
   };
 
@@ -6925,7 +6268,8 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     "Ctrl-F": "goCharRight", "Ctrl-B": "goCharLeft", "Ctrl-P": "goLineUp", "Ctrl-N": "goLineDown",
     "Alt-F": "goWordRight", "Alt-B": "goWordLeft", "Ctrl-A": "goLineStart", "Ctrl-E": "goLineEnd",
     "Ctrl-V": "goPageDown", "Shift-Ctrl-V": "goPageUp", "Ctrl-D": "delCharAfter", "Ctrl-H": "delCharBefore",
-    "Alt-D": "delWordAfter", "Alt-Backspace": "delWordBefore", "Ctrl-K": "killLine", "Ctrl-T": "transposeChars"
+    "Alt-D": "delWordAfter", "Alt-Backspace": "delWordBefore", "Ctrl-K": "killLine", "Ctrl-T": "transposeChars",
+    "Ctrl-O": "openLine"
   };
   keyMap.macDefault = {
     "Cmd-A": "selectAll", "Cmd-D": "deleteLine", "Cmd-Z": "undo", "Shift-Cmd-Z": "redo", "Cmd-Y": "redo",
@@ -7687,8 +7031,8 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       var fromCmp = cmp(found.from, from) || extraLeft(sp.marker) - extraLeft(marker);
       var toCmp = cmp(found.to, to) || extraRight(sp.marker) - extraRight(marker);
       if (fromCmp >= 0 && toCmp <= 0 || fromCmp <= 0 && toCmp >= 0) continue;
-      if (fromCmp <= 0 && (cmp(found.to, from) > 0 || (sp.marker.inclusiveRight && marker.inclusiveLeft)) ||
-          fromCmp >= 0 && (cmp(found.from, to) < 0 || (sp.marker.inclusiveLeft && marker.inclusiveRight)))
+      if (fromCmp <= 0 && (sp.marker.inclusiveRight && marker.inclusiveLeft ? cmp(found.to, from) >= 0 : cmp(found.to, from) > 0) ||
+          fromCmp >= 0 && (sp.marker.inclusiveRight && marker.inclusiveLeft ? cmp(found.from, to) <= 0 : cmp(found.from, to) < 0))
         return true;
     }
   }
@@ -8090,8 +7434,11 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     }
 
     // See issue #2901
-    if (webkit && /\bcm-tab\b/.test(builder.content.lastChild.className))
-      builder.content.className = "cm-tab-wrap-hack";
+    if (webkit) {
+      var last = builder.content.lastChild
+      if (/\bcm-tab\b/.test(last.className) || (last.querySelector && last.querySelector(".cm-tab")))
+        builder.content.className = "cm-tab-wrap-hack";
+    }
 
     signal(cm, "renderLine", cm, lineView.line, builder.pre);
     if (builder.pre.className)
@@ -8443,13 +7790,16 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         if (at <= sz) {
           child.insertInner(at, lines, height);
           if (child.lines && child.lines.length > 50) {
-            while (child.lines.length > 50) {
-              var spilled = child.lines.splice(child.lines.length - 25, 25);
-              var newleaf = new LeafChunk(spilled);
-              child.height -= newleaf.height;
-              this.children.splice(i + 1, 0, newleaf);
-              newleaf.parent = this;
+            // To avoid memory thrashing when child.lines is huge (e.g. first view of a large file), it's never spliced.
+            // Instead, small slices are taken. They're taken in order because sequential memory accesses are fastest.
+            var remaining = child.lines.length % 25 + 25
+            for (var pos = remaining; pos < child.lines.length;) {
+              var leaf = new LeafChunk(child.lines.slice(pos, pos += 25));
+              child.height -= leaf.height;
+              this.children.splice(++i, 0, leaf);
+              leaf.parent = this;
             }
+            child.lines = child.lines.slice(0, remaining);
             this.maybeSpill();
           }
           break;
@@ -8469,7 +7819,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
           copy.parent = me;
           me.children = [copy, sibling];
           me = copy;
-        } else {
+       } else {
           me.size -= sibling.size;
           me.height -= sibling.height;
           var myIndex = indexOf(me.parent.children, me);
@@ -8754,9 +8104,9 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         var spans = line.markedSpans;
         if (spans) for (var i = 0; i < spans.length; i++) {
           var span = spans[i];
-          if (!(span.to != null && lineNo == from.line && from.ch > span.to ||
+          if (!(span.to != null && lineNo == from.line && from.ch >= span.to ||
                 span.from == null && lineNo != from.line ||
-                span.from != null && lineNo == to.line && span.from > to.ch) &&
+                span.from != null && lineNo == to.line && span.from >= to.ch) &&
               (!filter || filter(span.marker)))
             found.push(span.marker.parent || span.marker);
         }
@@ -10019,7 +9369,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   // THE END
 
-  CodeMirror.version = "5.13.3";
+  CodeMirror.version = "5.15.3";
 
   return CodeMirror;
 });
@@ -10156,7 +9506,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
   CodeMirror.defineMIME("text/x-gfm", "gfm");
 });
 
-},{"../../addon/mode/overlay":6,"../../lib/codemirror":7,"../markdown/markdown":9}],9:[function(require,module,exports){
+},{"../../addon/mode/overlay":5,"../../lib/codemirror":7,"../markdown/markdown":9}],9:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -10247,7 +9597,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
   ,   setextHeaderRE = /^ *(?:\={1,}|-{1,})\s*$/
   ,   textRE = /^[^#!\[\]*_\\<>` "'(~]+/
   ,   fencedCodeRE = new RegExp("^(" + (modeCfg.fencedCodeBlocks === true ? "~~~+|```+" : modeCfg.fencedCodeBlocks) +
-                                ")[ \\t]*([\\w+#]*)");
+                                ")[ \\t]*([\\w+#\-]*)");
 
   function switchInline(stream, state, f) {
     state.f = state.inline = f;
@@ -10377,7 +9727,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       state.fencedChars = match[1]
       // try switching mode
       state.localMode = getMode(match[2]);
-      if (state.localMode) state.localState = state.localMode.startState();
+      if (state.localMode) state.localState = CodeMirror.startState(state.localMode);
       state.f = state.block = local;
       if (modeCfg.highlightFormatting) state.formatting = "code-block";
       state.code = -1
@@ -10596,13 +9946,13 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       return tokenTypes.image;
     }
 
-    if (ch === '[' && stream.match(/.*\](\(.*\)| ?\[.*\])/, false)) {
+    if (ch === '[' && stream.match(/[^\]]*\](\(.*\)| ?\[.*?\])/, false)) {
       state.linkText = true;
       if (modeCfg.highlightFormatting) state.formatting = "link";
       return getType(state);
     }
 
-    if (ch === ']' && state.linkText && stream.match(/\(.*\)| ?\[.*\]/, false)) {
+    if (ch === ']' && state.linkText && stream.match(/\(.*?\)| ?\[.*?\]/, false)) {
       if (modeCfg.highlightFormatting) state.formatting = "link";
       var type = getType(state);
       state.linkText = false;
@@ -10755,12 +10105,17 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     }
     var ch = stream.next();
     if (ch === '(' || ch === '[') {
-      state.f = state.inline = getLinkHrefInside(ch === "(" ? ")" : "]");
+      state.f = state.inline = getLinkHrefInside(ch === "(" ? ")" : "]", 0);
       if (modeCfg.highlightFormatting) state.formatting = "link-string";
       state.linkHref = true;
       return getType(state);
     }
     return 'error';
+  }
+
+  var linkRE = {
+    ")": /^(?:[^\\\(\)]|\\.|\((?:[^\\\(\)]|\\.)*\))*?(?=\))/,
+    "]": /^(?:[^\\\[\]]|\\.|\[(?:[^\\\[\\]]|\\.)*\])*?(?=\])/
   }
 
   function getLinkHrefInside(endChar) {
@@ -10775,10 +10130,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
         return returnState;
       }
 
-      if (stream.match(inlineRE(endChar), true)) {
-        stream.backUp(1);
-      }
-
+      stream.match(linkRE[endChar])
       state.linkHref = true;
       return getType(state);
     };
@@ -10824,18 +10176,6 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
     }
     state.f = state.inline = inlineNormal;
     return tokenTypes.linkHref + " url";
-  }
-
-  var savedInlineRE = [];
-  function inlineRE(endChar) {
-    if (!savedInlineRE[endChar]) {
-      // Escape endChar for RegExp (taken from http://stackoverflow.com/a/494122/526741)
-      endChar = (endChar+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
-      // Match any non-endChar, escaped character, as well as the closing
-      // endChar.
-      savedInlineRE[endChar] = new RegExp('^(?:[^\\\\]|\\\\.)*?(' + endChar + ')');
-    }
-    return savedInlineRE[endChar];
   }
 
   var mode = {
@@ -11055,11 +10395,12 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "Modelica", mime: "text/x-modelica", mode: "modelica", ext: ["mo"]},
     {name: "MUMPS", mime: "text/x-mumps", mode: "mumps", ext: ["mps"]},
     {name: "MS SQL", mime: "text/x-mssql", mode: "sql"},
+    {name: "mbox", mime: "application/mbox", mode: "mbox", ext: ["mbox"]},
     {name: "MySQL", mime: "text/x-mysql", mode: "sql"},
     {name: "Nginx", mime: "text/x-nginx-conf", mode: "nginx", file: /nginx.*\.conf$/i},
     {name: "NSIS", mime: "text/x-nsis", mode: "nsis", ext: ["nsh", "nsi"]},
     {name: "NTriples", mime: "text/n-triples", mode: "ntriples", ext: ["nt"]},
-    {name: "Objective C", mime: "text/x-objectivec", mode: "clike", ext: ["m", "mm"]},
+    {name: "Objective C", mime: "text/x-objectivec", mode: "clike", ext: ["m", "mm"], alias: ["objective-c", "objc"]},
     {name: "OCaml", mime: "text/x-ocaml", mode: "mllike", ext: ["ml", "mli", "mll", "mly"]},
     {name: "Octave", mime: "text/x-octave", mode: "octave", ext: ["m"]},
     {name: "Oz", mime: "text/x-oz", mode: "oz", ext: ["oz"]},
@@ -11073,7 +10414,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "PowerShell", mime: "application/x-powershell", mode: "powershell", ext: ["ps1", "psd1", "psm1"]},
     {name: "Properties files", mime: "text/x-properties", mode: "properties", ext: ["properties", "ini", "in"], alias: ["ini", "properties"]},
     {name: "ProtoBuf", mime: "text/x-protobuf", mode: "protobuf", ext: ["proto"]},
-    {name: "Python", mime: "text/x-python", mode: "python", ext: ["py", "pyw"]},
+    {name: "Python", mime: "text/x-python", mode: "python", ext: ["BUILD", "bzl", "py", "pyw"], file: /^(BUCK|BUILD)$/},
     {name: "Puppet", mime: "text/x-puppet", mode: "puppet", ext: ["pp"]},
     {name: "Q", mime: "text/x-q", mode: "q", ext: ["q"]},
     {name: "R", mime: "text/x-rsrc", mode: "r", ext: ["r"], alias: ["rscript"]},
@@ -11082,6 +10423,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "RPM Spec", mime: "text/x-rpm-spec", mode: "rpm", ext: ["spec"]},
     {name: "Ruby", mime: "text/x-ruby", mode: "ruby", ext: ["rb"], alias: ["jruby", "macruby", "rake", "rb", "rbx"]},
     {name: "Rust", mime: "text/x-rustsrc", mode: "rust", ext: ["rs"]},
+    {name: "SAS", mime: "text/x-sas", mode: "sas", ext: ["sas"]},
     {name: "Sass", mime: "text/x-sass", mode: "sass", ext: ["sass"]},
     {name: "Scala", mime: "text/x-scala", mode: "clike", ext: ["scala"]},
     {name: "Scheme", mime: "text/x-scheme", mode: "scheme", ext: ["scm", "ss"]},
@@ -11113,6 +10455,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "Turtle", mime: "text/turtle", mode: "turtle", ext: ["ttl"]},
     {name: "TypeScript", mime: "application/typescript", mode: "javascript", ext: ["ts"], alias: ["ts"]},
     {name: "Twig", mime: "text/x-twig", mode: "twig"},
+    {name: "Web IDL", mime: "text/x-webidl", mode: "webidl", ext: ["webidl"]},
     {name: "VB.NET", mime: "text/x-vb", mode: "vb", ext: ["vb"]},
     {name: "VBScript", mime: "text/vbscript", mode: "vbscript", ext: ["vbs"]},
     {name: "Velocity", mime: "text/velocity", mode: "velocity", ext: ["vtl"]},
@@ -11120,6 +10463,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
     {name: "VHDL", mime: "text/x-vhdl", mode: "vhdl", ext: ["vhd", "vhdl"]},
     {name: "XML", mimes: ["application/xml", "text/xml"], mode: "xml", ext: ["xml", "xsl", "xsd"], alias: ["rss", "wsdl", "xsd"]},
     {name: "XQuery", mime: "application/xquery", mode: "xquery", ext: ["xy", "xquery"]},
+    {name: "Yacas", mime: "text/x-yacas", mode: "yacas", ext: ["ys"]},
     {name: "YAML", mime: "text/x-yaml", mode: "yaml", ext: ["yaml", "yml"], alias: ["yml"]},
     {name: "Z80", mime: "text/x-z80", mode: "z80", ext: ["z80"]},
     {name: "mscgen", mime: "text/x-mscgen", mode: "mscgen", ext: ["mscgen", "mscin", "msc"]},
@@ -11568,6 +10912,195 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 });
 
 },{"../../lib/codemirror":7}],12:[function(require,module,exports){
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+(function (mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"), require("../yaml/yaml"))
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror", "../yaml/yaml"], mod)
+  else // Plain browser env
+    mod(CodeMirror)
+})(function (CodeMirror) {
+
+  var START = 0, FRONTMATTER = 1, BODY = 2
+
+  // a mixed mode for Markdown text with an optional YAML front matter
+  CodeMirror.defineMode("yaml-frontmatter", function (config, parserConfig) {
+    var yamlMode = CodeMirror.getMode(config, "yaml")
+    var innerMode = CodeMirror.getMode(config, parserConfig && parserConfig.base || "gfm")
+
+    function curMode(state) {
+      return state.state == BODY ? innerMode : yamlMode
+    }
+
+    return {
+      startState: function () {
+        return {
+          state: START,
+          inner: CodeMirror.startState(yamlMode)
+        }
+      },
+      copyState: function (state) {
+        return {
+          state: state.state,
+          inner: CodeMirror.copyState(curMode(state), state.inner)
+        }
+      },
+      token: function (stream, state) {
+        if (state.state == START) {
+          if (stream.match(/---/, false)) {
+            state.state = FRONTMATTER
+            return yamlMode.token(stream, state.inner)
+          } else {
+            state.state = BODY
+            state.inner = CodeMirror.startState(innerMode)
+            return innerMode.token(stream, state.inner)
+          }
+        } else if (state.state == FRONTMATTER) {
+          var end = stream.sol() && stream.match(/---/, false)
+          var style = yamlMode.token(stream, state.inner)
+          if (end) {
+            state.state = BODY
+            state.inner = CodeMirror.startState(innerMode)
+          }
+          return style
+        } else {
+          return innerMode.token(stream, state.inner)
+        }
+      },
+      innerMode: function (state) {
+        return {mode: curMode(state), state: state.inner}
+      },
+      blankLine: function (state) {
+        var mode = curMode(state)
+        if (mode.blankLine) return mode.blankLine(state.inner)
+      }
+    }
+  })
+});
+
+},{"../../lib/codemirror":7,"../yaml/yaml":13}],13:[function(require,module,exports){
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
+CodeMirror.defineMode("yaml", function() {
+
+  var cons = ['true', 'false', 'on', 'off', 'yes', 'no'];
+  var keywordRegex = new RegExp("\\b(("+cons.join(")|(")+"))$", 'i');
+
+  return {
+    token: function(stream, state) {
+      var ch = stream.peek();
+      var esc = state.escaped;
+      state.escaped = false;
+      /* comments */
+      if (ch == "#" && (stream.pos == 0 || /\s/.test(stream.string.charAt(stream.pos - 1)))) {
+        stream.skipToEnd();
+        return "comment";
+      }
+
+      if (stream.match(/^('([^']|\\.)*'?|"([^"]|\\.)*"?)/))
+        return "string";
+
+      if (state.literal && stream.indentation() > state.keyCol) {
+        stream.skipToEnd(); return "string";
+      } else if (state.literal) { state.literal = false; }
+      if (stream.sol()) {
+        state.keyCol = 0;
+        state.pair = false;
+        state.pairStart = false;
+        /* document start */
+        if(stream.match(/---/)) { return "def"; }
+        /* document end */
+        if (stream.match(/\.\.\./)) { return "def"; }
+        /* array list item */
+        if (stream.match(/\s*-\s+/)) { return 'meta'; }
+      }
+      /* inline pairs/lists */
+      if (stream.match(/^(\{|\}|\[|\])/)) {
+        if (ch == '{')
+          state.inlinePairs++;
+        else if (ch == '}')
+          state.inlinePairs--;
+        else if (ch == '[')
+          state.inlineList++;
+        else
+          state.inlineList--;
+        return 'meta';
+      }
+
+      /* list seperator */
+      if (state.inlineList > 0 && !esc && ch == ',') {
+        stream.next();
+        return 'meta';
+      }
+      /* pairs seperator */
+      if (state.inlinePairs > 0 && !esc && ch == ',') {
+        state.keyCol = 0;
+        state.pair = false;
+        state.pairStart = false;
+        stream.next();
+        return 'meta';
+      }
+
+      /* start of value of a pair */
+      if (state.pairStart) {
+        /* block literals */
+        if (stream.match(/^\s*(\||\>)\s*/)) { state.literal = true; return 'meta'; };
+        /* references */
+        if (stream.match(/^\s*(\&|\*)[a-z0-9\._-]+\b/i)) { return 'variable-2'; }
+        /* numbers */
+        if (state.inlinePairs == 0 && stream.match(/^\s*-?[0-9\.\,]+\s?$/)) { return 'number'; }
+        if (state.inlinePairs > 0 && stream.match(/^\s*-?[0-9\.\,]+\s?(?=(,|}))/)) { return 'number'; }
+        /* keywords */
+        if (stream.match(keywordRegex)) { return 'keyword'; }
+      }
+
+      /* pairs (associative arrays) -> key */
+      if (!state.pair && stream.match(/^\s*(?:[,\[\]{}&*!|>'"%@`][^\s'":]|[^,\[\]{}#&*!|>'"%@`])[^#]*?(?=\s*:($|\s))/)) {
+        state.pair = true;
+        state.keyCol = stream.indentation();
+        return "atom";
+      }
+      if (state.pair && stream.match(/^:\s*/)) { state.pairStart = true; return 'meta'; }
+
+      /* nothing found, continue */
+      state.pairStart = false;
+      state.escaped = (ch == '\\');
+      stream.next();
+      return null;
+    },
+    startState: function() {
+      return {
+        pair: false,
+        pairStart: false,
+        keyCol: 0,
+        inlinePairs: 0,
+        inlineList: 0,
+        literal: false,
+        escaped: false
+      };
+    }
+  };
+});
+
+CodeMirror.defineMIME("text/x-yaml", "yaml");
+
+});
+
+},{"../../lib/codemirror":7}],14:[function(require,module,exports){
 (function (global){
 /**
  * marked - a markdown parser
@@ -12856,7 +12389,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -12902,7 +12435,7 @@ CodeMirror.commands.shiftTabAndUnindentMarkdownList = function (cm) {
 	}
 };
 
-},{"codemirror":7}],14:[function(require,module,exports){
+},{"codemirror":7}],16:[function(require,module,exports){
 /*global require,module*/
 "use strict";
 var CodeMirror = require("codemirror");
@@ -12912,8 +12445,11 @@ require("codemirror/addon/display/fullscreen.js");
 require("codemirror/mode/markdown/markdown.js");
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/addon/display/placeholder.js");
+require("codemirror/addon/selection/mark-selection.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
+require("codemirror/mode/yaml/yaml.js");
+require("codemirror/mode/yaml-frontmatter/yaml-frontmatter.js");
 require("spell-checker");
 var marked = require("marked");
 
@@ -14368,11 +13904,11 @@ SimpleMDE.prototype.render = function(el) {
 	if(options.spellChecker !== false) {
 		mode = "spell-checker";
 		backdrop = options.parsingConfig;
-		backdrop.name = "gfm";
+		backdrop.name = options.mode || "gfm";
 		backdrop.gitHubSpice = false;
 	} else {
 		mode = options.parsingConfig;
-		mode.name = "gfm";
+		mode.name = options.mode || "gfm";
 		mode.gitHubSpice = false;
 	}
 
@@ -14388,7 +13924,8 @@ SimpleMDE.prototype.render = function(el) {
 		extraKeys: keyMaps,
 		lineWrapping: (options.lineWrapping === false) ? false : true,
 		allowDropFileTypes: ["text/plain"],
-		placeholder: options.placeholder || el.getAttribute("placeholder") || ""
+		placeholder: options.placeholder || el.getAttribute("placeholder") || "",
+		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
 	});
 
 	if(options.forceSync === true) {
@@ -14914,5 +14451,5 @@ SimpleMDE.prototype.toTextArea = function() {
 };
 
 module.exports = SimpleMDE;
-},{"./codemirror/tablist":13,"codemirror":7,"codemirror/addon/display/fullscreen.js":3,"codemirror/addon/display/placeholder.js":4,"codemirror/addon/edit/continuelist.js":5,"codemirror/addon/mode/overlay.js":6,"codemirror/mode/gfm/gfm.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/xml/xml.js":11,"marked":12,"spell-checker":1}]},{},[14])(14)
+},{"./codemirror/tablist":15,"codemirror":7,"codemirror/addon/display/fullscreen.js":2,"codemirror/addon/display/placeholder.js":3,"codemirror/addon/edit/continuelist.js":4,"codemirror/addon/mode/overlay.js":5,"codemirror/addon/selection/mark-selection.js":6,"codemirror/mode/gfm/gfm.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/xml/xml.js":11,"codemirror/mode/yaml-frontmatter/yaml-frontmatter.js":12,"codemirror/mode/yaml/yaml.js":13,"marked":14,"spell-checker":1}]},{},[16])(16)
 });
