@@ -96,9 +96,9 @@ simplemde.value("This text will appear in the editor");
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
 - **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
-  - **markedOptions**: Set default marked markdown renderer default [options](https://github.com/chjj/marked#options-1). `singleLineBreaks` and `codeSyntaxHighlighting` options below will take precedence.
-  - **singleLineBreaks**: If set to `false`, disable parsing GFM single line breaks. Defaults to `true`.
   - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
+  - **markedOptions**: Set the internal Markdown renderer's [options](https://github.com/chjj/marked#options-1). Other `renderingConfig` options will take precedence.
+  - **singleLineBreaks**: If set to `false`, disable parsing GFM single line breaks. Defaults to `true`.
 - **shortcuts**: Keyboard shortcuts associated with this instance. Defaults to the [array of shortcuts](#keyboard-shortcuts).
 - **showIcons**: An array of icon names to show. Can be used to show specific icons hidden by default without completely customizing the toolbar.
 - **spellChecker**: If set to `false`, disable the spell checker. Defaults to `true`.
