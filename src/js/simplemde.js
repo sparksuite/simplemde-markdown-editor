@@ -100,7 +100,7 @@ function createIcon(options, enableTooltips, shortcuts) {
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
-		el.title = createTootlip(options.title, options.action, shortcuts);
+		el.title = createTooltip(options.title, options.action, shortcuts);
 
 		if(isMac) {
 			el.title = el.title.replace("Ctrl", "⌘");
@@ -120,7 +120,7 @@ function createSep() {
 	return el;
 }
 
-function createTootlip(title, action, shortcuts) {
+function createTooltip(title, action, shortcuts) {
 	var actionName;
 	var tooltip = title;
 
