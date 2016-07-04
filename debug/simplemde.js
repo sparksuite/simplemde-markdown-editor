@@ -173,7 +173,7 @@ exports.kMaxLength = kMaxLength()
 function typedArraySupport () {
   try {
     var arr = new Uint8Array(1)
-    arr.foo = function () { return 42 }
+    arr.__proto__ = {__proto__: Uint8Array.prototype, foo: function () { return 42 }}
     return arr.foo() === 42 && // typed array instances can be augmented
         typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
         arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
@@ -317,7 +317,7 @@ function allocUnsafe (that, size) {
   assertSize(size)
   that = createBuffer(that, size < 0 ? 0 : checked(size) | 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < size; i++) {
+    for (var i = 0; i < size; ++i) {
       that[i] = 0
     }
   }
@@ -495,14 +495,14 @@ Buffer.concat = function concat (list, length) {
   var i
   if (length === undefined) {
     length = 0
-    for (i = 0; i < list.length; i++) {
+    for (i = 0; i < list.length; ++i) {
       length += list[i].length
     }
   }
 
   var buffer = Buffer.allocUnsafe(length)
   var pos = 0
-  for (i = 0; i < list.length; i++) {
+  for (i = 0; i < list.length; ++i) {
     var buf = list[i]
     if (!Buffer.isBuffer(buf)) {
       throw new TypeError('"list" argument must be an Array of Buffers')
@@ -534,7 +534,6 @@ function byteLength (string, encoding) {
     switch (encoding) {
       case 'ascii':
       case 'binary':
-      // Deprecated
       case 'raw':
       case 'raws':
         return len
@@ -772,15 +771,16 @@ function arrayIndexOf (arr, val, byteOffset, encoding) {
   }
 
   var foundIndex = -1
-  for (var i = 0; byteOffset + i < arrLength; i++) {
-    if (read(arr, byteOffset + i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+  for (var i = byteOffset; i < arrLength; ++i) {
+    if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
       if (foundIndex === -1) foundIndex = i
-      if (i - foundIndex + 1 === valLength) return (byteOffset + foundIndex) * indexSize
+      if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
     } else {
       if (foundIndex !== -1) i -= i - foundIndex
       foundIndex = -1
     }
   }
+
   return -1
 }
 
@@ -845,7 +845,7 @@ function hexWrite (buf, string, offset, length) {
   if (length > strLen / 2) {
     length = strLen / 2
   }
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16)
     if (isNaN(parsed)) return i
     buf[offset + i] = parsed
@@ -1059,7 +1059,7 @@ function asciiSlice (buf, start, end) {
   var ret = ''
   end = Math.min(buf.length, end)
 
-  for (var i = start; i < end; i++) {
+  for (var i = start; i < end; ++i) {
     ret += String.fromCharCode(buf[i] & 0x7F)
   }
   return ret
@@ -1069,7 +1069,7 @@ function binarySlice (buf, start, end) {
   var ret = ''
   end = Math.min(buf.length, end)
 
-  for (var i = start; i < end; i++) {
+  for (var i = start; i < end; ++i) {
     ret += String.fromCharCode(buf[i])
   }
   return ret
@@ -1082,7 +1082,7 @@ function hexSlice (buf, start, end) {
   if (!end || end < 0 || end > len) end = len
 
   var out = ''
-  for (var i = start; i < end; i++) {
+  for (var i = start; i < end; ++i) {
     out += toHex(buf[i])
   }
   return out
@@ -1125,7 +1125,7 @@ Buffer.prototype.slice = function slice (start, end) {
   } else {
     var sliceLen = end - start
     newBuf = new Buffer(sliceLen, undefined)
-    for (var i = 0; i < sliceLen; i++) {
+    for (var i = 0; i < sliceLen; ++i) {
       newBuf[i] = this[i + start]
     }
   }
@@ -1352,7 +1352,7 @@ Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
 
 function objectWriteUInt16 (buf, value, offset, littleEndian) {
   if (value < 0) value = 0xffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; i++) {
+  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
     buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
       (littleEndian ? i : 1 - i) * 8
   }
@@ -1386,7 +1386,7 @@ Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert
 
 function objectWriteUInt32 (buf, value, offset, littleEndian) {
   if (value < 0) value = 0xffffffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; i++) {
+  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
     buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
   }
 }
@@ -1601,12 +1601,12 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
 
   if (this === target && start < targetStart && targetStart < end) {
     // descending copy from end
-    for (i = len - 1; i >= 0; i--) {
+    for (i = len - 1; i >= 0; --i) {
       target[i + targetStart] = this[i + start]
     }
   } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
     // ascending copy from start
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < len; ++i) {
       target[i + targetStart] = this[i + start]
     }
   } else {
@@ -1667,7 +1667,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 
   var i
   if (typeof val === 'number') {
-    for (i = start; i < end; i++) {
+    for (i = start; i < end; ++i) {
       this[i] = val
     }
   } else {
@@ -1675,7 +1675,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
       ? val
       : utf8ToBytes(new Buffer(val, encoding).toString())
     var len = bytes.length
-    for (i = 0; i < end - start; i++) {
+    for (i = 0; i < end - start; ++i) {
       this[i + start] = bytes[i % len]
     }
   }
@@ -1717,7 +1717,7 @@ function utf8ToBytes (string, units) {
   var leadSurrogate = null
   var bytes = []
 
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < length; ++i) {
     codePoint = string.charCodeAt(i)
 
     // is surrogate component
@@ -1792,7 +1792,7 @@ function utf8ToBytes (string, units) {
 
 function asciiToBytes (str) {
   var byteArray = []
-  for (var i = 0; i < str.length; i++) {
+  for (var i = 0; i < str.length; ++i) {
     // Node's code seems to be doing this and not & 0x7F..
     byteArray.push(str.charCodeAt(i) & 0xFF)
   }
@@ -1802,7 +1802,7 @@ function asciiToBytes (str) {
 function utf16leToBytes (str, units) {
   var c, hi, lo
   var byteArray = []
-  for (var i = 0; i < str.length; i++) {
+  for (var i = 0; i < str.length; ++i) {
     if ((units -= 2) < 0) break
 
     c = str.charCodeAt(i)
@@ -1820,7 +1820,7 @@ function base64ToBytes (str) {
 }
 
 function blitBuffer (src, dst, offset, length) {
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < length; ++i) {
     if ((i + offset >= dst.length) || (i >= src.length)) break
     dst[i + offset] = src[i]
   }
@@ -5255,10 +5255,23 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     for (;;) {
       if (bidi ? to == from || to == moveVisually(lineObj, from, 1) : to - from <= 1) {
         var ch = x < fromX || x - fromX <= toX - x ? from : to;
+        var outside = ch == from ? fromOutside : toOutside
         var xDiff = x - (ch == from ? fromX : toX);
+        // This is a kludge to handle the case where the coordinates
+        // are after a line-wrapped line. We should replace it with a
+        // more general handling of cursor positions around line
+        // breaks. (Issue #4078)
+        if (toOutside && !bidi && !/\s/.test(lineObj.text.charAt(ch)) && xDiff > 0 &&
+            ch < lineObj.text.length && preparedMeasure.view.measure.heights.length > 1) {
+          var charSize = measureCharPrepared(cm, preparedMeasure, ch, "right");
+          if (innerOff <= charSize.bottom && innerOff >= charSize.top && Math.abs(x - charSize.right) < xDiff) {
+            outside = false
+            ch++
+            xDiff = x - charSize.right
+          }
+        }
         while (isExtendingChar(lineObj.text.charAt(ch))) ++ch;
-        var pos = PosWithInfo(lineNo, ch, ch == from ? fromOutside : toOutside,
-                              xDiff < -1 ? -1 : xDiff > 1 ? 1 : 0);
+        var pos = PosWithInfo(lineNo, ch, outside, xDiff < -1 ? -1 : xDiff > 1 ? 1 : 0);
         return pos;
       }
       var step = Math.ceil(dist / 2), middle = from + step;
@@ -5982,6 +5995,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
     // Let the drag handler handle this.
     if (webkit) display.scroller.draggable = true;
     cm.state.draggingText = dragEnd;
+    dragEnd.copy = mac ? e.altKey : e.ctrlKey
     // IE's approach to draggable
     if (display.scroller.dragDrop) display.scroller.dragDrop();
     on(document, "mouseup", dragEnd);
@@ -6212,7 +6226,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       try {
         var text = e.dataTransfer.getData("Text");
         if (text) {
-          if (cm.state.draggingText && !(mac ? e.altKey : e.ctrlKey))
+          if (cm.state.draggingText && !cm.state.draggingText.copy)
             var selected = cm.listSelections();
           setSelectionNoUndo(cm.doc, simpleSelection(pos, pos));
           if (selected) for (var i = 0; i < selected.length; ++i)
@@ -11224,7 +11238,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   // THE END
 
-  CodeMirror.version = "5.15.2";
+  CodeMirror.version = "5.16.0";
 
   return CodeMirror;
 });
@@ -15211,7 +15225,7 @@ function toggleFullScreen(editor) {
 
 	// Hide side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
-	if(/editor-preview-active-side/.test(sidebyside.className))
+	if(/simplemde-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
 
@@ -15683,9 +15697,9 @@ function toggleSideBySide(editor) {
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
 	var useSideBySideListener = false;
-	if(/editor-preview-active-side/.test(preview.className)) {
+	if(/simplemde-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
-			/\s*editor-preview-active-side\s*/g, ""
+			/\s*simplemde-preview-active-side\s*/g, ""
 		);
 		toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
 		wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, " ");
@@ -15696,7 +15710,7 @@ function toggleSideBySide(editor) {
 		setTimeout(function() {
 			if(!cm.getOption("fullScreen"))
 				toggleFullScreen(editor);
-			preview.className += " editor-preview-active-side";
+			preview.className += " simplemde-preview-active-side";
 		}, 1);
 		toolbarButton.className += " active";
 		wrapper.className += " CodeMirror-sided";
@@ -15705,9 +15719,9 @@ function toggleSideBySide(editor) {
 
 	// Hide normal preview if active
 	var previewNormal = wrapper.lastChild;
-	if(/editor-preview-active/.test(previewNormal.className)) {
+	if(/simplemde-preview-active/.test(previewNormal.className)) {
 		previewNormal.className = previewNormal.className.replace(
-			/\s*editor-preview-active\s*/g, ""
+			/\s*simplemde-preview-active\s*/g, ""
 		);
 		var toolbar = editor.toolbarElements.preview;
 		var toolbar_div = wrapper.previousSibling;
@@ -15744,14 +15758,14 @@ function togglePreview(editor) {
 	var toolbar_div = wrapper.previousSibling;
 	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 	var preview = wrapper.lastChild;
-	if(!preview || !/editor-preview/.test(preview.className)) {
+	if(!preview || !/simplemde-preview/.test(preview.className)) {
 		preview = document.createElement("div");
-		preview.className = "editor-preview";
+		preview.className = "simplemde-preview";
 		wrapper.appendChild(preview);
 	}
-	if(/editor-preview-active/.test(preview.className)) {
+	if(/simplemde-preview-active/.test(preview.className)) {
 		preview.className = preview.className.replace(
-			/\s*editor-preview-active\s*/g, ""
+			/\s*simplemde-preview-active\s*/g, ""
 		);
 		if(toolbar) {
 			toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
@@ -15762,7 +15776,7 @@ function togglePreview(editor) {
 		// give some time for the transition from editor.css to fire and the view to slide from right to left,
 		// instead of just appearing.
 		setTimeout(function() {
-			preview.className += " editor-preview-active";
+			preview.className += " simplemde-preview-active";
 		}, 1);
 		if(toolbar) {
 			toolbar.className += " active";
@@ -15773,12 +15787,12 @@ function togglePreview(editor) {
 
 	// Turn off side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
-	if(/editor-preview-active-side/.test(sidebyside.className))
+	if(/simplemde-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
 
 function _replaceSelection(cm, active, startEnd, url) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var text;
@@ -15812,7 +15826,7 @@ function _replaceSelection(cm, active, startEnd, url) {
 
 
 function _toggleHeading(cm, direction, size) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var startPoint = cm.getCursor("start");
@@ -15882,7 +15896,7 @@ function _toggleHeading(cm, direction, size) {
 
 
 function _toggleLine(cm, name) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var stat = getState(cm);
@@ -15919,7 +15933,7 @@ function _toggleLine(cm, name) {
 }
 
 function _toggleBlock(editor, type, start_chars, end_chars) {
-	if(/editor-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className))
 		return;
 
 	end_chars = (typeof end_chars === "undefined") ? start_chars : end_chars;
@@ -15988,7 +16002,7 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 }
 
 function _cleanBlock(cm) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var startPoint = cm.getCursor("start");
@@ -16381,8 +16395,12 @@ function SimpleMDE(options) {
 SimpleMDE.prototype.markdown = function(text) {
 	if(marked) {
 		// Initialize
-		var markedOptions = {};
-
+		var markedOptions;
+		if(this.options && this.options.renderingConfig && this.options.renderingConfig.markedOptions) {
+			markedOptions = this.options.renderingConfig.markedOptions;
+		} else {
+			markedOptions = {};
+		}
 
 		// Update options
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.singleLineBreaks === false) {
@@ -16471,7 +16489,7 @@ SimpleMDE.prototype.render = function(el) {
 	this.codemirror = CodeMirror.fromTextArea(el, {
 		mode: mode,
 		backdrop: backdrop,
-		theme: "paper",
+		theme: "simplemde",
 		tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
 		indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
 		indentWithTabs: (options.indentWithTabs === false) ? false : true,
@@ -16602,9 +16620,9 @@ SimpleMDE.prototype.createSideBySide = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 
-	if(!preview || !/editor-preview-side/.test(preview.className)) {
+	if(!preview || !/simplemde-preview-side/.test(preview.className)) {
 		preview = document.createElement("div");
-		preview.className = "editor-preview-side";
+		preview.className = "simplemde-preview-side";
 		wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
 	}
 
@@ -16652,7 +16670,7 @@ SimpleMDE.prototype.createToolbar = function(items) {
 	}
 
 	var bar = document.createElement("div");
-	bar.className = "editor-toolbar";
+	bar.className = "simplemde-toolbar";
 
 	var self = this;
 
@@ -16810,7 +16828,7 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 
 	// Create element for the status bar
 	var bar = document.createElement("div");
-	bar.className = "editor-statusbar";
+	bar.className = "simplemde-statusbar";
 
 
 	// Create a new span for each item
@@ -16966,7 +16984,7 @@ SimpleMDE.prototype.isPreviewActive = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.lastChild;
 
-	return /editor-preview-active/.test(preview.className);
+	return /simplemde-preview-active/.test(preview.className);
 };
 
 SimpleMDE.prototype.isSideBySideActive = function() {
@@ -16974,7 +16992,7 @@ SimpleMDE.prototype.isSideBySideActive = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 
-	return /editor-preview-active-side/.test(preview.className);
+	return /simplemde-preview-active-side/.test(preview.className);
 };
 
 SimpleMDE.prototype.isFullscreenActive = function() {

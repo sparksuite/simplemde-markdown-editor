@@ -222,7 +222,7 @@ function toggleFullScreen(editor) {
 
 	// Hide side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
-	if(/editor-preview-active-side/.test(sidebyside.className))
+	if(/simplemde-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
 
@@ -694,9 +694,9 @@ function toggleSideBySide(editor) {
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
 	var useSideBySideListener = false;
-	if(/editor-preview-active-side/.test(preview.className)) {
+	if(/simplemde-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
-			/\s*editor-preview-active-side\s*/g, ""
+			/\s*simplemde-preview-active-side\s*/g, ""
 		);
 		toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
 		wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, " ");
@@ -707,7 +707,7 @@ function toggleSideBySide(editor) {
 		setTimeout(function() {
 			if(!cm.getOption("fullScreen"))
 				toggleFullScreen(editor);
-			preview.className += " editor-preview-active-side";
+			preview.className += " simplemde-preview-active-side";
 		}, 1);
 		toolbarButton.className += " active";
 		wrapper.className += " CodeMirror-sided";
@@ -716,9 +716,9 @@ function toggleSideBySide(editor) {
 
 	// Hide normal preview if active
 	var previewNormal = wrapper.lastChild;
-	if(/editor-preview-active/.test(previewNormal.className)) {
+	if(/simplemde-preview-active/.test(previewNormal.className)) {
 		previewNormal.className = previewNormal.className.replace(
-			/\s*editor-preview-active\s*/g, ""
+			/\s*simplemde-preview-active\s*/g, ""
 		);
 		var toolbar = editor.toolbarElements.preview;
 		var toolbar_div = wrapper.previousSibling;
@@ -755,14 +755,14 @@ function togglePreview(editor) {
 	var toolbar_div = wrapper.previousSibling;
 	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 	var preview = wrapper.lastChild;
-	if(!preview || !/editor-preview/.test(preview.className)) {
+	if(!preview || !/simplemde-preview/.test(preview.className)) {
 		preview = document.createElement("div");
-		preview.className = "editor-preview";
+		preview.className = "simplemde-preview";
 		wrapper.appendChild(preview);
 	}
-	if(/editor-preview-active/.test(preview.className)) {
+	if(/simplemde-preview-active/.test(preview.className)) {
 		preview.className = preview.className.replace(
-			/\s*editor-preview-active\s*/g, ""
+			/\s*simplemde-preview-active\s*/g, ""
 		);
 		if(toolbar) {
 			toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
@@ -773,7 +773,7 @@ function togglePreview(editor) {
 		// give some time for the transition from editor.css to fire and the view to slide from right to left,
 		// instead of just appearing.
 		setTimeout(function() {
-			preview.className += " editor-preview-active";
+			preview.className += " simplemde-preview-active";
 		}, 1);
 		if(toolbar) {
 			toolbar.className += " active";
@@ -784,12 +784,12 @@ function togglePreview(editor) {
 
 	// Turn off side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
-	if(/editor-preview-active-side/.test(sidebyside.className))
+	if(/simplemde-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
 
 function _replaceSelection(cm, active, startEnd, url) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var text;
@@ -823,7 +823,7 @@ function _replaceSelection(cm, active, startEnd, url) {
 
 
 function _toggleHeading(cm, direction, size) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var startPoint = cm.getCursor("start");
@@ -893,7 +893,7 @@ function _toggleHeading(cm, direction, size) {
 
 
 function _toggleLine(cm, name) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var stat = getState(cm);
@@ -930,7 +930,7 @@ function _toggleLine(cm, name) {
 }
 
 function _toggleBlock(editor, type, start_chars, end_chars) {
-	if(/editor-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className))
 		return;
 
 	end_chars = (typeof end_chars === "undefined") ? start_chars : end_chars;
@@ -999,7 +999,7 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 }
 
 function _cleanBlock(cm) {
-	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
+	if(/simplemde-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
 	var startPoint = cm.getCursor("start");
@@ -1486,7 +1486,7 @@ SimpleMDE.prototype.render = function(el) {
 	this.codemirror = CodeMirror.fromTextArea(el, {
 		mode: mode,
 		backdrop: backdrop,
-		theme: "paper",
+		theme: "simplemde",
 		tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
 		indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
 		indentWithTabs: (options.indentWithTabs === false) ? false : true,
@@ -1617,9 +1617,9 @@ SimpleMDE.prototype.createSideBySide = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 
-	if(!preview || !/editor-preview-side/.test(preview.className)) {
+	if(!preview || !/simplemde-preview-side/.test(preview.className)) {
 		preview = document.createElement("div");
-		preview.className = "editor-preview-side";
+		preview.className = "simplemde-preview-side";
 		wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
 	}
 
@@ -1667,7 +1667,7 @@ SimpleMDE.prototype.createToolbar = function(items) {
 	}
 
 	var bar = document.createElement("div");
-	bar.className = "editor-toolbar";
+	bar.className = "simplemde-toolbar";
 
 	var self = this;
 
@@ -1825,7 +1825,7 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 
 	// Create element for the status bar
 	var bar = document.createElement("div");
-	bar.className = "editor-statusbar";
+	bar.className = "simplemde-statusbar";
 
 
 	// Create a new span for each item
@@ -1981,7 +1981,7 @@ SimpleMDE.prototype.isPreviewActive = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.lastChild;
 
-	return /editor-preview-active/.test(preview.className);
+	return /simplemde-preview-active/.test(preview.className);
 };
 
 SimpleMDE.prototype.isSideBySideActive = function() {
@@ -1989,7 +1989,7 @@ SimpleMDE.prototype.isSideBySideActive = function() {
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 
-	return /editor-preview-active-side/.test(preview.className);
+	return /simplemde-preview-active-side/.test(preview.className);
 };
 
 SimpleMDE.prototype.isFullscreenActive = function() {
