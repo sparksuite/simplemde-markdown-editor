@@ -907,7 +907,7 @@ function _toggleLine(cm, name) {
 	var map = {
 		"quote": "> ",
 		"unordered-list": "* ",
-		"ordered-list": "1. "
+		"ordered-list": "%i. "
 	};
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
@@ -915,7 +915,7 @@ function _toggleLine(cm, name) {
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
-				text = map[name] + text;
+				text = map[name].replace(/\%i/g, (i - startPoint.line) + 1) + text;
 			}
 			cm.replaceRange(text, {
 				line: i,
