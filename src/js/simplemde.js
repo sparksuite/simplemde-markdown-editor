@@ -651,7 +651,29 @@ function drawTable(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	_replaceSelection(cm, stat.table, options.insertTexts.table);
+	if(options.promptTables) {
+		var columns = parseInt(prompt(options.promptTexts.tableColumns));
+		if(isNaN(columns) || columns <= 0) {
+			return false;
+		}
+		var rows = parseInt(prompt(options.promptTexts.tableRows));
+		if(isNaN(rows) || rows <= 0) {
+			return false;
+		}
+		// Build the table.
+		var tableString = "\n\n|";
+		for(var i = 1; i <= columns; ++i) {
+			tableString += " Column " + i + " |";
+		}
+		tableString += "\n|" + " --------------- |".repeat(columns);
+		var rowString = "\n|" + "     Text     |".repeat(columns);
+		tableString += rowString.repeat(rows);
+		tableString += "\n\n";
+
+		_replaceSelection(cm, stat.table, ["", tableString]);
+	} else {
+		_replaceSelection(cm, stat.table, options.insertTexts.table);
+	}
 }
 
 /**
@@ -1249,7 +1271,9 @@ var insertTexts = {
 
 var promptTexts = {
 	link: "URL for the link:",
-	image: "URL of the image:"
+	image: "URL of the image:",
+	tableColumns: "The number of columns:",
+	tableRows: "The number of rows:"
 };
 
 var blockStyles = {
