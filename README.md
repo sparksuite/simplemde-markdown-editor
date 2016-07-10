@@ -88,12 +88,12 @@ simplemde.value("This text will appear in the editor");
   - link
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
-- **minHeight**: A minimal height of the editable area. Should be a string containing a valid CSS value like: `"400px"`. Dafaults to `"300px"`.
+- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Dafaults to `"300px"`.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
   - **strikethrough**: If set to `false`, will not process GFM strikethrough syntax. Defaults to `true`.
   - **underscoresBreakWords**: If set to `true`, let underscores be a delimiter for separating words. Defaults to `false`.
-- **placeholder**: Custom placeholder that should be displayed
+- **placeholder**: If set, displays a custom placeholder message.
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
 - **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
@@ -135,6 +135,7 @@ var simplemde = new SimpleMDE({
 		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
 	},
 	lineWrapping: false,
+	minHeight: "500px",
 	parsingConfig: {
 		allowAtxHeaderWithoutSpace: true,
 		strikethrough: false,
@@ -277,24 +278,6 @@ var simplemde = new SimpleMDE({
 Shortcuts are automatically converted between platforms. If you define a shortcut as "Cmd-B", on PC that shortcut will be changed to "Ctrl-B". Conversely, a shortcut defined as "Ctrl-B" will become "Cmd-B" for Mac users.
 
 The list of actions that can be bound is the same as the list of built-in actions available for [toolbar buttons](#toolbar-icons).
-
-#### Height
-
-To change the minimum height (before it starts auto-growing):
-
-```CSS
-.CodeMirror, .CodeMirror-scroll {
-	min-height: 200px;
-}
-```
-
-Or, you can keep the height static:
-
-```CSS
-.CodeMirror {
-	height: 300px;
-}
-```
 
 ## Event handling
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events
