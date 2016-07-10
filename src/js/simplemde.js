@@ -1364,6 +1364,8 @@ function SimpleMDE(options) {
 	// Merging the shortcuts, with the given options
 	options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
 
+	options.minHeight = options.minHeight || "300px";
+
 
 	// Change unique_id to uniqueId for backwards compatibility
 	if(options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
@@ -1498,6 +1500,8 @@ SimpleMDE.prototype.render = function(el) {
 		placeholder: options.placeholder || el.getAttribute("placeholder") || "",
 		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
 	});
+
+	this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
 
 	if(options.forceSync === true) {
 		var cm = this.codemirror;
