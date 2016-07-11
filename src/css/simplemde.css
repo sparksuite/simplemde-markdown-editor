@@ -17,6 +17,8 @@
     bottom: 0;
     height: auto;
     z-index: 9;
+    border-right: none !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .CodeMirror-sided {
