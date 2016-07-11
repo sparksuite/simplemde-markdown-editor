@@ -94,8 +94,8 @@ simplemde.value("This text will appear in the editor");
   - **underscoresBreakWords**: If set to `true`, let underscores be a delimiter for separating words. Defaults to `false`.
 - **placeholder**: Custom placeholder that should be displayed
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
-- **promptTables**: If set to `true`, a JS alert window appears twice asking for the number of columns and rows to generate the table scheme. Defaults to `false`.
-- **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
+- **promptTables**: If set to `true`, a nice window appears twice asking for the number of columns and rows to generate the table scheme. Defaults to `false`.
+- **promptURLs**: If set to `true`, a nice window appears asking for the link or image URL. Defaults to `false`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
   - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
   - **markedOptions**: Set the internal Markdown renderer's [options](https://github.com/chjj/marked#options-1). Other `renderingConfig` options will take precedence.

@@ -12,7 +12,8 @@ require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
 var CodeMirrorSpellChecker = require("codemirror-spell-checker");
 var marked = require("marked");
-
+var sweetAlert = require("sweetalert2");
+var Promise = require("es6-promise").Promise;
 
 // Some variables
 var isMac = /Mac/.test(navigator.platform);
@@ -617,14 +618,17 @@ function drawLink(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
 	if(options.promptURLs) {
-		url = prompt(options.promptTexts.link);
-		if(!url) {
-			return false;
-		}
+		sweetAlert({
+			title: options.promptTexts.link,
+			input: "text",
+			showCancelButton: true
+		}).then(function(enteredUrl) {
+			_replaceSelection(cm, stat.link, options.insertTexts.link, enteredUrl);
+		});
+	} else {
+		_replaceSelection(cm, stat.link, options.insertTexts.link, "http://");
 	}
-	_replaceSelection(cm, stat.link, options.insertTexts.link, url);
 }
 
 /**
@@ -634,14 +638,17 @@ function drawImage(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
 	if(options.promptURLs) {
-		url = prompt(options.promptTexts.image);
-		if(!url) {
-			return false;
-		}
+		sweetAlert({
+			title: options.promptTexts.image,
+			input: "text",
+			showCancelButton: true
+		}).then(function(enteredUrl) {
+			_replaceSelection(cm, stat.image, options.insertTexts.image, enteredUrl);
+		});
+	} else {
+		_replaceSelection(cm, stat.image, options.insertTexts.image, "http://");
 	}
-	_replaceSelection(cm, stat.image, options.insertTexts.image, url);
 }
 
 /**
@@ -652,25 +659,45 @@ function drawTable(editor) {
 	var stat = getState(cm);
 	var options = editor.options;
 	if(options.promptTables) {
-		var columns = parseInt(prompt(options.promptTexts.tableColumns));
-		if(isNaN(columns) || columns <= 0) {
-			return false;
-		}
-		var rows = parseInt(prompt(options.promptTexts.tableRows));
-		if(isNaN(rows) || rows <= 0) {
-			return false;
-		}
-		// Build the table.
-		var tableString = "\n\n|";
-		for(var i = 1; i <= columns; ++i) {
-			tableString += " Column " + i + " |";
-		}
-		tableString += "\n|" + " --------------- |".repeat(columns);
-		var rowString = "\n|" + "     Text     |".repeat(columns);
-		tableString += rowString.repeat(rows);
-		tableString += "\n\n";
+		var numberValidator = function(input) {
+			return new Promise(function(resolve, reject) {
+				if(isNaN(input)) {
+					reject("You must provide a positive number.");
+				} else if(input <= 0) {
+					reject("The number must be greater than zero.");
+				} else {
+					resolve();
+				}
+			});
+		};
 
-		_replaceSelection(cm, stat.table, ["", tableString]);
+		sweetAlert({
+			title: options.promptTexts.tableColumns,
+			input: "text",
+			showCancelButton: true,
+			confirmButtonText: "Next <i class='fa fa-arrow-right'></i>",
+			inputValidator: numberValidator
+		}).then(function(columns) {
+			sweetAlert({
+				title: options.promptTexts.tableRows,
+				input: "text",
+				showCancelButton: true,
+				inputValidator: numberValidator
+			}).then(function(rows) {
+				// Build the table.
+				var tableString = "\n\n|";
+				for(var i = 1; i <= columns; ++i) {
+					tableString += " Column " + i + " |";
+				}
+				tableString += "\n|" + " --------------- |".repeat(columns);
+				var rowString = "\n|" + "     Text     |".repeat(columns);
+				tableString += rowString.repeat(rows);
+				tableString += "\n\n";
+
+				_replaceSelection(cm, stat.table, ["", tableString]);
+			});
+		});
+
 	} else {
 		_replaceSelection(cm, stat.table, options.insertTexts.table);
 	}
@@ -1270,10 +1297,10 @@ var insertTexts = {
 };
 
 var promptTexts = {
-	link: "URL for the link:",
-	image: "URL of the image:",
-	tableColumns: "The number of columns:",
-	tableRows: "The number of rows:"
+	link: "URL for the link",
+	image: "URL of the image",
+	tableColumns: "The number of columns",
+	tableRows: "The number of rows"
 };
 
 var blockStyles = {
