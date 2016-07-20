@@ -795,8 +795,9 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var text;
 	var start = startEnd[0];
 	var end = startEnd[1];
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
+	var startPoint = {}, endPoint = {};
+	Object.assign(startPoint, cm.getCursor("start"));
+	Object.assign(endPoint, cm.getCursor("end"));
 	if(url) {
 		end = end.replace("#url#", url);
 	}
@@ -1364,6 +1365,8 @@ function SimpleMDE(options) {
 	// Merging the shortcuts, with the given options
 	options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
 
+	options.minHeight = options.minHeight || "300px";
+
 
 	// Change unique_id to uniqueId for backwards compatibility
 	if(options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
@@ -1392,8 +1395,12 @@ function SimpleMDE(options) {
 SimpleMDE.prototype.markdown = function(text) {
 	if(marked) {
 		// Initialize
-		var markedOptions = {};
-
+		var markedOptions;
+		if(this.options && this.options.renderingConfig && this.options.renderingConfig.markedOptions) {
+			markedOptions = this.options.renderingConfig.markedOptions;
+		} else {
+			markedOptions = {};
+		}
 
 		// Update options
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.singleLineBreaks === false) {
@@ -1494,6 +1501,8 @@ SimpleMDE.prototype.render = function(el) {
 		placeholder: options.placeholder || el.getAttribute("placeholder") || "",
 		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
 	});
+
+	this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
 
 	if(options.forceSync === true) {
 		var cm = this.codemirror;
