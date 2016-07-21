@@ -189,6 +189,7 @@ Name | Action | Tooltip<br>Class
 bold | toggleBold | Bold<br>fa fa-bold
 italic | toggleItalic | Italic<br>fa fa-italic
 strikethrough | toggleStrikethrough | Strikethrough<br>fa fa-strikethrough
+underline | toggleUnderline | Underline<br>fa fa-underline
 heading | toggleHeadingSmaller | Heading<br>fa fa-header
 heading-smaller | toggleHeadingSmaller | Smaller Heading<br>fa fa-header
 heading-bigger | toggleHeadingBigger | Bigger Heading<br>fa fa-lg fa-header
@@ -247,6 +248,7 @@ Shortcut | Action
 :------- | :-----
 *Cmd-'* | "toggleBlockquote"
 *Cmd-B* | "toggleBold"
+*Cmd-U* | "toggleUnderline"
 *Cmd-E* | "cleanBlock"
 *Cmd-H* | "toggleHeadingSmaller"
 *Cmd-I* | "toggleItalic"
