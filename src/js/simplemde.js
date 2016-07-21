@@ -803,7 +803,8 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var text;
 	var start = startEnd[0];
 	var end = startEnd[1];
-	var startPoint = {}, endPoint = {};
+	var startPoint = {},
+		endPoint = {};
 	Object.assign(startPoint, cm.getCursor("start"));
 	Object.assign(endPoint, cm.getCursor("end"));
 	if(url) {
