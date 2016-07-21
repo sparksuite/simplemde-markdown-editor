@@ -21,6 +21,7 @@ var isMac = /Mac/.test(navigator.platform);
 var bindings = {
 	"toggleBold": toggleBold,
 	"toggleItalic": toggleItalic,
+	"toggleUnderline": toggleUnderline,
 	"drawLink": drawLink,
 	"toggleHeadingSmaller": toggleHeadingSmaller,
 	"toggleHeadingBigger": toggleHeadingBigger,
@@ -46,6 +47,7 @@ var bindings = {
 var shortcuts = {
 	"toggleBold": "Cmd-B",
 	"toggleItalic": "Cmd-I",
+	"toggleUnderline": "Cmd-U",
 	"drawLink": "Cmd-K",
 	"toggleHeadingSmaller": "Cmd-H",
 	"toggleHeadingBigger": "Shift-Cmd-H",
@@ -242,6 +244,12 @@ function toggleItalic(editor) {
 	_toggleBlock(editor, "italic", editor.options.blockStyles.italic);
 }
 
+/**
+ * Action for toggling underline.
+ */
+function toggleUnderline(editor) {
+	_toggleBlock(editor, "underline", "__");
+}
 
 /**
  * Action for toggling strikethrough.
@@ -795,7 +803,8 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var text;
 	var start = startEnd[0];
 	var end = startEnd[1];
-	var startPoint = {}, endPoint = {};
+	var startPoint = {},
+		endPoint = {};
 	Object.assign(startPoint, cm.getCursor("start"));
 	Object.assign(endPoint, cm.getCursor("end"));
 	if(url) {
@@ -1081,6 +1090,12 @@ var toolbarBuiltInButtons = {
 		className: "fa fa-italic",
 		title: "Italic",
 		default: true
+	},
+	"underline": {
+		name: "underline",
+		action: toggleUnderline,
+		className: "fa fa-underline",
+		title: "Underline"
 	},
 	"strikethrough": {
 		name: "strikethrough",
@@ -1890,6 +1905,7 @@ SimpleMDE.prototype.value = function(val) {
  */
 SimpleMDE.toggleBold = toggleBold;
 SimpleMDE.toggleItalic = toggleItalic;
+SimpleMDE.toggleUnderline = toggleUnderline;
 SimpleMDE.toggleStrikethrough = toggleStrikethrough;
 SimpleMDE.toggleBlockquote = toggleBlockquote;
 SimpleMDE.toggleHeadingSmaller = toggleHeadingSmaller;
@@ -1919,6 +1935,9 @@ SimpleMDE.prototype.toggleBold = function() {
 };
 SimpleMDE.prototype.toggleItalic = function() {
 	toggleItalic(this);
+};
+SimpleMDE.prototype.toggleUnderline = function() {
+	toggleUnderline(this);
 };
 SimpleMDE.prototype.toggleStrikethrough = function() {
 	toggleStrikethrough(this);
