@@ -16326,6 +16326,11 @@ function SimpleMDE(options) {
 	// Add default preview rendering function
 	if(!options.previewRender) {
 		options.previewRender = function(plainText) {
+
+      //Converting every ">" and "<" characters in the whole editor to their html entities name
+      plainText = plainText.replace(/[<]/g, "&lt;");
+      plainText = plainText.replace(/[>]/g, "&gt;");
+
 			// Note: "this" refers to the options object
 			return this.parent.markdown(plainText);
 		};
@@ -16393,6 +16398,11 @@ SimpleMDE.prototype.markdown = function(text) {
 
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
 			markedOptions.highlight = function(code) {
+
+        //Reverse the html entities back to normal only for the characters in a code block
+        code = code.replace(/\&lt;/g, "<");
+        code = code.replace(/\&gt;/g, ">");
+
 				return window.hljs.highlightAuto(code).value;
 			};
 		}
