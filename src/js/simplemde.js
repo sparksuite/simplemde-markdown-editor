@@ -924,9 +924,9 @@ function _toggleLine(cm, name) {
 					if (arr[2] && arr[2] == map[name]) {
 						char = '';
 					}
-					text = arr[1] + char + arr[3] +text.replace(whitespacesRegexp, '').replace(repl[name], "$1") ;
+					text = arr[1] + char + arr[3] +text.replace(whitespacesRegexp, '').replace(repl[name], "$1");
 				} else {
-					text = map[name] + ' ' + text
+					text = map[name] + ' ' + text;
 				}
 			}
 			cm.replaceRange(text, {
