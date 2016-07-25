@@ -795,7 +795,8 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var text;
 	var start = startEnd[0];
 	var end = startEnd[1];
-	var startPoint = {}, endPoint = {};
+	var startPoint = {},
+		endPoint = {};
 	Object.assign(startPoint, cm.getCursor("start"));
 	Object.assign(endPoint, cm.getCursor("end"));
 	if(url) {
@@ -1409,10 +1410,17 @@ SimpleMDE.prototype.markdown = function(text) {
 			markedOptions.breaks = true;
 		}
 
-		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-			markedOptions.highlight = function(code) {
-				return window.hljs.highlightAuto(code).value;
-			};
+		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true) {
+
+			/* Get HLJS from config or window */
+			var hljs = this.options.renderingConfig.hljs || window.hljs;
+
+			/* Check if HLJS loaded */
+			if(hljs) {
+				markedOptions.highlight = function(code) {
+					return hljs.highlightAuto(code).value;
+				};
+			}
 		}
 
 
