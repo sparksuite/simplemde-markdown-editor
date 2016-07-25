@@ -919,14 +919,14 @@ function _toggleLine(cm, name) {
 				text = text.replace(repl[name], "$1");
 			} else {
 				var arr = listRegexp.exec(text);
-				if (arr !== null && arr[1]) {
-					var char =  map[name];
-					if (arr[2] && arr[2] == map[name]) {
-						char = '';
+				if(arr !== null && arr[1]) {
+					var char = map[name];
+					if(arr[2] && arr[2] == map[name]) {
+						char = "";
 					}
-					text = arr[1] + char + arr[3] +text.replace(whitespacesRegexp, '').replace(repl[name], "$1");
+					text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
 				} else {
-					text = map[name] + ' ' + text;
+					text = map[name] + " " + text;
 				}
 			}
 			cm.replaceRange(text, {
