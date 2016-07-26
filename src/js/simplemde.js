@@ -919,7 +919,7 @@ function _toggleLine(cm, name) {
 				text = text.replace(repl[name], "$1");
 			} else {
 				var arr = listRegexp.exec(text);
-				if(arr !== null && arr[1]) {
+				if(arr !== null) {
 					var char = map[name];
 					if(arr[2] && arr[2] == map[name]) {
 						char = "";
