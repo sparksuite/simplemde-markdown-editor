@@ -907,7 +907,7 @@ function _toggleLine(cm, name) {
 	var repl = {
 		"quote": /^(\s*)\>\s+/,
 		"unordered-list": listRegexp,
-		"ordered-list": listRegexp,
+		"ordered-list": listRegexp
 	};
 	var map = {
 		"quote": ">",

@@ -15938,18 +15938,21 @@ function _toggleLine(cm, name) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
+	var listRegexp = /^(\s*)(\*|\-|\+|\d*\.)(\s+)/;
+	var whitespacesRegexp = /^\s*/;
+
 	var stat = getState(cm);
 	var startPoint = cm.getCursor("start");
 	var endPoint = cm.getCursor("end");
 	var repl = {
 		"quote": /^(\s*)\>\s+/,
-		"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
-		"ordered-list": /^(\s*)\d+\.\s+/
+		"unordered-list": listRegexp,
+		"ordered-list": listRegexp
 	};
 	var map = {
-		"quote": "> ",
-		"unordered-list": "* ",
-		"ordered-list": "1. "
+		"quote": ">",
+		"unordered-list": "*",
+		"ordered-list": "1."
 	};
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
@@ -15957,7 +15960,16 @@ function _toggleLine(cm, name) {
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
-				text = map[name] + text;
+				var arr = listRegexp.exec(text);
+				if(arr !== null) {
+					var char = map[name];
+					if(arr[2] && arr[2] == map[name]) {
+						char = "";
+					}
+					text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
+				} else {
+					text = map[name] + " " + text;
+				}
 			}
 			cm.replaceRange(text, {
 				line: i,
