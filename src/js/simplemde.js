@@ -1896,10 +1896,16 @@ SimpleMDE.prototype.createStatusbar = function(status) {
  * Get or set the text content.
  */
 SimpleMDE.prototype.value = function(val) {
+	var cm = this.codemirror;
 	if(val === undefined) {
-		return this.codemirror.getValue();
+		return cm.getValue();
 	} else {
-		this.codemirror.getDoc().setValue(val);
+		cm.getDoc().setValue(val);
+		if(this.isPreviewActive()) {
+			var wrapper = cm.getWrapperElement();
+			var preview = wrapper.lastChild;
+			preview.innerHTML = this.options.previewRender(val, preview);
+		}
 		return this;
 	}
 };
