@@ -88,6 +88,7 @@ simplemde.value("This text will appear in the editor");
   - link
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
+- **onChange**: A function that will be called on every change.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
   - **strikethrough**: If set to `false`, will not process GFM strikethrough syntax. Defaults to `true`.
