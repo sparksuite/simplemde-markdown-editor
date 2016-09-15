@@ -1531,6 +1531,10 @@ SimpleMDE.prototype.render = function(el) {
 		});
 	}
 
+	if(options.onChange) {
+		this.codemirror.on("change", options.onChange);
+	}
+
 	this.gui = {};
 
 	if(options.toolbar !== false) {
