@@ -1501,6 +1501,9 @@ SimpleMDE.prototype.render = function(el) {
 			cm.save();
 		});
 	}
+	if(options.onChange) {
+		this.codemirror.on("change", options.onChange);
+	}
 
 	this.gui = {};
 
