@@ -11,7 +11,8 @@ require("codemirror/addon/selection/mark-selection.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
 var CodeMirrorSpellChecker = require("codemirror-spell-checker");
-var marked = require("marked");
+//var marked = require("marked");
+var Remarkable = require("remarkable");
 
 
 // Some variables
@@ -1390,7 +1391,7 @@ function SimpleMDE(options) {
  * Default markdown render.
  */
 SimpleMDE.prototype.markdown = function(text) {
-	if(marked) {
+	/*if(marked) {
 		// Initialize
 		var markedOptions = {};
 
@@ -1415,7 +1416,30 @@ SimpleMDE.prototype.markdown = function(text) {
 
 		// Return
 		return marked(text);
-	}
+	}*/
+        if(Remarkable) {
+                var md = new Remarkable({
+                        html: false,
+                        xhtmlOut: true,
+                        breaks: false,
+                        highlight: function(str, lang) {
+                                if(typeof window.hljs != undefined && lang && window.hljs.getLanguage(lang)) {
+                                        try {
+                                                return window.hljs.highlight(lang, str).value;
+                                        } catch(err) {
+                                                //continue
+                                        }    
+                                }    
+                                try {
+                                        return window.hljs.highlightAuto(str).value;
+                                } catch(err) {
+                                        //continue
+                                }    
+                                return;
+                        }    
+                });  
+                return md.render(text);
+        }
 };
 
 /**
