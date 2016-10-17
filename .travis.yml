@@ -4,6 +4,7 @@ node_js:
 - '5'
 - '4'
 - '0.12'
+sudo: false
 before_script:
 - npm install -g gulp
 script: gulp
