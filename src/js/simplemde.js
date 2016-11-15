@@ -189,6 +189,7 @@ function toggleFullScreen(editor) {
 	// Set fullscreen
 	var cm = editor.codemirror;
 	cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+	cm.focus();
 
 
 	// Prevent scrolling on body during fullscreen active
@@ -220,7 +221,7 @@ function toggleFullScreen(editor) {
 	}
 
 
-	// Hide side by side if needed
+  // Hide side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
 	if(/editor-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
@@ -690,6 +691,7 @@ function redo(editor) {
  */
 function toggleSideBySide(editor) {
 	var cm = editor.codemirror;
+	cm.focus();
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
@@ -751,6 +753,7 @@ function toggleSideBySide(editor) {
  */
 function togglePreview(editor) {
 	var cm = editor.codemirror;
+	cm.focus();
 	var wrapper = cm.getWrapperElement();
 	var toolbar_div = wrapper.previousSibling;
 	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
