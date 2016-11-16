@@ -1015,23 +1015,32 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 function _cleanBlock(cm) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
-
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
-	var text;
-
-	for(var line = startPoint.line; line <= endPoint.line; line++) {
-		text = cm.getLine(line);
-		text = text.replace(/^[ ]*([# ]+|\*|\-|[> ]+|[0-9]+(.|\)))[ ]*/, "");
-
-		cm.replaceRange(text, {
-			line: line,
-			ch: 0
-		}, {
-			line: line,
-			ch: 99999999999999
-		});
+	// split the selection in lines
+	var selections = cm.getSelection().split("\n");
+	var removeTags = function(selection) {
+		var html = marked(selection);
+		// create a div...
+		var tmp = document.createElement("DIV");
+		// .. with the new generated html code...
+		tmp.innerHTML = html;
+		// ... now read the text of the generated code.
+		// This way the browser does the job of removing the tags.
+		var result = selection;
+		if(tmp.textContent) {
+			result = tmp.textContent;
+		} else if(tmp.innerText) {
+			result = tmp.innerText;
+		}
+		// removing trailing "new line"
+		return result.split("\n").join("");
+	};
+	var result = [];
+	for(var i = 0; i < selections.length; i++) {
+		result.push(removeTags(selections[i]));
 	}
+	// Add removed "new lines" back to the resulting string.
+	// Replace the selection with the new clean selection.
+	cm.replaceSelection(result.join("\n"));
 }
 
 // Merge the properties of one object into another.
