@@ -100,7 +100,7 @@ function createIcon(options, enableTooltips, shortcuts) {
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
-		el.title = createTootlip(options.title, options.action, shortcuts);
+		el.title = createTooltip(options.title, options.action, shortcuts);
 
 		if(isMac) {
 			el.title = el.title.replace("Ctrl", "⌘");
@@ -120,7 +120,7 @@ function createSep() {
 	return el;
 }
 
-function createTootlip(title, action, shortcuts) {
+function createTooltip(title, action, shortcuts) {
 	var actionName;
 	var tooltip = title;
 
@@ -795,8 +795,10 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var text;
 	var start = startEnd[0];
 	var end = startEnd[1];
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
+	var startPoint = {},
+		endPoint = {};
+	Object.assign(startPoint, cm.getCursor("start"));
+	Object.assign(endPoint, cm.getCursor("end"));
 	if(url) {
 		end = end.replace("#url#", url);
 	}
@@ -896,18 +898,21 @@ function _toggleLine(cm, name) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
+	var listRegexp = /^(\s*)(\*|\-|\+|\d*\.)(\s+)/;
+	var whitespacesRegexp = /^\s*/;
+
 	var stat = getState(cm);
 	var startPoint = cm.getCursor("start");
 	var endPoint = cm.getCursor("end");
 	var repl = {
 		"quote": /^(\s*)\>\s+/,
-		"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
-		"ordered-list": /^(\s*)\d+\.\s+/
+		"unordered-list": listRegexp,
+		"ordered-list": listRegexp
 	};
 	var map = {
-		"quote": "> ",
-		"unordered-list": "* ",
-		"ordered-list": "1. "
+		"quote": ">",
+		"unordered-list": "*",
+		"ordered-list": "1."
 	};
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
@@ -915,7 +920,16 @@ function _toggleLine(cm, name) {
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
-				text = map[name] + text;
+				var arr = listRegexp.exec(text);
+				if(arr !== null) {
+					var char = map[name];
+					if(arr[2] && arr[2] == map[name]) {
+						char = "";
+					}
+					text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
+				} else {
+					text = map[name] + " " + text;
+				}
 			}
 			cm.replaceRange(text, {
 				line: i,
@@ -1364,6 +1378,8 @@ function SimpleMDE(options) {
 	// Merging the shortcuts, with the given options
 	options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
 
+	options.minHeight = options.minHeight || "300px";
+
 
 	// Change unique_id to uniqueId for backwards compatibility
 	if(options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
@@ -1392,8 +1408,12 @@ function SimpleMDE(options) {
 SimpleMDE.prototype.markdown = function(text) {
 	if(marked) {
 		// Initialize
-		var markedOptions = {};
-
+		var markedOptions;
+		if(this.options && this.options.renderingConfig && this.options.renderingConfig.markedOptions) {
+			markedOptions = this.options.renderingConfig.markedOptions;
+		} else {
+			markedOptions = {};
+		}
 
 		// Update options
 		if(this.options && this.options.renderingConfig && this.options.renderingConfig.singleLineBreaks === false) {
@@ -1402,10 +1422,17 @@ SimpleMDE.prototype.markdown = function(text) {
 			markedOptions.breaks = true;
 		}
 
-		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-			markedOptions.highlight = function(code) {
-				return window.hljs.highlightAuto(code).value;
-			};
+		if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true) {
+
+			/* Get HLJS from config or window */
+			var hljs = this.options.renderingConfig.hljs || window.hljs;
+
+			/* Check if HLJS loaded */
+			if(hljs) {
+				markedOptions.highlight = function(code) {
+					return hljs.highlightAuto(code).value;
+				};
+			}
 		}
 
 
@@ -1494,6 +1521,8 @@ SimpleMDE.prototype.render = function(el) {
 		placeholder: options.placeholder || el.getAttribute("placeholder") || "",
 		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
 	});
+
+	this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
 
 	if(options.forceSync === true) {
 		var cm = this.codemirror;
@@ -1867,10 +1896,16 @@ SimpleMDE.prototype.createStatusbar = function(status) {
  * Get or set the text content.
  */
 SimpleMDE.prototype.value = function(val) {
+	var cm = this.codemirror;
 	if(val === undefined) {
-		return this.codemirror.getValue();
+		return cm.getValue();
 	} else {
-		this.codemirror.getDoc().setValue(val);
+		cm.getDoc().setValue(val);
+		if(this.isPreviewActive()) {
+			var wrapper = cm.getWrapperElement();
+			var preview = wrapper.lastChild;
+			preview.innerHTML = this.options.previewRender(val, preview);
+		}
 		return this;
 	}
 };
