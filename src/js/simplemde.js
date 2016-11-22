@@ -904,18 +904,26 @@ function _toggleLine(cm, name) {
 		"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
 		"ordered-list": /^(\s*)\d+\.\s+/
 	};
-	var map = {
-		"quote": "> ",
-		"unordered-list": "* ",
-		"ordered-list": "1. "
+
+	var _getMapName = function(name, i) {
+		var map = {
+			"quote": "> ",
+			"unordered-list": "* ",
+			"ordered-list": "%%i. "
+		};
+
+		return map[name].replace("%%i", i);
 	};
+
+	var line = 1;
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
 			var text = cm.getLine(i);
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
-				text = map[name] + text;
+				text = _getMapName(name, line) + text;
+				line += 1;
 			}
 			cm.replaceRange(text, {
 				line: i,
