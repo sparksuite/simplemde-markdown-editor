@@ -326,3 +326,7 @@
 .CodeMirror .CodeMirror-placeholder {
     opacity: .5;
 }
+
+.CodeMirror .CodeMirror-code .cm-formatting{
+    color:rgba(0, 0, 0, .2);
+}
