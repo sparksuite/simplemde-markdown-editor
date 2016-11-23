@@ -909,11 +909,29 @@ function _toggleLine(cm, name) {
 		"unordered-list": listRegexp,
 		"ordered-list": listRegexp
 	};
-	var map = {
-		"quote": ">",
-		"unordered-list": "*",
-		"ordered-list": "1."
+
+	var _getChar = function(name, i) {
+		var map = {
+			"quote": ">",
+			"unordered-list": "*",
+			"ordered-list": "%%i."
+		};
+
+		return map[name].replace("%%i", i);
 	};
+
+	var _checkChar = function(name, char) {
+		var map = {
+			"quote": "\>",
+			"unordered-list": "\*",
+			"ordered-list": "\d+."
+		};
+		var rt = new RegExp(map[name]);
+
+		return char && rt.test(char);
+	};
+
+	var line = 1;
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
 			var text = cm.getLine(i);
@@ -921,15 +939,16 @@ function _toggleLine(cm, name) {
 				text = text.replace(repl[name], "$1");
 			} else {
 				var arr = listRegexp.exec(text);
+				var char = _getChar(name, line);
 				if(arr !== null) {
-					var char = map[name];
-					if(arr[2] && arr[2] == map[name]) {
+					if(_checkChar(name, arr[2])) {
 						char = "";
 					}
 					text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
 				} else {
-					text = map[name] + " " + text;
+					text = char + " " + text;
 				}
+				line += 1;
 			}
 			cm.replaceRange(text, {
 				line: i,
