@@ -97,6 +97,7 @@ simplemde.value("This text will appear in the editor");
 - **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
   - **singleLineBreaks**: If set to `false`, disable parsing GFM single line breaks. Defaults to `true`.
+  - **sanitize**: If set to `true`, enable sanitizing on the preview. e.g. '&lt;br/&gt;' will be render as text instead of a line-break
   - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
 - **shortcuts**: Keyboard shortcuts associated with this instance. Defaults to the [array of shortcuts](#keyboard-shortcuts).
 - **showIcons**: An array of icon names to show. Can be used to show specific icons hidden by default without completely customizing the toolbar.
@@ -152,6 +153,7 @@ var simplemde = new SimpleMDE({
 	promptURLs: true,
 	renderingConfig: {
 		singleLineBreaks: false,
+		sanitize: true,
 		codeSyntaxHighlighting: true,
 	},
 	shortcuts: {
