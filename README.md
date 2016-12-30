@@ -57,12 +57,55 @@ var simplemde = new SimpleMDE({ element: $("#MyID")[0] });
 
 ## Get/set the content
 
+Get the content
+
 ```JavaScript
-simplemde.value();
+var val = simplemde.value();
 ```
+
+Set the content
 
 ```JavaScript
 simplemde.value("This text will appear in the editor");
+```
+
+## Working with forms
+
+### Setting the form value correctly before Submit
+
+By listening to the `blur` function of codemirror you can ensure, that the value of the underlying textarea in your form always corresponds to the value of your SimpleMDE and vice versa.
+
+```JavaScript
+var textarea = $("#MyID");
+var simplemde = new SimpleMDE({element: textarea[0]});
+simplemde.value(textarea.text());
+simplemde.codemirror.on("blur", function() {
+   textarea.text(simplemde.value());
+});
+```
+
+### Restoring default tab behaviour in forms
+
+Here is a way how you can restore the default tab behaviour within forms. Please note, that this prevents the possibility to input tabs into the text.
+
+```JavaScript
+var textarea = $("#MyID");
+var simplemde = new SimpleMDE({element: textarea[0]});
+var formKeyMap = {
+  "Ctrl-Enter": function () {
+    $(textarea).text(simplemde.value());
+    $('#submit').trigger('click'); // or $('#form').submit() depending on the server-side implementation
+  },
+  "Tab": function () {
+    var inputs = $(textarea).closest('form').find(':input');
+    inputs.eq( inputs.index(textarea)+ 2 ).focus(); // +1 would focus codemirrors own textarea element again, which is not what we want.
+  },
+  "Shift-Tab": function () {
+    var inputs = $(textarea).closest('form').find(':input');
+    inputs.eq( inputs.index(textarea)- 1 ).focus();
+  }
+};
+simplemde.codemirror.addKeyMap(formKeyMap);
 ```
 
 ## Configuration
