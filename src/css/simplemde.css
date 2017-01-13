@@ -225,6 +225,11 @@
     box-sizing: border-box;
 }
 
+iframe.editor-preview {
+    border: 0;
+    padding: 0;
+}
+
 .editor-preview-side {
     padding: 10px;
     position: fixed;
@@ -238,6 +243,11 @@
     display: none;
     box-sizing: border-box;
     border: 1px solid #ddd;
+}
+
+iframe.editor-preview-side {
+    padding: 0;
+    height: 100%;
 }
 
 .editor-preview-active-side {

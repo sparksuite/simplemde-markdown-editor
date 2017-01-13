@@ -178,6 +178,46 @@ function getState(cm, pos) {
 	return ret;
 }
 
+function createPreviewContainer(className, previewConfig) {
+	var preview;
+
+	if(previewConfig.useIframe) {
+		preview = document.createElement("iframe");
+		preview.onload = function() {
+			var idoc = getIframeDocument(preview);
+
+			for(var i in previewConfig.editorCss) {
+				var link = idoc.createElement("link");
+				link.rel = "stylesheet";
+				link.href = previewConfig.editorCss[i];
+				idoc.head.appendChild(link);
+			}
+		};
+	} else {
+		preview = document.createElement("div");
+	}
+
+	preview.className = className;
+
+	return preview;
+}
+
+function getIframeDocument(iframe) {
+	return iframe.contentDocument || iframe.contentWindow.document;
+}
+
+function getPreviewContentContainer(preview) {
+	if(preview.tagName == "IFRAME") {
+		return getIframeDocument(preview).body;
+	}
+
+	return preview;
+}
+
+function injectPreviewContent(preview, content) {
+	getPreviewContentContainer(preview).innerHTML = content;
+}
+
 
 // Saved overflow setting
 var saved_overflow = "";
@@ -727,7 +767,7 @@ function toggleSideBySide(editor) {
 	}
 
 	var sideBySideRenderingFunction = function() {
-		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
+		injectPreviewContent(preview, editor.options.previewRender(editor.value(), preview));
 	};
 
 	if(!cm.sideBySideRenderingFunction) {
@@ -735,7 +775,7 @@ function toggleSideBySide(editor) {
 	}
 
 	if(useSideBySideListener) {
-		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
+		injectPreviewContent(preview, editor.options.previewRender(editor.value(), preview));
 		cm.on("update", cm.sideBySideRenderingFunction);
 	} else {
 		cm.off("update", cm.sideBySideRenderingFunction);
@@ -756,8 +796,7 @@ function togglePreview(editor) {
 	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 	var preview = wrapper.lastChild;
 	if(!preview || !/editor-preview/.test(preview.className)) {
-		preview = document.createElement("div");
-		preview.className = "editor-preview";
+		preview = createPreviewContainer("editor-preview", editor.options.previewConfig);
 		wrapper.appendChild(preview);
 	}
 	if(/editor-preview-active/.test(preview.className)) {
@@ -780,7 +819,7 @@ function togglePreview(editor) {
 			toolbar_div.className += " disabled-for-preview";
 		}
 	}
-	preview.innerHTML = editor.options.previewRender(editor.value(), preview);
+	injectPreviewContent(preview, editor.options.previewRender(editor.value(), preview));
 
 	// Turn off side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
@@ -1376,6 +1415,13 @@ function SimpleMDE(options) {
 	}
 
 
+	// Set default options for preview config
+	options.previewConfig = extend({
+		useIframe: true, // should the preview be done in an iframe to isolate stylesheets
+		editorCss: [] // if the iframe mode is enabled, an array of stylesheets to style the preview area
+	}, options.previewConfig || {});
+
+
 	// Set default options for parsing config
 	options.parsingConfig = extend({
 		highlightFormatting: true // needed for toggleCodeBlock to detect types of code
@@ -1662,38 +1708,40 @@ SimpleMDE.prototype.createSideBySide = function() {
 	var preview = wrapper.nextSibling;
 
 	if(!preview || !/editor-preview-side/.test(preview.className)) {
-		preview = document.createElement("div");
-		preview.className = "editor-preview-side";
+		preview = createPreviewContainer("editor-preview-side", this.options.previewConfig);
 		wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
 	}
 
-	// Syncs scroll  editor -> preview
-	var cScroll = false;
-	var pScroll = false;
-	cm.on("scroll", function(v) {
-		if(cScroll) {
-			cScroll = false;
-			return;
-		}
-		pScroll = true;
-		var height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
-		var ratio = parseFloat(v.getScrollInfo().top) / height;
-		var move = (preview.scrollHeight - preview.clientHeight) * ratio;
-		preview.scrollTop = move;
-	});
+	if(preview.tagName == "DIV") {
+		// Syncs scroll  editor -> preview
+		var cScroll = false;
+		var pScroll = false;
+		cm.on("scroll", function(v) {
+			if(cScroll) {
+				cScroll = false;
+				return;
+			}
+			pScroll = true;
+			var height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
+			var ratio = parseFloat(v.getScrollInfo().top) / height;
+			var move = (preview.scrollHeight - preview.clientHeight) * ratio;
+			preview.scrollTop = move;
+		});
 
-	// Syncs scroll  preview -> editor
-	preview.onscroll = function() {
-		if(pScroll) {
-			pScroll = false;
-			return;
-		}
-		cScroll = true;
-		var height = preview.scrollHeight - preview.clientHeight;
-		var ratio = parseFloat(preview.scrollTop) / height;
-		var move = (cm.getScrollInfo().height - cm.getScrollInfo().clientHeight) * ratio;
-		cm.scrollTo(0, move);
-	};
+		// Syncs scroll  preview -> editor
+		preview.onscroll = function() {
+			if(pScroll) {
+				pScroll = false;
+				return;
+			}
+			cScroll = true;
+			var height = preview.scrollHeight - preview.clientHeight;
+			var ratio = parseFloat(preview.scrollTop) / height;
+			var move = (cm.getScrollInfo().height - cm.getScrollInfo().clientHeight) * ratio;
+			cm.scrollTo(0, move);
+		};
+	}
+
 	return preview;
 };
 
@@ -1923,7 +1971,7 @@ SimpleMDE.prototype.value = function(val) {
 		if(this.isPreviewActive()) {
 			var wrapper = cm.getWrapperElement();
 			var preview = wrapper.lastChild;
-			preview.innerHTML = this.options.previewRender(val, preview);
+			injectPreviewContent(preview, this.options.previewRender(val, preview));
 		}
 		return this;
 	}
