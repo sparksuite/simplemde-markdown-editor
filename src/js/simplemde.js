@@ -14,7 +14,7 @@ import 'codemirror/mode/xml/xml'
 
 
 // Some variables
-var isMac = /Mac/.test(navigator.platform);
+const isMac = navigator.platform.includes('Mac');
 
 // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
 var bindings = {
