@@ -1,26 +1,25 @@
 "use strict";
+import babelify from 'babelify'
+import gulp from 'gulp'
+import minifycss from 'gulp-clean-css'
+import uglify from 'gulp-uglify'
+import concat from 'gulp-concat'
+import header from 'gulp-header'
+import buffer from 'vinyl-buffer'
+import pkg from './package.json'
+import debug from 'gulp-debug'
+import eslint from 'gulp-eslint'
+import prettify from 'gulp-jsbeautifier'
+import browserify from 'browserify'
+import source from 'vinyl-source-stream'
+import rename from 'gulp-rename'
 
-var gulp = require("gulp"),
-	minifycss = require("gulp-clean-css"),
-	uglify = require("gulp-uglify"),
-	concat = require("gulp-concat"),
-	header = require("gulp-header"),
-	buffer = require("vinyl-buffer"),
-	pkg = require("./package.json"),
-	debug = require("gulp-debug"),
-	eslint = require("gulp-eslint"),
-	prettify = require("gulp-jsbeautifier"),
-	browserify = require("browserify"),
-	source = require("vinyl-source-stream"),
-	rename = require("gulp-rename");
-
-var banner = ["/**",
-	" * <%= pkg.name %> v<%= pkg.version %>",
-	" * Copyright <%= pkg.company %>",
-	" * @link <%= pkg.homepage %>",
-	" * @license <%= pkg.license %>",
-	" */",
-	""].join("\n");
+const banner = `/**
+ * <%= pkg.name %> v<%= pkg.version %>
+ * Copyright <%= pkg.company %>
+ * @link <%= pkg.homepage %>
+ * @license <%= pkg.license %>
+ */\n`
 
 gulp.task("prettify-js", [], function() {
 	return gulp.src("./src/js/simplemde.js")
@@ -44,6 +43,7 @@ gulp.task("lint", ["prettify-js"], function() {
 
 function taskBrowserify(opts) {
 	return browserify("./src/js/simplemde.js", opts)
+		.transform("babelify", {presets: ['es2015', 'stage-3']})
 		.bundle();
 }
 
