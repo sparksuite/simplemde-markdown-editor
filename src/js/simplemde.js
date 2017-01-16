@@ -1,17 +1,16 @@
 /*global require,module*/
-"use strict";
-var CodeMirror = require("codemirror");
-require("codemirror/addon/edit/continuelist.js");
-require("./codemirror/tablist");
-require("codemirror/addon/display/fullscreen.js");
-require("codemirror/mode/markdown/markdown.js");
-require("codemirror/addon/mode/overlay.js");
-require("codemirror/addon/display/placeholder.js");
-require("codemirror/addon/selection/mark-selection.js");
-require("codemirror/mode/gfm/gfm.js");
-require("codemirror/mode/xml/xml.js");
-var CodeMirrorSpellChecker = require("codemirror-spell-checker");
-var marked = require("marked");
+import CodeMirror from 'codemirror'
+import CodeMirrorSpellChecker from 'codemirror-spell-checker'
+import marked from 'marked'
+import 'codemirror/addon/edit/continuelist'
+import 'codemirror/addon/display/fullscreen'
+import 'codemirror/addon/mode/overla'
+import 'codemirror/addon/display/placeholder'
+import 'codemirror/addon/selection/mark-selection'
+import './codemirror/tablist'
+import 'codemirror/mode/markdown/markdown'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/mode/xml/xml'
 
 
 // Some variables
