@@ -1,4 +1,3 @@
-"use strict";
 import babelify from 'babelify'
 import gulp from 'gulp'
 import minifycss from 'gulp-clean-css'
