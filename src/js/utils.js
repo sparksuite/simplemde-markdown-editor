@@ -1,5 +1,5 @@
 /**
- * Created by WittBulter on 2017/1/17.
+ * @description :: versatile tools,
  */
 import {bindings} from './metadata'
 

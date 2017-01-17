@@ -1,7 +1,7 @@
 /**
- * Created by WittBulter on 2017/1/17.
+ * @description :: default action
  */
-import Base from './base'
+import base from './base'
 
 export default class Action {
 	constructor (){
@@ -12,14 +12,14 @@ export default class Action {
 	 * Action for toggling bold.
 	 */
 	static toggleBold (editor){
-		Base.toggleBlock(editor, "bold", editor.options.blockStyles.bold);
+		base.toggleBlock(editor, "bold", editor.options.blockStyles.bold);
 	}
 
 	/**
 	 * Action for toggling italic.
 	 */
 	static toggleItalic (editor){
-		Base.toggleBlock(editor, "italic", editor.options.blockStyles.italic);
+		base.toggleBlock(editor, "italic", editor.options.blockStyles.italic);
 	}
 
 	/**
@@ -27,7 +27,7 @@ export default class Action {
 	 */
 	static drawLink (editor){
 		const cm = editor.codemirror;
-		const stat = Base.getState(cm);
+		const stat = base.getState(cm);
 		const options = editor.options;
 		let url = "http://";
 		if (options.promptURLs){
@@ -36,7 +36,7 @@ export default class Action {
 				return false;
 			}
 		}
-		Base.replaceSelection(cm, stat.link, options.insertTexts.link, url);
+		base.replaceSelection(cm, stat.link, options.insertTexts.link, url);
 	}
 
 	/**
@@ -44,7 +44,7 @@ export default class Action {
 	 */
 	static toggleHeadingSmaller (editor){
 		const cm = editor.codemirror;
-		Base.toggleHeading(cm, "smaller");
+		base.toggleHeading(cm, "smaller");
 	}
 
 	/**
@@ -52,7 +52,7 @@ export default class Action {
 	 */
 	static toggleHeadingBigger (editor){
 		const cm = editor.codemirror;
-		Base.toggleHeading(cm, "bigger");
+		base.toggleHeading(cm, "bigger");
 	}
 
 	/**
@@ -60,7 +60,7 @@ export default class Action {
 	 */
 	static drawImage (editor){
 		const cm = editor.codemirror;
-		const stat = Base.getState(cm);
+		const stat = base.getState(cm);
 		const options = editor.options;
 		let url = "http://";
 		if (options.promptURLs){
@@ -69,7 +69,7 @@ export default class Action {
 				return false;
 			}
 		}
-		Base.replaceSelection(cm, stat.image, options.insertTexts.image, url);
+		base.replaceSelection(cm, stat.image, options.insertTexts.image, url);
 	}
 
 	/**
@@ -77,7 +77,7 @@ export default class Action {
 	 */
 	static toggleBlockquote (editor){
 		const cm = editor.codemirror;
-		Base.toggleLine(cm, "quote");
+		base.toggleLine(cm, "quote");
 	}
 
 	/**
@@ -85,7 +85,7 @@ export default class Action {
 	 */
 	static toggleOrderedList (editor){
 		const cm = editor.codemirror;
-		Base.toggleLine(cm, "ordered-list");
+		base.toggleLine(cm, "ordered-list");
 	}
 
 	/**
@@ -93,7 +93,7 @@ export default class Action {
 	 */
 	static toggleUnorderedList (editor){
 		const cm = editor.codemirror;
-		Base.toggleLine(cm, "unordered-list");
+		base.toggleLine(cm, "unordered-list");
 	}
 
 	/**
@@ -158,7 +158,7 @@ export default class Action {
 				repl_end = fenceCharsToInsert + "\n";
 				end_line_sel--;
 			}
-			Base.replaceSelection(cm, false, [repl_start, repl_end]);
+			base.replaceSelection(cm, false, [repl_start, repl_end]);
 			cm.setSelection({
 				line: start_line_sel,
 				ch: 0
@@ -244,7 +244,7 @@ export default class Action {
 					// full last line selected, putting cursor at beginning of next
 					end_line -= 1;
 				}
-				cm.operation(function (){
+				cm.operation(() =>{
 					// end line first, so that line numbers don't change
 					cm.replaceRange(end_text, {
 						line: end_line,
@@ -298,7 +298,7 @@ export default class Action {
 						}
 					}
 				}
-				cm.operation(function (){
+				cm.operation(() =>{
 					cm.replaceRange("", {
 						line: block_start,
 						ch: 0
@@ -378,7 +378,7 @@ export default class Action {
 			if (no_sel_and_starting_of_line || sel_multi){
 				insertFencingAtSelection(cm, cur_start, cur_end, fenceCharsToInsert);
 			} else{
-				Base.replaceSelection(cm, false, ["`", "`"]);
+				base.replaceSelection(cm, false, ["`", "`"]);
 			}
 		}
 	}
@@ -447,7 +447,7 @@ export default class Action {
 			// When the preview button is clicked for the first time,
 			// give some time for the transition from editor.css to fire and the view to slide from right to left,
 			// instead of just appearing.
-			setTimeout(function (){
+			setTimeout(() =>{
 				if (!cm.getOption("fullScreen"))
 					Action.toggleFullScreen(editor);
 				preview.className += " editor-preview-active-side";
@@ -469,7 +469,7 @@ export default class Action {
 			toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
 		}
 
-		const sideBySideRenderingFunction = function (){
+		const sideBySideRenderingFunction = () =>{
 			preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 		};
 
@@ -514,7 +514,7 @@ export default class Action {
 			// When the preview button is clicked for the first time,
 			// give some time for the transition from editor.css to fire and the view to slide from right to left,
 			// instead of just appearing.
-			setTimeout(function (){
+			setTimeout(() =>{
 				preview.className += " editor-preview-active";
 			}, 1);
 			if (toolbar){
@@ -534,7 +534,7 @@ export default class Action {
 	 * Action for toggling strikethrough.
 	 */
 	static toggleStrikethrough (editor){
-		Base.toggleBlock(editor, "strikethrough", "~~");
+		base.toggleBlock(editor, "strikethrough", "~~");
 	}
 
 	/**
@@ -542,17 +542,17 @@ export default class Action {
 	 */
 	static toggleHeading1 (editor){
 		const cm = editor.codemirror;
-		Base.toggleHeading(cm, undefined, 1);
+		base.toggleHeading(cm, undefined, 1);
 	}
 
 	static toggleHeading2 (editor){
 		const cm = editor.codemirror;
-		Base.toggleHeading(cm, undefined, 2);
+		base.toggleHeading(cm, undefined, 2);
 	}
 
 	static toggleHeading3 (editor){
 		const cm = editor.codemirror;
-		Base.toggleHeading(cm, undefined, 3);
+		base.toggleHeading(cm, undefined, 3);
 	}
 
 	/**
@@ -560,7 +560,7 @@ export default class Action {
 	 */
 	static cleanBlock (editor){
 		const cm = editor.codemirror;
-		Base.cleanBlock(cm);
+		base.cleanBlock(cm);
 	}
 
 	/**
@@ -568,9 +568,9 @@ export default class Action {
 	 */
 	static drawTable (editor){
 		const cm = editor.codemirror;
-		const stat = Base.getState(cm);
+		const stat = base.getState(cm);
 		const options = editor.options;
-		Base.replaceSelection(cm, stat.table, options.insertTexts.table);
+		base.replaceSelection(cm, stat.table, options.insertTexts.table);
 	}
 
 	/**
@@ -578,9 +578,9 @@ export default class Action {
 	 */
 	static drawHorizontalRule (editor){
 		const cm = editor.codemirror;
-		const stat = Base.getState(cm);
+		const stat = base.getState(cm);
 		const options = editor.options;
-		Base.replaceSelection(cm, stat.image, options.insertTexts.horizontalRule);
+		base.replaceSelection(cm, stat.image, options.insertTexts.horizontalRule);
 	}
 
 	/**

@@ -69,11 +69,10 @@ const createTootlip = (title, action, shortcuts) => {
 /**
  * Interface of SimpleMDE.
  */
-
-
 class SimpleMDE extends Action {
 	constructor(options = {}) {
 		super()
+
 		// Used later to refer to it"s parent
 		options.parent = this;
 
@@ -113,7 +112,6 @@ class SimpleMDE extends Action {
 			return;
 		}
 
-
 		// Handle toolbar
 		if(options.toolbar === undefined) {
 			// Initialize
@@ -134,56 +132,43 @@ class SimpleMDE extends Action {
 			}
 		}
 
-
 		// Handle status bar
 		if(!options.hasOwnProperty("status")) {
 			options.status = ["autosave", "lines", "words", "cursor"];
 		}
 
-
 		// Add default preview rendering function
 		if(!options.previewRender) {
-			options.previewRender = function(plainText) {
-				// Note: "this" refers to the options object
-				return this.parent.markdown(plainText);
-			};
+			// Note: "this" refers to the options object
+			options.previewRender = plainText => this.parent.markdown(plainText)
 		}
-
 
 		// Set default options for parsing config
 		options.parsingConfig = Object.assign({
 			highlightFormatting: true // needed for toggleCodeBlock to detect types of code
 		}, options.parsingConfig || {});
 
-
 		// Merging the insertTexts, with the given options
 		options.insertTexts = Object.assign({}, insertTexts, options.insertTexts || {});
-
 
 		// Merging the promptTexts, with the given options
 		options.promptTexts = promptTexts;
 
-
 		// Merging the blockStyles, with the given options
 		options.blockStyles = Object.assign({}, blockStyles, options.blockStyles || {});
 
-
 		// Merging the shortcuts, with the given options
 		options.shortcuts = Object.assign({}, shortcuts, options.shortcuts || {});
-
 
 		// Change unique_id to uniqueId for backwards compatibility
 		if(options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
 			options.autosave.uniqueId = options.autosave.unique_id;
 
-
 		// Update this options
 		this.options = options;
 
-
 		// Auto render
 		this.render();
-
 
 		// The codemirror component is only available after rendering
 		// so, the setter for the initialValue can only run after
@@ -192,7 +177,6 @@ class SimpleMDE extends Action {
 			this.value(options.initialValue);
 		}
 	}
-
 
 	/**
 	 * Default markdown render.
@@ -207,9 +191,7 @@ class SimpleMDE extends Action {
 			markedOptions.breaks = !update
 
 			if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-				markedOptions.highlight = function(code) {
-					return window.hljs.highlightAuto(code).value;
-				};
+				markedOptions.highlight = code => window.hljs.highlightAuto(code).value
 			}
 
 			// Set options
@@ -224,14 +206,11 @@ class SimpleMDE extends Action {
 	 * Render editor to the given element.
 	 */
 	render(el = this.element || document.getElementsByTagName("textarea")[0]) {
-		if(this._rendered && this._rendered === el) {
-			// Already rendered.
-			return;
-		}
+		// Already rendered.
+		if(this._rendered && this._rendered === el) return;
 
 		this.element = el;
 		const options = this.options;
-
 		const self = this;
 		let keyMaps = {};
 
@@ -239,9 +218,7 @@ class SimpleMDE extends Action {
 			// null stands for "do not bind this command"
 			if(options.shortcuts[key] !== null && bindings[key] !== null) {
 				(function(key) {
-					keyMaps[utils.fixShortcut(options.shortcuts[key])] = function() {
-						bindings[key](self);
-					};
+					keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => bindings[key](self);
 				})(key);
 			}
 		}
@@ -249,13 +226,9 @@ class SimpleMDE extends Action {
 		keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
 		keyMaps["Tab"] = "tabAndIndentMarkdownList";
 		keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
-		keyMaps["Esc"] = function(cm) {
-			if(cm.getOption("fullScreen")) Action.toggleFullScreen(self);
-		};
+		keyMaps["Esc"] = cm => cm.getOption("fullScreen") && Action.toggleFullScreen(self);
 
-		document.addEventListener("keydown", function(e) {
-			e = e || window.event;
-
+		document.addEventListener("keydown", (e = window.event) => {
 			if(e.keyCode == 27) {
 				if(self.codemirror.getOption("fullScreen")) Action.toggleFullScreen(self);
 			}
@@ -295,9 +268,7 @@ class SimpleMDE extends Action {
 
 		if(options.forceSync === true) {
 			const cm = this.codemirror;
-			cm.on("change", function() {
-				cm.save();
-			});
+			cm.on("change", () => cm.save());
 		}
 
 		this.gui = {};
@@ -313,9 +284,7 @@ class SimpleMDE extends Action {
 		}
 
 		this.gui.sideBySide = this.createSideBySide();
-
 		this._rendered = this.element;
-
 
 		// Fixes CodeMirror bug (#344)
 		const temp_cm = this.codemirror;
@@ -330,12 +299,11 @@ class SimpleMDE extends Action {
 			const simplemde = this;
 
 			if(this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-				console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
-				return;
+				return console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
 			}
 
 			if(simplemde.element.form != null && simplemde.element.form != undefined) {
-				simplemde.element.form.addEventListener("submit", function() {
+				simplemde.element.form.addEventListener("submit", () => {
 					localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
 				});
 			}
@@ -381,10 +349,8 @@ class SimpleMDE extends Action {
 	clearAutosavedValue() {
 		if(utils.isLocalStorageAvailable()) {
 			if(this.options.autosave == undefined || this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-				console.log("SimpleMDE: You must set a uniqueId to clear the autosave value");
-				return;
+				return console.log("SimpleMDE: You must set a uniqueId to clear the autosave value");
 			}
-
 			localStorage.removeItem("smde_" + this.options.autosave.uniqueId);
 		} else {
 			console.log("SimpleMDE: localStorage not available, cannot autosave");
@@ -405,11 +371,8 @@ class SimpleMDE extends Action {
 		// Syncs scroll  editor -> preview
 		let cScroll = false;
 		let pScroll = false;
-		cm.on("scroll", function(v) {
-			if(cScroll) {
-				cScroll = false;
-				return;
-			}
+		cm.on("scroll", v => {
+			if(cScroll) return cScroll = false;
 			pScroll = true;
 			let height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
 			let ratio = parseFloat(v.getScrollInfo().top) / height;
@@ -417,11 +380,8 @@ class SimpleMDE extends Action {
 		});
 
 		// Syncs scroll  preview -> editor
-		preview.onscroll = function() {
-			if(pScroll) {
-				pScroll = false;
-				return;
-			}
+		preview.onscroll = () => {
+			if(pScroll) return pScroll = false;
 			cScroll = true;
 			let height = preview.scrollHeight - preview.clientHeight;
 			let ratio = parseFloat(preview.scrollTop) / height;
@@ -434,9 +394,7 @@ class SimpleMDE extends Action {
 	createToolbar(items) {
 		items = items || this.options.toolbar;
 
-		if(!items || items.length === 0) {
-			return;
-		}
+		if(!items || items.length === 0) return;
 		let i;
 		for(i = 0; i < items.length; i++) {
 			if(toolbarBuiltInButtons[items[i]] != undefined) {
@@ -492,7 +450,7 @@ class SimpleMDE extends Action {
 				// bind events, special for info
 				if(item.action) {
 					if(typeof item.action === "function") {
-						el.onclick = function(e) {
+						el.onclick = e => {
 							e.preventDefault();
 							item.action(self);
 						};
@@ -510,7 +468,7 @@ class SimpleMDE extends Action {
 		self.toolbarElements = toolbarData;
 
 		let cm = this.codemirror;
-		cm.on("cursorActivity", function() {
+		cm.on("cursorActivity", () => {
 			let stat = base.getState(cm);
 
 			for(let key in toolbarData) {
@@ -536,11 +494,8 @@ class SimpleMDE extends Action {
 		let options = this.options;
 		let cm = this.codemirror;
 
-
 		// Make sure the status variable is valid
-		if(!status || status.length === 0)
-			return;
-
+		if(!status || status.length === 0) return;
 
 		// Set up the built-in items
 		let items = [];
@@ -563,29 +518,19 @@ class SimpleMDE extends Action {
 				let name = status[i];
 
 				if(name === "words") {
-					defaultValue = function(el) {
-						el.innerHTML = utils.wordCount(cm.getValue());
-					};
-					onUpdate = function(el) {
-						el.innerHTML = utils.wordCount(cm.getValue());
-					};
+					defaultValue = el => el.innerHTML = utils.wordCount(cm.getValue());
+					onUpdate = el => el.innerHTML = utils.wordCount(cm.getValue());
 				} else if(name === "lines") {
-					defaultValue = function(el) {
-						el.innerHTML = cm.lineCount();
-					};
-					onUpdate = function(el) {
-						el.innerHTML = cm.lineCount();
-					};
+					defaultValue = el => el.innerHTML = cm.lineCount();
+					onUpdate = el => el.innerHTML = cm.lineCount();
 				} else if(name === "cursor") {
-					defaultValue = function(el) {
-						el.innerHTML = "0:0";
-					};
-					onUpdate = function(el) {
+					defaultValue = el => el.innerHTML = "0:0";
+					onUpdate = el => {
 						const pos = cm.getCursor();
 						el.innerHTML = pos.line + ":" + pos.ch;
 					};
 				} else if(name === "autosave") {
-					defaultValue = function(el) {
+					defaultValue = el => {
 						if(options.autosave != undefined && options.autosave.enabled === true) {
 							el.setAttribute("id", "autosaved");
 						}
@@ -626,13 +571,8 @@ class SimpleMDE extends Action {
 			// Ensure the onUpdate is a function
 			if(typeof item.onUpdate === "function") {
 				// Create a closure around the span of the current action, then execute the onUpdate handler
-				this.codemirror.on("update", (function(el, item) {
-					return function() {
-						item.onUpdate(el);
-					};
-				}(el, item)));
+				this.codemirror.on("update", (((el, item) => () => item.onUpdate(el))(el, item)));
 			}
-
 
 			// Append the item to the status bar
 			bar.appendChild(el);
@@ -649,14 +589,10 @@ class SimpleMDE extends Action {
 	 * Get or set the text content.
 	 */
 	value(val) {
-		if(val === undefined) {
-			return this.codemirror.getValue();
-		} else {
-			this.codemirror.getDoc().setValue(val);
-			return this;
-		}
+		if(val === undefined) return this.codemirror.getValue();
+		this.codemirror.getDoc().setValue(val);
+		return this;
 	};
-
 
 	/**
 	 * Bind instance methods for exports.

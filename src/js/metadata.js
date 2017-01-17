@@ -1,5 +1,5 @@
 /**
- * Created by WittBulter on 2017/1/17.
+ * @description :: metadata, immutable
  */
 import Action from './action'
 

@@ -1,44 +1,27 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
+import CodeMirror from 'CodeMirror'
 
-var CodeMirror = require("codemirror");
+CodeMirror.commands.tabAndIndentMarkdownList = cm =>{
+	const ranges = cm.listSelections();
+	const pos = ranges[0].head;
+	const eolState = cm.getStateAfter(pos.line);
+	const inList = eolState.list !== false;
 
-CodeMirror.commands.tabAndIndentMarkdownList = function (cm) {
-	var ranges = cm.listSelections();
-	var pos = ranges[0].head;
-	var eolState = cm.getStateAfter(pos.line);
-	var inList = eolState.list !== false;
+	if (inList) return cm.execCommand("indentMore");
 
-	if (inList) {
-		cm.execCommand("indentMore");
-		return;
-	}
-
-	if (cm.options.indentWithTabs) {
-		cm.execCommand("insertTab");
-	}
-	else {
-		var spaces = Array(cm.options.tabSize + 1).join(" ");
-		cm.replaceSelection(spaces);
-	}
+	if (cm.options.indentWithTabs) return cm.execCommand("insertTab");
+	cm.replaceSelection(Array(cm.options.tabSize + 1).join(" "));
 };
 
 CodeMirror.commands.shiftTabAndUnindentMarkdownList = function (cm) {
-	var ranges = cm.listSelections();
-	var pos = ranges[0].head;
-	var eolState = cm.getStateAfter(pos.line);
-	var inList = eolState.list !== false;
+	const ranges = cm.listSelections();
+	const pos = ranges[0].head;
+	const eolState = cm.getStateAfter(pos.line);
+	const inList = eolState.list !== false;
 
-	if (inList) {
-		cm.execCommand("indentLess");
-		return;
-	}
+	if (inList) return cm.execCommand("indentLess");
 
-	if (cm.options.indentWithTabs) {
-		cm.execCommand("insertTab");
-	}
-	else {
-		var spaces = Array(cm.options.tabSize + 1).join(" ");
-		cm.replaceSelection(spaces);
-	}
+	if (cm.options.indentWithTabs) return cm.execCommand("insertTab");
+	cm.replaceSelection(Array(cm.options.tabSize + 1).join(" "));
 };

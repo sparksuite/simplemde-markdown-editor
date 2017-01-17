@@ -1,5 +1,5 @@
 /**
- * Created by WittBulter on 2017/1/17.
+ * @description :: Basic operation
  */
 
 export default new class Base {
@@ -249,7 +249,6 @@ export default new class Base {
 		}
 		cm.focus();
 	}
-
 
 	cleanBlock (cm){
 		if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
