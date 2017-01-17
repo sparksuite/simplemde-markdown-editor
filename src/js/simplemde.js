@@ -71,12 +71,11 @@ const createTootlip = (title, action, shortcuts) => {
  */
 
 
-export class SimpleMDE extends Action {
+class SimpleMDE extends Action {
 	constructor(options = {}) {
 		super()
 		// Used later to refer to it"s parent
 		options.parent = this;
-
 
 		// Check if Font Awesome needs to be auto downloaded
 		let autoDownloadFA = true;
@@ -122,7 +121,7 @@ export class SimpleMDE extends Action {
 
 
 			// Loop over the built in buttons, to get the preferred order
-			for(let key of toolbarBuiltInButtons) {
+			for(let key in toolbarBuiltInButtons) {
 				if(toolbarBuiltInButtons.hasOwnProperty(key)) {
 					if(key.indexOf("separator-") != -1) {
 						options.toolbar.push("|");
@@ -236,7 +235,7 @@ export class SimpleMDE extends Action {
 		const self = this;
 		let keyMaps = {};
 
-		for(let key of options.shortcuts) {
+		for(let key in options.shortcuts) {
 			// null stands for "do not bind this command"
 			if(options.shortcuts[key] !== null && bindings[key] !== null) {
 				(function(key) {
@@ -514,7 +513,7 @@ export class SimpleMDE extends Action {
 		cm.on("cursorActivity", function() {
 			let stat = base.getState(cm);
 
-			for(let key of toolbarData) {
+			for(let key in toolbarData) {
 				(function(key) {
 					let el = toolbarData[key];
 					if(stat[key]) {
@@ -782,6 +781,5 @@ export class SimpleMDE extends Action {
 			this.clearAutosavedValue();
 		}
 	};
-
-
 }
+export default SimpleMDE

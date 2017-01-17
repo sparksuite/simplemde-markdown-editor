@@ -48,7 +48,7 @@ gulp.task("lint", ["prettify-js"], () =>{
 });
 
 function taskBrowserify(opts) {
-	return browserify("./src/js/simplemde.js", opts)
+	return browserify("./src/js/index.js", opts)
 		.transform("babelify", {presets: ['es2015', 'stage-3']})
 		.bundle();
 }
