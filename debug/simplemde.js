@@ -16875,7 +16875,7 @@ var SimpleMDE = function (_Action) {
 		if (!options.previewRender) {
 			// Note: "this" refers to the options object
 			options.previewRender = function (plainText) {
-				return _this.parent.markdown(plainText);
+				return options.parent.markdown(plainText);
 			};
 		}
 

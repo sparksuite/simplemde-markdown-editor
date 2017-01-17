@@ -140,7 +140,7 @@ class SimpleMDE extends Action {
 		// Add default preview rendering function
 		if(!options.previewRender) {
 			// Note: "this" refers to the options object
-			options.previewRender = plainText => this.parent.markdown(plainText)
+			options.previewRender = plainText => options.parent.markdown(plainText)
 		}
 
 		// Set default options for parsing config
