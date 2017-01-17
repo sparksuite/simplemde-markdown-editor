@@ -4,7 +4,7 @@ import CodeMirrorSpellChecker from 'codemirror-spell-checker'
 import marked from 'marked'
 import 'codemirror/addon/edit/continuelist'
 import 'codemirror/addon/display/fullscreen'
-import 'codemirror/addon/mode/overla'
+import 'codemirror/addon/mode/overlay'
 import 'codemirror/addon/display/placeholder'
 import 'codemirror/addon/selection/mark-selection'
 import './codemirror/tablist'
@@ -53,10 +53,14 @@ const createSep = () => {
 }
 
 const createTootlip = (title, action, shortcuts) => {
+	let actionName;
 	let tooltip = title;
 
-	if(action && shortcuts[utils.getBindingName(action)]) {
-		tooltip += " (" + utils.fixShortcut(shortcuts[actionName]) + ")"
+	if(action) {
+		actionName = utils.getBindingName(action);
+		if(shortcuts[actionName]) {
+			tooltip += " (" + utils.fixShortcut(shortcuts[actionName]) + ")";
+		}
 	}
 
 	return tooltip;
@@ -69,6 +73,7 @@ const createTootlip = (title, action, shortcuts) => {
 
 export class SimpleMDE extends Action {
 	constructor(options = {}) {
+		super()
 		// Used later to refer to it"s parent
 		options.parent = this;
 
