@@ -66,4 +66,26 @@ export default new class Utils {
 
 		return true;
 	}
+
+	downloadFA (options = {}){
+
+		let autoDownloadFA = true;
+
+		if(options.autoDownloadFontAwesome === false) {
+			autoDownloadFA = false;
+		}
+
+		if(options.autoDownloadFontAwesome !== true) {
+			autoDownloadFA = ! Array
+				.from(document.styleSheets)
+				.find(v => v.href&& v.href.includes('//maxcdn.bootstrapcdn.com/font-awesome/'))
+		}
+
+		if(autoDownloadFA) {
+			let link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
+			document.getElementsByTagName("head")[0].appendChild(link);
+		}
+	}
 }

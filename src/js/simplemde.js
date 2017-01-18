@@ -77,31 +77,7 @@ class SimpleMDE extends Action {
 		options.parent = this;
 
 		// Check if Font Awesome needs to be auto downloaded
-		let autoDownloadFA = true;
-
-		if(options.autoDownloadFontAwesome === false) {
-			autoDownloadFA = false;
-		}
-
-		if(options.autoDownloadFontAwesome !== true) {
-			const styleSheets = document.styleSheets;
-			for(let i = 0; i < styleSheets.length; i++) {
-				if(!styleSheets[i].href)
-					continue;
-
-				if(styleSheets[i].href.indexOf("//maxcdn.bootstrapcdn.com/font-awesome/") > -1) {
-					autoDownloadFA = false;
-				}
-			}
-		}
-
-		if(autoDownloadFA) {
-			let link = document.createElement("link");
-			link.rel = "stylesheet";
-			link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
-			document.getElementsByTagName("head")[0].appendChild(link);
-		}
-
+		utils.downloadFA(options)
 
 		// Find the textarea to use
 		if(options.element) {

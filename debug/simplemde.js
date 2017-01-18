@@ -15456,9 +15456,7 @@ var Action = function () {
 			var url = "http://";
 			if (options.promptURLs) {
 				url = prompt(options.promptTexts.link);
-				if (!url) {
-					return false;
-				}
+				if (!url) return false;
 			}
 			_base2.default.replaceSelection(cm, stat.link, options.insertTexts.link, url);
 		}
@@ -15498,9 +15496,7 @@ var Action = function () {
 			var url = "http://";
 			if (options.promptURLs) {
 				url = prompt(options.promptTexts.image);
-				if (!url) {
-					return false;
-				}
+				if (!url) return false;
 			}
 			_base2.default.replaceSelection(cm, stat.image, options.insertTexts.image, url);
 		}
@@ -15555,8 +15551,8 @@ var Action = function () {
 				return line.styles && line.styles[2] && line.styles[2].indexOf("formatting-code-block") !== -1;
 			};
 
+			// base goes an extra level deep when mode backdrops are used, e.g. spellchecker on
 			var token_state = function token_state(token) {
-				// base goes an extra level deep when mode backdrops are used, e.g. spellchecker on
 				return token.state.base.base || token.state.base;
 			};
 
@@ -15580,17 +15576,16 @@ var Action = function () {
 					ch: line.text.length - 1
 				});
 				var types = firstTok.type ? firstTok.type.split(" ") : [];
-				if (lastTok && token_state(lastTok).indentedCode) {
-					// have to check last char, since first chars of first line aren"t marked as indented
-					return "indented";
-				} else if (types.indexOf("comment") === -1) {
-					// has to be after "indented" check, since first chars of first indented line aren"t marked as such
-					return false;
-				} else if (token_state(firstTok).fencedChars || token_state(lastTok).fencedChars || fencing_line(line)) {
+
+				// have to check last char, since first chars of first line aren"t marked as indented
+				if (lastTok && token_state(lastTok).indentedCode) return "indented";
+
+				// has to be after "indented" check, since first chars of first indented line aren"t marked as such
+				if (types.indexOf("comment") === -1) return false;
+				if (token_state(firstTok).fencedChars || token_state(lastTok).fencedChars || fencing_line(line)) {
 					return "fenced";
-				} else {
-					return "single";
 				}
+				return "single";
 			};
 
 			var insertFencingAtSelection = function insertFencingAtSelection(cm, cur_start, cur_end, fenceCharsToInsert) {
@@ -16814,29 +16809,7 @@ var SimpleMDE = function (_Action) {
 		options.parent = _this;
 
 		// Check if Font Awesome needs to be auto downloaded
-		var autoDownloadFA = true;
-
-		if (options.autoDownloadFontAwesome === false) {
-			autoDownloadFA = false;
-		}
-
-		if (options.autoDownloadFontAwesome !== true) {
-			var styleSheets = document.styleSheets;
-			for (var i = 0; i < styleSheets.length; i++) {
-				if (!styleSheets[i].href) continue;
-
-				if (styleSheets[i].href.indexOf("//maxcdn.bootstrapcdn.com/font-awesome/") > -1) {
-					autoDownloadFA = false;
-				}
-			}
-		}
-
-		if (autoDownloadFA) {
-			var link = document.createElement("link");
-			link.rel = "stylesheet";
-			link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
-			document.getElementsByTagName("head")[0].appendChild(link);
-		}
+		_utils2.default.downloadFA(options);
 
 		// Find the textarea to use
 		if (options.element) {
@@ -17648,6 +17621,31 @@ exports.default = new (function () {
 			}
 
 			return true;
+		}
+	}, {
+		key: 'downloadFA',
+		value: function downloadFA() {
+			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+
+			var autoDownloadFA = true;
+
+			if (options.autoDownloadFontAwesome === false) {
+				autoDownloadFA = false;
+			}
+
+			if (options.autoDownloadFontAwesome !== true) {
+				autoDownloadFA = !Array.from(document.styleSheets).find(function (v) {
+					return v.href && v.href.includes('//maxcdn.bootstrapcdn.com/font-awesome/');
+				});
+			}
+
+			if (autoDownloadFA) {
+				var link = document.createElement("link");
+				link.rel = "stylesheet";
+				link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
+				document.getElementsByTagName("head")[0].appendChild(link);
+			}
 		}
 	}]);
 
