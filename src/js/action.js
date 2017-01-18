@@ -32,9 +32,7 @@ export default class Action {
 		let url = "http://";
 		if (options.promptURLs){
 			url = prompt(options.promptTexts.link);
-			if (!url){
-				return false;
-			}
+			if (!url) return false;
 		}
 		base.replaceSelection(cm, stat.link, options.insertTexts.link, url);
 	}
@@ -65,9 +63,7 @@ export default class Action {
 		let url = "http://";
 		if (options.promptURLs){
 			url = prompt(options.promptTexts.image);
-			if (!url){
-				return false;
-			}
+			if (!url) return false;
 		}
 		base.replaceSelection(cm, stat.image, options.insertTexts.image, url);
 	}
@@ -110,10 +106,8 @@ export default class Action {
 			return line.styles && line.styles[2] && line.styles[2].indexOf("formatting-code-block") !== -1;
 		}
 
-		const token_state = token =>{
-			// base goes an extra level deep when mode backdrops are used, e.g. spellchecker on
-			return token.state.base.base || token.state.base;
-		}
+		// base goes an extra level deep when mode backdrops are used, e.g. spellchecker on
+		const token_state = token => token.state.base.base || token.state.base;
 
 		const code_type = (cm, line_num, line = cm.getLineHandle(line_num), firstTok, lastTok) =>{
 			/*
@@ -131,17 +125,16 @@ export default class Action {
 					ch: line.text.length - 1
 				}));
 			let types = firstTok.type? firstTok.type.split(" "): [];
-			if (lastTok && token_state(lastTok).indentedCode){
-				// have to check last char, since first chars of first line aren"t marked as indented
-				return "indented";
-			} else if (types.indexOf("comment") === -1){
-				// has to be after "indented" check, since first chars of first indented line aren"t marked as such
-				return false;
-			} else if (token_state(firstTok).fencedChars || token_state(lastTok).fencedChars || fencing_line(line)){
+
+			// have to check last char, since first chars of first line aren"t marked as indented
+			if (lastTok && token_state(lastTok).indentedCode) return "indented";
+
+			// has to be after "indented" check, since first chars of first indented line aren"t marked as such
+			if (types.indexOf("comment") === -1) return false;
+			if (token_state(firstTok).fencedChars || token_state(lastTok).fencedChars || fencing_line(line)){
 				return "fenced";
-			} else{
-				return "single";
 			}
+			return "single";
 		}
 
 		const insertFencingAtSelection = (cm, cur_start, cur_end, fenceCharsToInsert) =>{
@@ -492,8 +485,8 @@ export default class Action {
 	 * Preview action.
 	 */
 	static togglePreview (editor){
-		let cm = editor.codemirror;
-		let wrapper = cm.getWrapperElement();
+		const cm = editor.codemirror;
+		const wrapper = cm.getWrapperElement();
 		let toolbar_div = wrapper.previousSibling;
 		let toolbar = editor.options.toolbar? editor.toolbarElements.preview: false;
 		let preview = wrapper.lastChild;
@@ -503,9 +496,7 @@ export default class Action {
 			wrapper.appendChild(preview);
 		}
 		if (/editor-preview-active/.test(preview.className)){
-			preview.className = preview.className.replace(
-				/\s*editor-preview-active\s*/g, ""
-			);
+			preview.className = preview.className.replace(/\s*editor-preview-active\s*/g, "");
 			if (toolbar){
 				toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
 				toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
