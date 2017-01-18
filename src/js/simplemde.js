@@ -84,15 +84,13 @@ class SimpleMDE extends Action {
 			this.element = options.element;
 		} else if(options.element === null) {
 			// This means that the element option was specified, but no element was found
-			console.log("SimpleMDE: Error. No element was found.");
-			return;
+			return console.log("SimpleMDE: Error. No element was found.");
 		}
 
 		// Handle toolbar
 		if(options.toolbar === undefined) {
 			// Initialize
 			options.toolbar = [];
-
 
 			// Loop over the built in buttons, to get the preferred order
 			for(let key in toolbarBuiltInButtons) {
@@ -297,21 +295,16 @@ class SimpleMDE extends Action {
 
 			let el = document.getElementById("autosaved");
 			if(el != null && el != undefined && el != "") {
-				let d = new Date();
-				let hh = d.getHours();
-				let m = d.getMinutes();
-				let dd = "am";
-				let h = hh;
-				if(h >= 12) {
-					h = hh - 12;
-					dd = "pm";
-				}
-				if(h == 0) {
-					h = 12;
-				}
-				m = m < 10 ? "0" + m : m;
+				const d = new Date();
+				const hh = d.getHours();
+				const mm = d.getMinutes();
 
-				el.innerHTML = "Autosaved: " + h + ":" + m + " " + dd;
+				// date format, output example: Autosaved: 5:45 pm
+				const dd = hh >= 12 ? 'pm' : 'am'
+				const h = hh == 0 ? 12 : hh > 12 ? hh - 12 : hh;
+				const m = mm < 10 ? `0${mm}` : mm;
+
+				el.innerHTML = `Autosaved: ${h}:${m} ${dd}`;
 			}
 
 			this.autosaveTimeoutId = setTimeout(function() {
