@@ -348,85 +348,66 @@ class SimpleMDE extends Action {
 		return preview;
 	};
 
-	createToolbar(items) {
-		items = items || this.options.toolbar;
-
+	createToolbar(items = this.options.toolbar) {
 		if(!items || items.length === 0) return;
-		let i;
-		for(i = 0; i < items.length; i++) {
-			if(toolbarBuiltInButtons[items[i]] != undefined) {
-				items[i] = toolbarBuiltInButtons[items[i]];
-			}
-		}
+		const isExistent = value => toolbarBuiltInButtons[value] != undefined
+		this.toolbar = items.map(v => isExistent(v) ? toolbarBuiltInButtons[v] : v)
 
 		let bar = document.createElement("div");
-		bar.className = "editor-toolbar";
-
-		let self = this;
-
 		let toolbarData = {};
-		self.toolbar = items;
-
-		for(i = 0; i < items.length; i++) {
-			if(items[i].name == "guide" && self.options.toolbarGuideIcon === false)
-				continue;
-
-			if(self.options.hideIcons && self.options.hideIcons.indexOf(items[i].name) != -1)
-				continue;
+		const nextLoop = (v, i) => {
+			const name = v.name
+			if(name == "guide" && this.options.toolbarGuideIcon === false) return true;
+			if(this.options.hideIcons && this.options.hideIcons.indexOf(name) != -1) return true;
 
 			// Fullscreen does not work well on mobile devices (even tablets)
 			// In the future, hopefully this can be resolved
-			if((items[i].name == "fullscreen" || items[i].name == "side-by-side") && utils.isMobile())
-				continue;
-
+			if((name == "fullscreen" || name == "side-by-side") && utils.isMobile()) return true;
 
 			// Don't include trailing separators
-			if(items[i] === "|") {
-				let nonSeparatorIconsFollow = false;
-
-				for(let x = (i + 1); x < items.length; x++) {
-					if(items[x] !== "|" && (!self.options.hideIcons || self.options.hideIcons.indexOf(items[x].name) == -1)) {
-						nonSeparatorIconsFollow = true;
+			if(v === "|") {
+				let nonSeparatorIconsFollow = true;
+				for(let x = (i + 1); x < this.toolbar.length; x++) {
+					if(this.toolbar[x] !== "|" && (!this.options.hideIcons || this.options.hideIcons.indexOf(name) == -1)) {
+						nonSeparatorIconsFollow = false;
 					}
 				}
-
-				if(!nonSeparatorIconsFollow)
-					continue;
+				if(nonSeparatorIconsFollow) return true
 			}
-
-
-			// Create the icon and append to the toolbar
-			(function(item) {
-				let el;
-				if(item === "|") {
-					el = createSep();
-				} else {
-					el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
-				}
-
-				// bind events, special for info
-				if(item.action) {
-					if(typeof item.action === "function") {
-						el.onclick = e => {
-							e.preventDefault();
-							item.action(self);
-						};
-					} else if(typeof item.action === "string") {
-						el.href = item.action;
-						el.target = "_blank";
-					}
-				}
-
-				toolbarData[item.name || item] = el;
-				bar.appendChild(el);
-			})(items[i]);
+			return false
+		}
+		const createElement = v => {
+			if(v === "|") return createSep();
+			return createIcon(v, this.options.toolbarTips, this.options.shortcuts)
 		}
 
-		self.toolbarElements = toolbarData;
+		this.toolbar.every((v, i) => {
+			if(nextLoop(v, i)) return false;
 
-		let cm = this.codemirror;
-		cm.on("cursorActivity", () => {
-			let stat = base.getState(cm);
+			// Create the icon and append to the toolbar
+			let el = createElement(v)
+
+			// bind events, special for info
+			if(v.action) {
+				if(typeof v.action === "function") {
+					el.onclick = e => {
+						e.preventDefault();
+						v.action(this);
+					};
+				}
+				if(typeof v.action === "string") {
+					el.href = v.action;
+					el.target = "_blank";
+				}
+			}
+
+			toolbarData[v.name || v] = el;
+			bar.appendChild(el);
+			return true;
+		})
+		this.toolbarElements = toolbarData;
+		this.codemirror.on("cursorActivity", () => {
+			let stat = base.getState(this.codemirror);
 
 			for(let key in toolbarData) {
 				(function(key) {
@@ -440,7 +421,9 @@ class SimpleMDE extends Action {
 			}
 		});
 
-		const cmWrapper = cm.getWrapperElement();
+		const cmWrapper = this.codemirror.getWrapperElement();
+
+		bar.className = "editor-toolbar";
 		cmWrapper.parentNode.insertBefore(bar, cmWrapper);
 		return bar;
 	};

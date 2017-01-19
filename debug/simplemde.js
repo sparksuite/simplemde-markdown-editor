@@ -17119,79 +17119,74 @@ var SimpleMDE = function (_Action) {
 		}
 	}, {
 		key: 'createToolbar',
-		value: function createToolbar(items) {
-			items = items || this.options.toolbar;
+		value: function createToolbar() {
+			var _this4 = this;
+
+			var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.toolbar;
 
 			if (!items || items.length === 0) return;
-			var i = void 0;
-			for (i = 0; i < items.length; i++) {
-				if (_metadata.toolbarBuiltInButtons[items[i]] != undefined) {
-					items[i] = _metadata.toolbarBuiltInButtons[items[i]];
-				}
-			}
+			var isExistent = function isExistent(value) {
+				return _metadata.toolbarBuiltInButtons[value] != undefined;
+			};
+			this.toolbar = items.map(function (v) {
+				return isExistent(v) ? _metadata.toolbarBuiltInButtons[v] : v;
+			});
 
 			var bar = document.createElement("div");
-			bar.className = "editor-toolbar";
-
-			var self = this;
-
 			var toolbarData = {};
-			self.toolbar = items;
-
-			for (i = 0; i < items.length; i++) {
-				if (items[i].name == "guide" && self.options.toolbarGuideIcon === false) continue;
-
-				if (self.options.hideIcons && self.options.hideIcons.indexOf(items[i].name) != -1) continue;
+			var nextLoop = function nextLoop(v, i) {
+				var name = v.name;
+				if (name == "guide" && _this4.options.toolbarGuideIcon === false) return true;
+				if (_this4.options.hideIcons && _this4.options.hideIcons.indexOf(name) != -1) return true;
 
 				// Fullscreen does not work well on mobile devices (even tablets)
 				// In the future, hopefully this can be resolved
-				if ((items[i].name == "fullscreen" || items[i].name == "side-by-side") && _utils2.default.isMobile()) continue;
+				if ((name == "fullscreen" || name == "side-by-side") && _utils2.default.isMobile()) return true;
 
 				// Don't include trailing separators
-				if (items[i] === "|") {
-					var nonSeparatorIconsFollow = false;
-
-					for (var x = i + 1; x < items.length; x++) {
-						if (items[x] !== "|" && (!self.options.hideIcons || self.options.hideIcons.indexOf(items[x].name) == -1)) {
-							nonSeparatorIconsFollow = true;
+				if (v === "|") {
+					var nonSeparatorIconsFollow = true;
+					for (var x = i + 1; x < _this4.toolbar.length; x++) {
+						if (_this4.toolbar[x] !== "|" && (!_this4.options.hideIcons || _this4.options.hideIcons.indexOf(name) == -1)) {
+							nonSeparatorIconsFollow = false;
 						}
 					}
-
-					if (!nonSeparatorIconsFollow) continue;
+					if (nonSeparatorIconsFollow) return true;
 				}
+				return false;
+			};
+			var createElement = function createElement(v) {
+				if (v === "|") return createSep();
+				return createIcon(v, _this4.options.toolbarTips, _this4.options.shortcuts);
+			};
+
+			this.toolbar.every(function (v, i) {
+				if (nextLoop(v, i)) return false;
 
 				// Create the icon and append to the toolbar
-				(function (item) {
-					var el = void 0;
-					if (item === "|") {
-						el = createSep();
-					} else {
-						el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
+				var el = createElement(v);
+
+				// bind events, special for info
+				if (v.action) {
+					if (typeof v.action === "function") {
+						el.onclick = function (e) {
+							e.preventDefault();
+							v.action(_this4);
+						};
 					}
-
-					// bind events, special for info
-					if (item.action) {
-						if (typeof item.action === "function") {
-							el.onclick = function (e) {
-								e.preventDefault();
-								item.action(self);
-							};
-						} else if (typeof item.action === "string") {
-							el.href = item.action;
-							el.target = "_blank";
-						}
+					if (typeof v.action === "string") {
+						el.href = v.action;
+						el.target = "_blank";
 					}
+				}
 
-					toolbarData[item.name || item] = el;
-					bar.appendChild(el);
-				})(items[i]);
-			}
-
-			self.toolbarElements = toolbarData;
-
-			var cm = this.codemirror;
-			cm.on("cursorActivity", function () {
-				var stat = _base2.default.getState(cm);
+				toolbarData[v.name || v] = el;
+				bar.appendChild(el);
+				return true;
+			});
+			this.toolbarElements = toolbarData;
+			this.codemirror.on("cursorActivity", function () {
+				var stat = _base2.default.getState(_this4.codemirror);
 
 				for (var key in toolbarData) {
 					(function (key) {
@@ -17205,14 +17200,16 @@ var SimpleMDE = function (_Action) {
 				}
 			});
 
-			var cmWrapper = cm.getWrapperElement();
+			var cmWrapper = this.codemirror.getWrapperElement();
+
+			bar.className = "editor-toolbar";
 			cmWrapper.parentNode.insertBefore(bar, cmWrapper);
 			return bar;
 		}
 	}, {
 		key: 'createStatusbar',
 		value: function createStatusbar() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.status;
 
@@ -17290,7 +17287,7 @@ var SimpleMDE = function (_Action) {
 				if (typeof v.defaultValue === "function") v.defaultValue(el);
 				if (typeof v.onUpdate === "function") {
 					// Create a closure around the span of the current action, then execute the onUpdate handler
-					_this4.codemirror.on("update", function () {
+					_this5.codemirror.on("update", function () {
 						return v.onUpdate(el);
 					});
 				}
