@@ -457,96 +457,76 @@ class SimpleMDE extends Action {
 		return bar;
 	};
 
-	createStatusbar(status) {
-		// Initialize
-		status = status || this.options.status;
-		let options = this.options;
-		let cm = this.codemirror;
-
+	createStatusbar(status = this.options.status) {
 		// Make sure the status variable is valid
 		if(!status || status.length === 0) return;
 
+		const options = this.options;
+		const cm = this.codemirror;
+
 		// Set up the built-in items
 		let items = [];
-		let i, onUpdate, defaultValue;
-
-		for(i = 0; i < status.length; i++) {
-			// Reset some values
-			onUpdate = undefined;
-			defaultValue = undefined;
-
-
-			// Handle if custom or not
-			if(typeof status[i] === "object") {
-				items.push({
-					className: status[i].className,
-					defaultValue: status[i].defaultValue,
-					onUpdate: status[i].onUpdate
-				});
-			} else {
-				let name = status[i];
-
-				if(name === "words") {
-					defaultValue = el => el.innerHTML = utils.wordCount(cm.getValue());
-					onUpdate = el => el.innerHTML = utils.wordCount(cm.getValue());
-				} else if(name === "lines") {
-					defaultValue = el => el.innerHTML = cm.lineCount();
-					onUpdate = el => el.innerHTML = cm.lineCount();
-				} else if(name === "cursor") {
-					defaultValue = el => el.innerHTML = "0:0";
-					onUpdate = el => {
-						const pos = cm.getCursor();
-						el.innerHTML = pos.line + ":" + pos.ch;
-					};
-				} else if(name === "autosave") {
-					defaultValue = el => {
-						if(options.autosave != undefined && options.autosave.enabled === true) {
-							el.setAttribute("id", "autosaved");
-						}
-					};
-				}
-
-				items.push({
-					className: name,
-					defaultValue: defaultValue,
-					onUpdate: onUpdate
-				});
-			}
-		}
-
-
-		// Create element for the status bar
 		let bar = document.createElement("div");
 		bar.className = "editor-statusbar";
 
-
-		// Create a new span for each item
-		for(i = 0; i < items.length; i++) {
-			// Store in temporary variable
-			let item = items[i];
-
-
-			// Create span element
-			let el = document.createElement("span");
-			el.className = item.className;
-
-
-			// Ensure the defaultValue is a function
-			if(typeof item.defaultValue === "function") {
-				item.defaultValue(el);
+		const statusFuncMap = {
+			words: {
+				defaultValue: el => el.innerHTML = utils.wordCount(cm.getValue()),
+				onUpdate: el => el.innerHTML = utils.wordCount(cm.getValue())
+			},
+			lines: {
+				defaultValue: el => el.innerHTML = cm.lineCount(),
+				onUpdate: el => el.innerHTML = cm.lineCount()
+			},
+			cursor: {
+				defaultValue: el => el.innerHTML = "0:0",
+				onUpdate: el => el.innerHTML = cm.getCursor().line + ":" + cm.getCursor().ch
+			},
+			autosave: {
+				defaultValue: el => {
+					if(options.autosave != undefined && options.autosave.enabled === true) {
+						el.setAttribute("id", "autosaved");
+					}
+				},
+				onUpdate: undefined
 			}
+		}
+
+		status.forEach(v => {
+			if(typeof v === "object") {
+				items.push({
+					className: v.className,
+					defaultValue: v.defaultValue,
+					onUpdate: v.onUpdate
+				})
+			}
+			if(statusFuncMap[v]) {
+				items.push({
+					className: v.toString(),
+					defaultValue: statusFuncMap[v].defaultValue,
+					onUpdate: statusFuncMap[v].onUpdate
+				})
+			}
+		})
 
 
-			// Ensure the onUpdate is a function
-			if(typeof item.onUpdate === "function") {
+		// Create element for the status bar
+		const createStatusElement = className => {
+			let el = document.createElement("span");
+			el.className = className
+			return el
+		}
+		items.forEach(v => {
+			const el = createStatusElement(v.className)
+			if(typeof v.defaultValue === "function") v.defaultValue(el)
+			if(typeof v.onUpdate === "function") {
 				// Create a closure around the span of the current action, then execute the onUpdate handler
-				this.codemirror.on("update", (((el, item) => () => item.onUpdate(el))(el, item)));
+				this.codemirror.on("update", () => v.onUpdate(el));
 			}
 
 			// Append the item to the status bar
 			bar.appendChild(el);
-		}
-
+		})
 
 		// Insert the status bar into the DOM
 		let cmWrapper = this.codemirror.getWrapperElement();

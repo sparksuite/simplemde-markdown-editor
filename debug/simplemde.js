@@ -16815,9 +16815,10 @@ var SimpleMDE = function (_Action) {
 		if (options.element) {
 			_this.element = options.element;
 		} else if (options.element === null) {
+			var _ret;
+
 			// This means that the element option was specified, but no element was found
-			console.log("SimpleMDE: Error. No element was found.");
-			return _possibleConstructorReturn(_this);
+			return _ret = console.log("SimpleMDE: Error. No element was found."), _possibleConstructorReturn(_this, _ret);
 		}
 
 		// Handle toolbar
@@ -17031,7 +17032,7 @@ var SimpleMDE = function (_Action) {
 			var _this3 = this;
 
 			if (_utils2.default.isLocalStorageAvailable()) {
-				var _ret2 = function () {
+				var _ret3 = function () {
 					var simplemde = _this3;
 
 					if (_this3.options.autosave.uniqueId == undefined || _this3.options.autosave.uniqueId == "") {
@@ -17061,19 +17062,14 @@ var SimpleMDE = function (_Action) {
 					if (el != null && el != undefined && el != "") {
 						var d = new Date();
 						var hh = d.getHours();
-						var m = d.getMinutes();
-						var dd = "am";
-						var h = hh;
-						if (h >= 12) {
-							h = hh - 12;
-							dd = "pm";
-						}
-						if (h == 0) {
-							h = 12;
-						}
-						m = m < 10 ? "0" + m : m;
+						var mm = d.getMinutes();
 
-						el.innerHTML = "Autosaved: " + h + ":" + m + " " + dd;
+						// date format, output example: Autosaved: 5:45 pm
+						var dd = hh >= 12 ? 'pm' : 'am';
+						var h = hh == 0 ? 12 : hh > 12 ? hh - 12 : hh;
+						var m = mm < 10 ? '0' + mm : mm;
+
+						el.innerHTML = 'Autosaved: ' + h + ':' + m + ' ' + dd;
 					}
 
 					_this3.autosaveTimeoutId = setTimeout(function () {
@@ -17081,7 +17077,7 @@ var SimpleMDE = function (_Action) {
 					}, _this3.options.autosave.delay || 10000);
 				}();
 
-				if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+				if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 			} else {
 				console.log("SimpleMDE: localStorage not available, cannot autosave");
 			}
@@ -17227,105 +17223,93 @@ var SimpleMDE = function (_Action) {
 		}
 	}, {
 		key: 'createStatusbar',
-		value: function createStatusbar(status) {
-			// Initialize
-			status = status || this.options.status;
-			var options = this.options;
-			var cm = this.codemirror;
+		value: function createStatusbar() {
+			var _this4 = this;
+
+			var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.status;
 
 			// Make sure the status variable is valid
 			if (!status || status.length === 0) return;
 
+			var options = this.options;
+			var cm = this.codemirror;
+
 			// Set up the built-in items
 			var items = [];
-			var i = void 0,
-			    onUpdate = void 0,
-			    defaultValue = void 0;
-
-			for (i = 0; i < status.length; i++) {
-				// Reset some values
-				onUpdate = undefined;
-				defaultValue = undefined;
-
-				// Handle if custom or not
-				if (_typeof(status[i]) === "object") {
-					items.push({
-						className: status[i].className,
-						defaultValue: status[i].defaultValue,
-						onUpdate: status[i].onUpdate
-					});
-				} else {
-					var name = status[i];
-
-					if (name === "words") {
-						defaultValue = function defaultValue(el) {
-							return el.innerHTML = _utils2.default.wordCount(cm.getValue());
-						};
-						onUpdate = function onUpdate(el) {
-							return el.innerHTML = _utils2.default.wordCount(cm.getValue());
-						};
-					} else if (name === "lines") {
-						defaultValue = function defaultValue(el) {
-							return el.innerHTML = cm.lineCount();
-						};
-						onUpdate = function onUpdate(el) {
-							return el.innerHTML = cm.lineCount();
-						};
-					} else if (name === "cursor") {
-						defaultValue = function defaultValue(el) {
-							return el.innerHTML = "0:0";
-						};
-						onUpdate = function onUpdate(el) {
-							var pos = cm.getCursor();
-							el.innerHTML = pos.line + ":" + pos.ch;
-						};
-					} else if (name === "autosave") {
-						defaultValue = function defaultValue(el) {
-							if (options.autosave != undefined && options.autosave.enabled === true) {
-								el.setAttribute("id", "autosaved");
-							}
-						};
-					}
-
-					items.push({
-						className: name,
-						defaultValue: defaultValue,
-						onUpdate: onUpdate
-					});
-				}
-			}
-
-			// Create element for the status bar
 			var bar = document.createElement("div");
 			bar.className = "editor-statusbar";
 
-			// Create a new span for each item
-			for (i = 0; i < items.length; i++) {
-				// Store in temporary variable
-				var item = items[i];
-
-				// Create span element
-				var el = document.createElement("span");
-				el.className = item.className;
-
-				// Ensure the defaultValue is a function
-				if (typeof item.defaultValue === "function") {
-					item.defaultValue(el);
+			var statusFuncMap = {
+				words: {
+					defaultValue: function defaultValue(el) {
+						return el.innerHTML = _utils2.default.wordCount(cm.getValue());
+					},
+					onUpdate: function onUpdate(el) {
+						return el.innerHTML = _utils2.default.wordCount(cm.getValue());
+					}
+				},
+				lines: {
+					defaultValue: function defaultValue(el) {
+						return el.innerHTML = cm.lineCount();
+					},
+					onUpdate: function onUpdate(el) {
+						return el.innerHTML = cm.lineCount();
+					}
+				},
+				cursor: {
+					defaultValue: function defaultValue(el) {
+						return el.innerHTML = "0:0";
+					},
+					onUpdate: function onUpdate(el) {
+						return el.innerHTML = cm.getCursor().line + ":" + cm.getCursor().ch;
+					}
+				},
+				autosave: {
+					defaultValue: function defaultValue(el) {
+						if (options.autosave != undefined && options.autosave.enabled === true) {
+							el.setAttribute("id", "autosaved");
+						}
+					},
+					onUpdate: undefined
 				}
+			};
 
-				// Ensure the onUpdate is a function
-				if (typeof item.onUpdate === "function") {
+			status.forEach(function (v) {
+				if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === "object") {
+					items.push({
+						className: v.className,
+						defaultValue: v.defaultValue,
+						onUpdate: v.onUpdate
+					});
+				}
+				if (statusFuncMap[v]) {
+					items.push({
+						className: v.toString(),
+						defaultValue: statusFuncMap[v].defaultValue,
+						onUpdate: statusFuncMap[v].onUpdate
+					});
+				}
+			});
+
+			// Create element for the status bar
+			var createStatusElement = function createStatusElement(className) {
+				var el = document.createElement("span");
+				el.className = className;
+				return el;
+			};
+			items.forEach(function (v) {
+				var el = createStatusElement(v.className);
+				if (typeof v.defaultValue === "function") v.defaultValue(el);
+				if (typeof v.onUpdate === "function") {
 					// Create a closure around the span of the current action, then execute the onUpdate handler
-					this.codemirror.on("update", function (el, item) {
-						return function () {
-							return item.onUpdate(el);
-						};
-					}(el, item));
+					_this4.codemirror.on("update", function () {
+						return v.onUpdate(el);
+					});
 				}
 
 				// Append the item to the status bar
 				bar.appendChild(el);
-			}
+			});
 
 			// Insert the status bar into the DOM
 			var cmWrapper = this.codemirror.getWrapperElement();
