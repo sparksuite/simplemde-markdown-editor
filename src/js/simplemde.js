@@ -27,9 +27,8 @@ import {
 /**
  * Create icon element for toolbar.
  */
-const createIcon = (options = {}, enableTooltips, shortcuts) => {
+const createIcon = (options = {}, enableTooltips = true, shortcuts) => {
 	let el = document.createElement("a");
-	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
 		el.title = createTootlip(options.title, options.action, shortcuts);

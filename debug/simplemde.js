@@ -16750,11 +16750,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 var createIcon = function createIcon() {
 	var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	var enableTooltips = arguments[1];
+	var enableTooltips = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 	var shortcuts = arguments[2];
 
 	var el = document.createElement("a");
-	enableTooltips = enableTooltips == undefined ? true : enableTooltips;
 
 	if (options.title && enableTooltips) {
 		el.title = createTootlip(options.title, options.action, shortcuts);
