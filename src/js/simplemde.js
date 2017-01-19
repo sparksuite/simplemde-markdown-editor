@@ -53,17 +53,13 @@ const createSep = () => {
 }
 
 const createTootlip = (title, action, shortcuts) => {
-	let actionName;
-	let tooltip = title;
-
-	if(action) {
-		actionName = utils.getBindingName(action);
-		if(shortcuts[actionName]) {
-			tooltip += " (" + utils.fixShortcut(shortcuts[actionName]) + ")";
-		}
+	if(!action) return title
+	const actionName = utils.getBindingName(action);
+	if(shortcuts[actionName]) {
+		title += ` ( ${utils.fixShortcut(shortcuts[actionName])} )`
 	}
 
-	return tooltip;
+	return title;
 }
 
 /**
@@ -80,9 +76,8 @@ class SimpleMDE extends Action {
 		utils.downloadFA(options)
 
 		// Find the textarea to use
-		if(options.element) {
-			this.element = options.element;
-		} else if(options.element === null) {
+		if(options.element) this.element = options.element;
+		if(options.element === null) {
 			// This means that the element option was specified, but no element was found
 			return console.log("SimpleMDE: Error. No element was found.");
 		}

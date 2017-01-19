@@ -16778,17 +16778,13 @@ var createSep = function createSep() {
 };
 
 var createTootlip = function createTootlip(title, action, shortcuts) {
-	var actionName = void 0;
-	var tooltip = title;
-
-	if (action) {
-		actionName = _utils2.default.getBindingName(action);
-		if (shortcuts[actionName]) {
-			tooltip += " (" + _utils2.default.fixShortcut(shortcuts[actionName]) + ")";
-		}
+	if (!action) return title;
+	var actionName = _utils2.default.getBindingName(action);
+	if (shortcuts[actionName]) {
+		title += ' ( ' + _utils2.default.fixShortcut(shortcuts[actionName]) + ' )';
 	}
 
-	return tooltip;
+	return title;
 };
 
 /**
@@ -16812,9 +16808,8 @@ var SimpleMDE = function (_Action) {
 		_utils2.default.downloadFA(options);
 
 		// Find the textarea to use
-		if (options.element) {
-			_this.element = options.element;
-		} else if (options.element === null) {
+		if (options.element) _this.element = options.element;
+		if (options.element === null) {
 			var _ret;
 
 			// This means that the element option was specified, but no element was found
