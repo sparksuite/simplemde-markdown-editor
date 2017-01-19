@@ -157,21 +157,15 @@ class SimpleMDE extends Action {
 	 */
 	markdown(text) {
 		if(marked) {
-			// Initialize
-			let markedOptions = {};
-
 			// Update options
 			const update = this.options && this.options.renderingConfig && this.options.renderingConfig.singleLineBreaks === false
-			markedOptions.breaks = !update
-
-			if(this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-				markedOptions.highlight = code => window.hljs.highlightAuto(code).value
-			}
+			const highlight = this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs
 
 			// Set options
-			marked.setOptions(markedOptions);
-
-			// Return
+			marked.setOptions({
+				breaks: !update,
+				highlight: highlight ? code => window.hljs.highlightAuto(code).value : undefined
+			});
 			return marked(text);
 		}
 	};

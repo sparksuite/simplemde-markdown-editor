@@ -16897,23 +16897,17 @@ var SimpleMDE = function (_Action) {
 		key: 'markdown',
 		value: function markdown(text) {
 			if (_marked2.default) {
-				// Initialize
-				var markedOptions = {};
-
 				// Update options
 				var update = this.options && this.options.renderingConfig && this.options.renderingConfig.singleLineBreaks === false;
-				markedOptions.breaks = !update;
-
-				if (this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs) {
-					markedOptions.highlight = function (code) {
-						return window.hljs.highlightAuto(code).value;
-					};
-				}
+				var highlight = this.options && this.options.renderingConfig && this.options.renderingConfig.codeSyntaxHighlighting === true && window.hljs;
 
 				// Set options
-				_marked2.default.setOptions(markedOptions);
-
-				// Return
+				_marked2.default.setOptions({
+					breaks: !update,
+					highlight: highlight ? function (code) {
+						return window.hljs.highlightAuto(code).value;
+					} : undefined
+				});
 				return (0, _marked2.default)(text);
 			}
 		}
