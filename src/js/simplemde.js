@@ -257,50 +257,49 @@ class SimpleMDE extends Action {
 
 
 	autosave() {
-		if(utils.isLocalStorageAvailable()) {
-			const simplemde = this;
-
-			if(this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-				return console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
-			}
-
-			if(simplemde.element.form != null && simplemde.element.form != undefined) {
-				simplemde.element.form.addEventListener("submit", () => {
-					localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
-				});
-			}
-
-			if(this.options.autosave.loaded !== true) {
-				if(typeof localStorage.getItem("smde_" + this.options.autosave.uniqueId) == "string" && localStorage.getItem("smde_" + this.options.autosave.uniqueId) != "") {
-					this.codemirror.setValue(localStorage.getItem("smde_" + this.options.autosave.uniqueId));
-					this.options.autosave.foundSavedValue = true;
-				}
-
-				this.options.autosave.loaded = true;
-			}
-
-			localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
-
-			let el = document.getElementById("autosaved");
-			if(el != null && el != undefined && el != "") {
-				const d = new Date();
-				const hh = d.getHours();
-				const mm = d.getMinutes();
-
-				// date format, output example: Autosaved: 5:45 pm
-				const dd = hh >= 12 ? 'pm' : 'am'
-				const h = hh == 0 ? 12 : hh > 12 ? hh - 12 : hh;
-				const m = mm < 10 ? `0${mm}` : mm;
-
-				el.innerHTML = `Autosaved: ${h}:${m} ${dd}`;
-			}
-
-			this.autosaveTimeoutId = setTimeout(function() {
-				simplemde.autosave();
-			}, this.options.autosave.delay || 10000);
-		} else {
-			console.log("SimpleMDE: localStorage not available, cannot autosave");
+		if(!utils.isLocalStorageAvailable()) {
+			return console.log("SimpleMDE: localStorage not available, cannot autosave")
 		}
+		const simplemde = this;
+
+		if(this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
+			return console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
+		}
+
+		if(simplemde.element.form != null && simplemde.element.form != undefined) {
+			simplemde.element.form.addEventListener("submit", () => {
+				localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+			});
+		}
+
+		if(this.options.autosave.loaded !== true) {
+			if(typeof localStorage.getItem("smde_" + this.options.autosave.uniqueId) == "string" && localStorage.getItem("smde_" + this.options.autosave.uniqueId) != "") {
+				this.codemirror.setValue(localStorage.getItem("smde_" + this.options.autosave.uniqueId));
+				this.options.autosave.foundSavedValue = true;
+			}
+
+			this.options.autosave.loaded = true;
+		}
+
+		localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
+
+		let el = document.getElementById("autosaved");
+		if(el != null && el != undefined && el != "") {
+			const d = new Date();
+			const hh = d.getHours();
+			const mm = d.getMinutes();
+
+			// date format, output example: Autosaved: 5:45 pm
+			const dd = hh >= 12 ? 'pm' : 'am'
+			const h = hh == 0 ? 12 : hh > 12 ? hh - 12 : hh;
+			const m = mm < 10 ? `0${mm}` : mm;
+
+			el.innerHTML = `Autosaved: ${h}:${m} ${dd}`;
+		}
+
+		this.autosaveTimeoutId = setTimeout(() => {
+			simplemde.autosave();
+		}, this.options.autosave.delay || 10000);
 	};
 
 	clearAutosavedValue() {
