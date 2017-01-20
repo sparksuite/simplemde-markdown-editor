@@ -227,8 +227,7 @@ class SimpleMDE extends Action {
 		});
 
 		if(options.forceSync === true) {
-			const cm = this.codemirror;
-			cm.on("change", () => cm.save());
+			this.codemirror.on("change", () => this.codemirror.save());
 		}
 
 		this.gui = {};
@@ -247,10 +246,9 @@ class SimpleMDE extends Action {
 		this._rendered = this.element;
 
 		// Fixes CodeMirror bug (#344)
-		const temp_cm = this.codemirror;
-		setTimeout(function() {
-			temp_cm.refresh();
-		}.bind(temp_cm), 0);
+		setTimeout(() => {
+			this.codemirror.refresh();
+		}, 0);
 	};
 
 

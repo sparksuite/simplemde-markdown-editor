@@ -16987,12 +16987,9 @@ var SimpleMDE = function (_Action) {
 			});
 
 			if (options.forceSync === true) {
-				(function () {
-					var cm = _this2.codemirror;
-					cm.on("change", function () {
-						return cm.save();
-					});
-				})();
+				this.codemirror.on("change", function () {
+					return _this2.codemirror.save();
+				});
 			}
 
 			this.gui = {};
@@ -17011,10 +17008,9 @@ var SimpleMDE = function (_Action) {
 			this._rendered = this.element;
 
 			// Fixes CodeMirror bug (#344)
-			var temp_cm = this.codemirror;
 			setTimeout(function () {
-				temp_cm.refresh();
-			}.bind(temp_cm), 0);
+				_this2.codemirror.refresh();
+			}, 0);
 		}
 	}, {
 		key: 'autosave',
