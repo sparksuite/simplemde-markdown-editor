@@ -490,7 +490,9 @@ export default class Action {
 		let toolbar_div = wrapper.previousSibling;
 		let toolbar = editor.options.toolbar? editor.toolbarElements.preview: false;
 		let preview = wrapper.lastChild;
-		if (!preview || !/editor-preview/.test(preview.className)){
+		const notCreate = !preview || !/editor-preview/.test(preview.className)
+
+		if (notCreate){
 			preview = document.createElement("div");
 			preview.className = "editor-preview";
 			wrapper.appendChild(preview);

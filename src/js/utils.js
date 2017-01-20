@@ -24,7 +24,9 @@ export default new class Utils {
 		const m = data.match(pattern);
 		let count = 0;
 		if(m === null) return count;
-		for(let i = 0; i < m.length; i++) {
+
+		const mLength = m.length
+		for(let i = 0; i < mLength; i++) {
 			if(m[i].charCodeAt(0) >= 0x4E00) {
 				count += m[i].length;
 			} else {

@@ -15945,7 +15945,9 @@ var Action = function () {
 			var toolbar_div = wrapper.previousSibling;
 			var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 			var preview = wrapper.lastChild;
-			if (!preview || !/editor-preview/.test(preview.className)) {
+			var notCreate = !preview || !/editor-preview/.test(preview.className);
+
+			if (notCreate) {
 				preview = document.createElement("div");
 				preview.className = "editor-preview";
 				wrapper.appendChild(preview);
@@ -17136,7 +17138,8 @@ var SimpleMDE = function (_Action) {
 				// Don't include trailing separators
 				if (v === "|") {
 					var nonSeparatorIconsFollow = true;
-					for (var x = i + 1; x < _this3.toolbar.length; x++) {
+					var toolbarLength = _this3.toolbar.length;
+					for (var x = i + 1; x < toolbarLength; x++) {
 						if (_this3.toolbar[x] !== "|" && (!_this3.options.hideIcons || _this3.options.hideIcons.indexOf(name) == -1)) {
 							nonSeparatorIconsFollow = false;
 						}
@@ -17532,7 +17535,9 @@ exports.default = new (function () {
 			var m = data.match(pattern);
 			var count = 0;
 			if (m === null) return count;
-			for (var i = 0; i < m.length; i++) {
+
+			var mLength = m.length;
+			for (var i = 0; i < mLength; i++) {
 				if (m[i].charCodeAt(0) >= 0x4E00) {
 					count += m[i].length;
 				} else {
