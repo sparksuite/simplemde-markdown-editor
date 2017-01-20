@@ -360,7 +360,7 @@ export default class Action {
 				});
 			}
 
-			for (var i = block_start; i <= block_end; i++){
+			for (let i = block_start; i <= block_end; i++){
 				cm.indentLine(i, "subtract"); // TODO: this doesn't get tracked in the history, so can't be undone :(
 			}
 			cm.focus();

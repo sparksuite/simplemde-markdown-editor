@@ -37,7 +37,7 @@ export default new class Utils {
 	}
 
 	getBindingName (f){
-		for(let key in bindings) {
+		for(const key in bindings) {
 			if(bindings[key] === f) {
 				return key;
 			}

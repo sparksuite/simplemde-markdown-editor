@@ -87,7 +87,7 @@ class SimpleMDE extends Action {
 			options.toolbar = [];
 
 			// Loop over the built in buttons, to get the preferred order
-			for(let key in toolbarBuiltInButtons) {
+			for(const key in toolbarBuiltInButtons) {
 				if(toolbarBuiltInButtons.hasOwnProperty(key)) {
 					if(key.indexOf("separator-") != -1) {
 						options.toolbar.push("|");
@@ -176,7 +176,7 @@ class SimpleMDE extends Action {
 		const self = this;
 		let keyMaps = {};
 
-		for(let key in options.shortcuts) {
+		for(const key in options.shortcuts) {
 			// null stands for "do not bind this command"
 			if(options.shortcuts[key] !== null && bindings[key] !== null) {
 				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => bindings[key](self);
@@ -406,7 +406,7 @@ class SimpleMDE extends Action {
 		this.codemirror.on("cursorActivity", () => {
 			let stat = base.getState(this.codemirror);
 
-			for(let key in toolbarData) {
+			for(const key in toolbarData) {
 				(function(key) {
 					let el = toolbarData[key];
 					if(stat[key]) {
