@@ -179,9 +179,7 @@ class SimpleMDE extends Action {
 		for(let key in options.shortcuts) {
 			// null stands for "do not bind this command"
 			if(options.shortcuts[key] !== null && bindings[key] !== null) {
-				(function(key) {
-					keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => bindings[key](self);
-				})(key);
+				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => bindings[key](self);
 			}
 		}
 

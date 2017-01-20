@@ -16925,15 +16925,17 @@ var SimpleMDE = function (_Action) {
 			var self = this;
 			var keyMaps = {};
 
-			for (var key in options.shortcuts) {
+			var _loop = function _loop(key) {
 				// null stands for "do not bind this command"
 				if (options.shortcuts[key] !== null && _metadata.bindings[key] !== null) {
-					(function (key) {
-						keyMaps[_utils2.default.fixShortcut(options.shortcuts[key])] = function () {
-							return _metadata.bindings[key](self);
-						};
-					})(key);
+					keyMaps[_utils2.default.fixShortcut(options.shortcuts[key])] = function () {
+						return _metadata.bindings[key](self);
+					};
 				}
+			};
+
+			for (var key in options.shortcuts) {
+				_loop(key);
 			}
 
 			keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
