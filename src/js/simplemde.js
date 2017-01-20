@@ -318,8 +318,9 @@ class SimpleMDE extends Action {
 		let cm = this.codemirror;
 		let wrapper = cm.getWrapperElement();
 		let preview = wrapper.nextSibling;
+		const notCreate = !preview || !/editor-preview-side/.test(preview.className)
 
-		if(!preview || !/editor-preview-side/.test(preview.className)) {
+		if(notCreate) {
 			preview = document.createElement("div");
 			preview.className = "editor-preview-side";
 			wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
@@ -331,8 +332,8 @@ class SimpleMDE extends Action {
 		cm.on("scroll", v => {
 			if(cScroll) return cScroll = false;
 			pScroll = true;
-			let height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
-			let ratio = parseFloat(v.getScrollInfo().top) / height;
+			const height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
+			const ratio = parseFloat(v.getScrollInfo().top) / height;
 			preview.scrollTop = (preview.scrollHeight - preview.clientHeight) * ratio;
 		});
 
@@ -340,9 +341,9 @@ class SimpleMDE extends Action {
 		preview.onscroll = () => {
 			if(pScroll) return pScroll = false;
 			cScroll = true;
-			let height = preview.scrollHeight - preview.clientHeight;
-			let ratio = parseFloat(preview.scrollTop) / height;
-			let move = (cm.getScrollInfo().height - cm.getScrollInfo().clientHeight) * ratio;
+			const height = preview.scrollHeight - preview.clientHeight;
+			const ratio = parseFloat(preview.scrollTop) / height;
+			const move = (cm.getScrollInfo().height - cm.getScrollInfo().clientHeight) * ratio;
 			cm.scrollTo(0, move);
 		};
 		return preview;
