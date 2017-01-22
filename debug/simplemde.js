@@ -17138,8 +17138,7 @@ var SimpleMDE = function (_Action) {
 				// Don't include trailing separators
 				if (v === "|") {
 					var nonSeparatorIconsFollow = true;
-					var toolbarLength = _this3.toolbar.length;
-					for (var x = i + 1; x < toolbarLength; x++) {
+					for (var x = i + 1; x < _this3.toolbar.length; x++) {
 						if (_this3.toolbar[x] !== "|" && (!_this3.options.hideIcons || _this3.options.hideIcons.indexOf(name) == -1)) {
 							nonSeparatorIconsFollow = false;
 						}
@@ -17536,8 +17535,7 @@ exports.default = new (function () {
 			var count = 0;
 			if (m === null) return count;
 
-			var mLength = m.length;
-			for (var i = 0; i < mLength; i++) {
+			for (var i = 0; i < m.length; i++) {
 				if (m[i].charCodeAt(0) >= 0x4E00) {
 					count += m[i].length;
 				} else {

@@ -25,8 +25,7 @@ export default new class Utils {
 		let count = 0;
 		if(m === null) return count;
 
-		const mLength = m.length
-		for(let i = 0; i < mLength; i++) {
+		for(let i = 0; i < m.length; i++) {
 			if(m[i].charCodeAt(0) >= 0x4E00) {
 				count += m[i].length;
 			} else {

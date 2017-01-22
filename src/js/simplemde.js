@@ -363,8 +363,7 @@ class SimpleMDE extends Action {
 			// Don't include trailing separators
 			if(v === "|") {
 				let nonSeparatorIconsFollow = true;
-				const toolbarLength = this.toolbar.length
-				for(let x = (i + 1); x < toolbarLength; x++) {
+				for(let x = (i + 1); x < this.toolbar.length; x++) {
 					if(this.toolbar[x] !== "|" && (!this.options.hideIcons || this.options.hideIcons.indexOf(name) == -1)) {
 						nonSeparatorIconsFollow = false;
 					}
