@@ -1,32 +1,31 @@
 /**
  * @description :: metadata, immutable
  */
-import Action from './action'
 
-export const bindings = {
-	"toggleBold": 'toggleBold',
-	"toggleItalic": 'toggleItalic',
-	"drawLink": 'drawLink',
-	"toggleHeadingSmaller": 'toggleHeadingSmaller',
-	"toggleHeadingBigger": 'toggleHeadingBigger',
-	"drawImage": 'drawImage',
-	"toggleBlockquote": 'toggleBlockquote',
-	"toggleOrderedList": 'toggleOrderedList',
-	"toggleUnorderedList": 'toggleUnorderedList',
-	"toggleCodeBlock": 'toggleCodeBlock',
-	"togglePreview": 'togglePreview',
-	"toggleStrikethrough": 'toggleStrikethrough',
-	"toggleHeading1": 'toggleHeading1',
-	"toggleHeading2": 'toggleHeading2',
-	"toggleHeading3": 'toggleHeading3',
-	"cleanBlock": 'cleanBlock',
-	"drawTable": 'drawTable',
-	"drawHorizontalRule": 'drawHorizontalRule',
-	"undo": 'undo',
-	"redo": 'redo',
-	"toggleSideBySide": 'toggleSideBySide',
-	"toggleFullScreen": 'toggleFullScreen'
-};
+export const bindings = [
+	'toggleBold',
+	'toggleItalic',
+	'drawLink',
+	'toggleHeadingSmaller',
+	'toggleHeadingBigger',
+	'drawImage',
+	'toggleBlockquote',
+	'toggleOrderedList',
+	'toggleUnorderedList',
+	'toggleCodeBlock',
+	'togglePreview',
+	'toggleStrikethrough',
+	'toggleHeading1',
+	'toggleHeading2',
+	'toggleHeading3',
+	'cleanBlock',
+	'drawTable',
+	'drawHorizontalRule',
+	'undo',
+	'redo',
+	'toggleSideBySide',
+	'toggleFullScreen'
+];
 
 export const shortcuts = {
 	"toggleBold": "Cmd-B",

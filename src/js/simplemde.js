@@ -53,8 +53,8 @@ const createSep = () => {
 
 const createTootlip = (title, action, shortcuts) => {
 	if(!action) return title
-	const actionName = utils.getBindingName(action);
-	if(shortcuts[actionName]) {
+	const actionName = bindings.find(action)
+	if(actionName && shortcuts[actionName]) {
 		title += ` ( ${utils.fixShortcut(shortcuts[actionName])} )`
 	}
 
@@ -178,8 +178,9 @@ class SimpleMDE extends Action {
 
 		for(const key in options.shortcuts) {
 			// null stands for "do not bind this command"
-			if(options.shortcuts[key] !== null && bindings[key] !== null) {
-				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => super[bindings[key]](self);
+			const isExistent = bindings.find(key)
+			if(options.shortcuts[key] !== null && isExistent) {
+				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => super[key](self);
 			}
 		}
 

@@ -35,15 +35,6 @@ export default new class Utils {
 		return count;
 	}
 
-	getBindingName (f){
-		for(const key in bindings) {
-			if(bindings[key] === f) {
-				return key;
-			}
-		}
-		return null;
-	};
-
 	/**
 	 * Fix shortcut. Mac use Command, others use Ctrl.
 	 */

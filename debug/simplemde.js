@@ -16447,40 +16447,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.promptTexts = exports.insertTexts = exports.blockStyles = exports.toolbarBuiltInButtons = exports.shortcuts = exports.bindings = undefined;
+/**
+ * @description :: metadata, immutable
+ */
 
-var _action = require('./action');
+var bindings = exports.bindings = ['toggleBold', 'toggleItalic', 'drawLink', 'toggleHeadingSmaller', 'toggleHeadingBigger', 'drawImage', 'toggleBlockquote', 'toggleOrderedList', 'toggleUnorderedList', 'toggleCodeBlock', 'togglePreview', 'toggleStrikethrough', 'toggleHeading1', 'toggleHeading2', 'toggleHeading3', 'cleanBlock', 'drawTable', 'drawHorizontalRule', 'undo', 'redo', 'toggleSideBySide', 'toggleFullScreen'];
 
-var _action2 = _interopRequireDefault(_action);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var bindings = exports.bindings = {
-	"toggleBold": 'toggleBold',
-	"toggleItalic": 'toggleItalic',
-	"drawLink": 'drawLink',
-	"toggleHeadingSmaller": 'toggleHeadingSmaller',
-	"toggleHeadingBigger": 'toggleHeadingBigger',
-	"drawImage": 'drawImage',
-	"toggleBlockquote": 'toggleBlockquote',
-	"toggleOrderedList": 'toggleOrderedList',
-	"toggleUnorderedList": 'toggleUnorderedList',
-	"toggleCodeBlock": 'toggleCodeBlock',
-	"togglePreview": 'togglePreview',
-	"toggleStrikethrough": 'toggleStrikethrough',
-	"toggleHeading1": 'toggleHeading1',
-	"toggleHeading2": 'toggleHeading2',
-	"toggleHeading3": 'toggleHeading3',
-	"cleanBlock": 'cleanBlock',
-	"drawTable": 'drawTable',
-	"drawHorizontalRule": 'drawHorizontalRule',
-	"undo": 'undo',
-	"redo": 'redo',
-	"toggleSideBySide": 'toggleSideBySide',
-	"toggleFullScreen": 'toggleFullScreen'
-}; /**
-    * @description :: metadata, immutable
-    */
 var shortcuts = exports.shortcuts = {
 	"toggleBold": "Cmd-B",
 	"toggleItalic": "Cmd-I",
@@ -16690,7 +16662,7 @@ var promptTexts = exports.promptTexts = {
 	image: "URL of the image:"
 };
 
-},{"./action":20}],25:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16789,8 +16761,8 @@ var createSep = function createSep() {
 
 var createTootlip = function createTootlip(title, action, shortcuts) {
 	if (!action) return title;
-	var actionName = _utils2.default.getBindingName(action);
-	if (shortcuts[actionName]) {
+	var actionName = _metadata.bindings.find(action);
+	if (actionName && shortcuts[actionName]) {
 		title += ' ( ' + _utils2.default.fixShortcut(shortcuts[actionName]) + ' )';
 	}
 
@@ -16938,9 +16910,10 @@ var SimpleMDE = function (_Action) {
 
 			var _loop = function _loop(key) {
 				// null stands for "do not bind this command"
-				if (options.shortcuts[key] !== null && _metadata.bindings[key] !== null) {
+				var isExistent = _metadata.bindings.find(key);
+				if (options.shortcuts[key] !== null && isExistent) {
 					keyMaps[_utils2.default.fixShortcut(options.shortcuts[key])] = function () {
-						return _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), _metadata.bindings[key], _this2).call(_this2, self);
+						return _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), key, _this2).call(_this2, self);
 					};
 				}
 			};
@@ -17435,23 +17408,13 @@ exports.default = new (function () {
 			}
 			return count;
 		}
-	}, {
-		key: 'getBindingName',
-		value: function getBindingName(f) {
-			for (var key in _metadata.bindings) {
-				if (_metadata.bindings[key] === f) {
-					return key;
-				}
-			}
-			return null;
-		}
-	}, {
-		key: 'fixShortcut',
-
 
 		/**
    * Fix shortcut. Mac use Command, others use Ctrl.
    */
+
+	}, {
+		key: 'fixShortcut',
 		value: function fixShortcut(name) {
 			name = this.isMac() ? name.replace("Ctrl", "Cmd") : name.replace("Cmd", "Ctrl");
 			return name;
