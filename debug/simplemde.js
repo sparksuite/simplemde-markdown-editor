@@ -16761,7 +16761,10 @@ var createSep = function createSep() {
 
 var createTootlip = function createTootlip(title, action, shortcuts) {
 	if (!action) return title;
-	if (!shortcuts[_metadata.bindings.find(action)]) return title;
+	var actionName = _metadata.bindings.find(function (bindingName) {
+		return bindingName === action;
+	});
+	if (!shortcuts[actionName]) return title;
 
 	return title + ' ( ' + _utils2.default.fixShortcut(shortcuts[actionName]) + ' )';
 };
@@ -16907,10 +16910,12 @@ var SimpleMDE = function (_Action) {
 
 			var _loop = function _loop(key) {
 				// null stands for "do not bind this command"
-				var isExistent = _metadata.bindings.find(key);
+				var isExistent = _metadata.bindings.find(function (bindingName) {
+					return bindingName === key;
+				});
 				if (options.shortcuts[key] !== null && isExistent) {
 					keyMaps[_utils2.default.fixShortcut(options.shortcuts[key])] = function () {
-						return _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), key, _this2).call(_this2, self);
+						return _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), key, _this2).call(_this2, _this2);
 					};
 				}
 			};
