@@ -15872,7 +15872,7 @@ var Action = function () {
 
 			// Hide side by side if needed
 			var sidebyside = cm.getWrapperElement().nextSibling;
-			if (/editor-preview-active-side/.test(sidebyside.className)) Action.toggleSideBySide(editor);
+			if (/editor-preview-active-side/.test(sidebyside.className)) this.toggleSideBySide(editor);
 		}
 
 		/**
@@ -15882,6 +15882,8 @@ var Action = function () {
 	}, {
 		key: 'toggleSideBySide',
 		value: function toggleSideBySide(editor) {
+			var _this = this;
+
 			var cm = editor.codemirror;
 			var wrapper = cm.getWrapperElement();
 			var preview = wrapper.nextSibling;
@@ -15896,7 +15898,7 @@ var Action = function () {
 				// give some time for the transition from editor.css to fire and the view to slide from right to left,
 				// instead of just appearing.
 				setTimeout(function () {
-					if (!cm.getOption("fullScreen")) Action.toggleFullScreen(editor);
+					if (!cm.getOption("fullScreen")) _this.toggleFullScreen(editor);
 					preview.className += " editor-preview-active-side";
 				}, 1);
 				toolbarButton.className += " active";
@@ -15974,7 +15976,7 @@ var Action = function () {
 
 			// Turn off side by side if needed
 			var sidebyside = cm.getWrapperElement().nextSibling;
-			if (/editor-preview-active-side/.test(sidebyside.className)) Action.toggleSideBySide(editor);
+			if (/editor-preview-active-side/.test(sidebyside.className)) this.toggleSideBySide(editor);
 		}
 
 		/**
@@ -16069,6 +16071,11 @@ var Action = function () {
 			var cm = editor.codemirror;
 			cm.redo();
 			cm.focus();
+		}
+	}, {
+		key: 'openGuide',
+		value: function openGuide() {
+			window.open('https://simplemde.com/markdown-guide');
 		}
 	}]);
 
@@ -16643,7 +16650,7 @@ var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	},
 	"guide": {
 		name: "guide",
-		action: "https://simplemde.com/markdown-guide",
+		action: "openGuide",
 		className: "fa fa-question-circle",
 		title: "Markdown Guide",
 		default: true
@@ -17168,12 +17175,6 @@ var SimpleMDE = function (_Action) {
 						isCustomMethods ? v.action(_this3) : _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), v.action, _this3).call(_this3, _this3);
 					};
 				}
-				// Link can be converted to a function
-				// todo
-				// if(typeof v.action === "string") {
-				// 	el.href = v.action;
-				// 	el.target = "_blank";
-				// }
 
 				toolbarData[v.name || v] = el;
 				bar.appendChild(el);
@@ -17181,7 +17182,6 @@ var SimpleMDE = function (_Action) {
 			this.toolbarElements = toolbarData;
 			this.codemirror.on("cursorActivity", function () {
 				var stat = _base2.default.getState(_this3.codemirror);
-				console.log(toolbarData, 1);
 				for (var key in toolbarData) {
 					var el = toolbarData[key];
 					if (stat[key]) {

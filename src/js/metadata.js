@@ -197,7 +197,7 @@ export const toolbarBuiltInButtons = {
 	},
 	"guide": {
 		name: "guide",
-		action: "https://simplemde.com/markdown-guide",
+		action: "openGuide",
 		className: "fa fa-question-circle",
 		title: "Markdown Guide",
 		default: true

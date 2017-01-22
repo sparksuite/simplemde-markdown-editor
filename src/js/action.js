@@ -417,7 +417,7 @@ export default class Action {
 		// Hide side by side if needed
 		const sidebyside = cm.getWrapperElement().nextSibling;
 		if (/editor-preview-active-side/.test(sidebyside.className))
-			Action.toggleSideBySide(editor);
+			this.toggleSideBySide(editor);
 	}
 
 
@@ -442,7 +442,7 @@ export default class Action {
 			// instead of just appearing.
 			setTimeout(() =>{
 				if (!cm.getOption("fullScreen"))
-					Action.toggleFullScreen(editor);
+					this.toggleFullScreen(editor);
 				preview.className += " editor-preview-active-side";
 			}, 1);
 			toolbarButton.className += " active";
@@ -520,7 +520,7 @@ export default class Action {
 		// Turn off side by side if needed
 		const sidebyside = cm.getWrapperElement().nextSibling;
 		if (/editor-preview-active-side/.test(sidebyside.className))
-			Action.toggleSideBySide(editor);
+			this.toggleSideBySide(editor);
 	}
 
 	/**
@@ -592,6 +592,10 @@ export default class Action {
 		const cm = editor.codemirror;
 		cm.redo();
 		cm.focus();
+	}
+
+	openGuide (){
+		window.open('https://simplemde.com/markdown-guide')
 	}
 
 

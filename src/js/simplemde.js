@@ -391,12 +391,6 @@ class SimpleMDE extends Action {
 					isCustomMethods ? v.action(this) : super[v.action](this)
 				};
 			}
-			// Link can be converted to a function
-			// todo
-			// if(typeof v.action === "string") {
-			// 	el.href = v.action;
-			// 	el.target = "_blank";
-			// }
 
 			toolbarData[v.name || v] = el;
 			bar.appendChild(el);
