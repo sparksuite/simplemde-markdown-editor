@@ -41,16 +41,14 @@ export default class Action {
 	 * Action for toggling heading size: normal -> h1 -> h2 -> h3 -> h4 -> h5 -> h6 -> normal
 	 */
 	toggleHeadingSmaller (editor){
-		const cm = editor.codemirror;
-		base.toggleHeading(cm, "smaller");
+		base.toggleHeading(editor.codemirror, "smaller");
 	}
 
 	/**
 	 * Action for toggling heading size: normal -> h6 -> h5 -> h4 -> h3 -> h2 -> h1 -> normal
 	 */
 	toggleHeadingBigger (editor){
-		const cm = editor.codemirror;
-		base.toggleHeading(cm, "bigger");
+		base.toggleHeading(editor.codemirror, "bigger");
 	}
 
 	/**
@@ -72,24 +70,21 @@ export default class Action {
 	 * Action for toggling blockquote.
 	 */
 	toggleBlockquote (editor){
-		const cm = editor.codemirror;
-		base.toggleLine(cm, "quote");
+		base.toggleLine(editor.codemirror, "quote");
 	}
 
 	/**
 	 * Action for toggling ol.
 	 */
 	toggleOrderedList (editor){
-		const cm = editor.codemirror;
-		base.toggleLine(cm, "ordered-list");
+		base.toggleLine(editor.codemirror, "ordered-list");
 	}
 
 	/**
 	 * Action for toggling ul.
 	 */
 	toggleUnorderedList (editor){
-		const cm = editor.codemirror;
-		base.toggleLine(cm, "unordered-list");
+		base.toggleLine(editor.codemirror, "unordered-list");
 	}
 
 	/**
@@ -381,7 +376,7 @@ export default class Action {
 	 */
 	toggleFullScreen (editor){
 		// Set fullscreen
-		let cm = editor.codemirror;
+		const cm = editor.codemirror;
 		cm.setOption("fullScreen", !cm.getOption("fullScreen"));
 
 
@@ -425,7 +420,7 @@ export default class Action {
 	 * Toggle side by side preview
 	 */
 	toggleSideBySide (editor){
-		let cm = editor.codemirror;
+		const cm = editor.codemirror;
 		let wrapper = cm.getWrapperElement();
 		let preview = wrapper.nextSibling;
 		let toolbarButton = editor.toolbarElements["side-by-side"];
@@ -485,8 +480,7 @@ export default class Action {
 	 * Preview action.
 	 */
 	togglePreview (editor){
-		const cm = editor.codemirror;
-		const wrapper = cm.getWrapperElement();
+		const wrapper = editor.codemirror.getWrapperElement();
 		let toolbar_div = wrapper.previousSibling;
 		let toolbar = editor.options.toolbar? editor.toolbarElements.preview: false;
 		let preview = wrapper.lastChild;
@@ -518,7 +512,7 @@ export default class Action {
 		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 
 		// Turn off side by side if needed
-		const sidebyside = cm.getWrapperElement().nextSibling;
+		const sidebyside = editor.codemirror.getWrapperElement().nextSibling;
 		if (/editor-preview-active-side/.test(sidebyside.className))
 			this.toggleSideBySide(editor);
 	}
@@ -534,26 +528,22 @@ export default class Action {
 	 * Action for toggling heading size 1, 2, 3
 	 */
 	toggleHeading1 (editor){
-		const cm = editor.codemirror;
-		base.toggleHeading(cm, undefined, 1);
+		base.toggleHeading(editor.codemirror, undefined, 1);
 	}
 
 	toggleHeading2 (editor){
-		const cm = editor.codemirror;
-		base.toggleHeading(cm, undefined, 2);
+		base.toggleHeading(editor.codemirror, undefined, 2);
 	}
 
 	toggleHeading3 (editor){
-		const cm = editor.codemirror;
-		base.toggleHeading(cm, undefined, 3);
+		base.toggleHeading(editor.codemirror, undefined, 3);
 	}
 
 	/**
 	 * Action for clean block (remove headline, list, blockquote code, markers)
 	 */
 	cleanBlock (editor){
-		const cm = editor.codemirror;
-		base.cleanBlock(cm);
+		base.cleanBlock(editor.codemirror);
 	}
 
 	/**
@@ -580,18 +570,16 @@ export default class Action {
 	 * Undo action.
 	 */
 	undo (editor){
-		const cm = editor.codemirror;
-		cm.undo();
-		cm.focus();
+		editor.codemirror.undo();
+		editor.codemirror.focus();
 	}
 
 	/**
 	 * Redo action.
 	 */
 	redo (editor){
-		const cm = editor.codemirror;
-		cm.redo();
-		cm.focus();
+		editor.codemirror.redo();
+		editor.codemirror.focus();
 	}
 
 	openGuide (){

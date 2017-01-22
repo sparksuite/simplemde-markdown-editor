@@ -171,7 +171,6 @@ class SimpleMDE extends Action {
 
 		this.element = el;
 		const options = this.options;
-		const self = this;
 		let keyMaps = {};
 
 		for(const key in options.shortcuts) {
@@ -185,11 +184,11 @@ class SimpleMDE extends Action {
 		keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
 		keyMaps["Tab"] = "tabAndIndentMarkdownList";
 		keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
-		keyMaps["Esc"] = cm => cm.getOption("fullScreen") && super.toggleFullScreen(self);
+		keyMaps["Esc"] = cm => cm.getOption("fullScreen") && super.toggleFullScreen(this);
 
 		document.addEventListener("keydown", (e = window.event) => {
 			if(e.keyCode == 27) {
-				if(self.codemirror.getOption("fullScreen")) super.toggleFullScreen(self);
+				if(this.codemirror.getOption("fullScreen")) super.toggleFullScreen(this);
 			}
 		}, false);
 
@@ -255,15 +254,14 @@ class SimpleMDE extends Action {
 		if(!utils.isLocalStorageAvailable()) {
 			return console.log("SimpleMDE: localStorage not available, cannot autosave")
 		}
-		const simplemde = this;
 
 		if(this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
 			return console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
 		}
 
-		if(simplemde.element.form != null && simplemde.element.form != undefined) {
-			simplemde.element.form.addEventListener("submit", () => {
-				localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+		if(this.element.form != null && this.element.form != undefined) {
+			this.element.form.addEventListener("submit", () => {
+				localStorage.removeItem("smde_" + this.options.autosave.uniqueId);
 			});
 		}
 
@@ -276,7 +274,7 @@ class SimpleMDE extends Action {
 			this.options.autosave.loaded = true;
 		}
 
-		localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
+		localStorage.setItem("smde_" + this.options.autosave.uniqueId, this.value());
 
 		let el = document.getElementById("autosaved");
 		if(el != null && el != undefined && el != "") {
@@ -293,7 +291,7 @@ class SimpleMDE extends Action {
 		}
 
 		this.autosaveTimeoutId = setTimeout(() => {
-			simplemde.autosave();
+			this.autosave();
 		}, this.options.autosave.delay || 10000);
 	};
 
@@ -506,36 +504,29 @@ class SimpleMDE extends Action {
 
 
 	isPreviewActive() {
-		const cm = this.codemirror;
-		const wrapper = cm.getWrapperElement();
+		const wrapper = this.codemirror.getWrapperElement();
 		const preview = wrapper.lastChild;
 
 		return /editor-preview-active/.test(preview.className);
 	};
 
 	isSideBySideActive() {
-		const cm = this.codemirror;
-		const wrapper = cm.getWrapperElement();
+		const wrapper = this.codemirror.getWrapperElement();
 		const preview = wrapper.nextSibling;
 
 		return /editor-preview-active-side/.test(preview.className);
 	};
 
 	isFullscreenActive() {
-		const cm = this.codemirror;
-
-		return cm.getOption("fullScreen");
+		return this.codemirror.getOption("fullScreen");
 	};
 
 	getState() {
-		const cm = this.codemirror;
-
-		return base.getState(cm);
+		return base.getState(this.codemirror);
 	};
 
 	toTextArea() {
-		const cm = this.codemirror;
-		const wrapper = cm.getWrapperElement();
+		const wrapper = this.codemirror.getWrapperElement();
 
 		if(wrapper.parentNode) {
 			if(this.gui.toolbar) {
@@ -549,7 +540,7 @@ class SimpleMDE extends Action {
 			}
 		}
 
-		cm.toTextArea();
+		this.codemirror.toTextArea();
 
 		if(this.autosaveTimeoutId) {
 			clearTimeout(this.autosaveTimeoutId);

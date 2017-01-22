@@ -15468,8 +15468,7 @@ var Action = function () {
 	}, {
 		key: 'toggleHeadingSmaller',
 		value: function toggleHeadingSmaller(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleHeading(cm, "smaller");
+			_base2.default.toggleHeading(editor.codemirror, "smaller");
 		}
 
 		/**
@@ -15479,8 +15478,7 @@ var Action = function () {
 	}, {
 		key: 'toggleHeadingBigger',
 		value: function toggleHeadingBigger(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleHeading(cm, "bigger");
+			_base2.default.toggleHeading(editor.codemirror, "bigger");
 		}
 
 		/**
@@ -15508,8 +15506,7 @@ var Action = function () {
 	}, {
 		key: 'toggleBlockquote',
 		value: function toggleBlockquote(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleLine(cm, "quote");
+			_base2.default.toggleLine(editor.codemirror, "quote");
 		}
 
 		/**
@@ -15519,8 +15516,7 @@ var Action = function () {
 	}, {
 		key: 'toggleOrderedList',
 		value: function toggleOrderedList(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleLine(cm, "ordered-list");
+			_base2.default.toggleLine(editor.codemirror, "ordered-list");
 		}
 
 		/**
@@ -15530,8 +15526,7 @@ var Action = function () {
 	}, {
 		key: 'toggleUnorderedList',
 		value: function toggleUnorderedList(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleLine(cm, "unordered-list");
+			_base2.default.toggleLine(editor.codemirror, "unordered-list");
 		}
 
 		/**
@@ -15942,8 +15937,7 @@ var Action = function () {
 	}, {
 		key: 'togglePreview',
 		value: function togglePreview(editor) {
-			var cm = editor.codemirror;
-			var wrapper = cm.getWrapperElement();
+			var wrapper = editor.codemirror.getWrapperElement();
 			var toolbar_div = wrapper.previousSibling;
 			var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 			var preview = wrapper.lastChild;
@@ -15975,7 +15969,7 @@ var Action = function () {
 			preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 
 			// Turn off side by side if needed
-			var sidebyside = cm.getWrapperElement().nextSibling;
+			var sidebyside = editor.codemirror.getWrapperElement().nextSibling;
 			if (/editor-preview-active-side/.test(sidebyside.className)) this.toggleSideBySide(editor);
 		}
 
@@ -15996,20 +15990,17 @@ var Action = function () {
 	}, {
 		key: 'toggleHeading1',
 		value: function toggleHeading1(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleHeading(cm, undefined, 1);
+			_base2.default.toggleHeading(editor.codemirror, undefined, 1);
 		}
 	}, {
 		key: 'toggleHeading2',
 		value: function toggleHeading2(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleHeading(cm, undefined, 2);
+			_base2.default.toggleHeading(editor.codemirror, undefined, 2);
 		}
 	}, {
 		key: 'toggleHeading3',
 		value: function toggleHeading3(editor) {
-			var cm = editor.codemirror;
-			_base2.default.toggleHeading(cm, undefined, 3);
+			_base2.default.toggleHeading(editor.codemirror, undefined, 3);
 		}
 
 		/**
@@ -16019,8 +16010,7 @@ var Action = function () {
 	}, {
 		key: 'cleanBlock',
 		value: function cleanBlock(editor) {
-			var cm = editor.codemirror;
-			_base2.default.cleanBlock(cm);
+			_base2.default.cleanBlock(editor.codemirror);
 		}
 
 		/**
@@ -16056,9 +16046,8 @@ var Action = function () {
 	}, {
 		key: 'undo',
 		value: function undo(editor) {
-			var cm = editor.codemirror;
-			cm.undo();
-			cm.focus();
+			editor.codemirror.undo();
+			editor.codemirror.focus();
 		}
 
 		/**
@@ -16068,9 +16057,8 @@ var Action = function () {
 	}, {
 		key: 'redo',
 		value: function redo(editor) {
-			var cm = editor.codemirror;
-			cm.redo();
-			cm.focus();
+			editor.codemirror.redo();
+			editor.codemirror.focus();
 		}
 	}, {
 		key: 'openGuide',
@@ -16905,7 +16893,6 @@ var SimpleMDE = function (_Action) {
 
 			this.element = el;
 			var options = this.options;
-			var self = this;
 			var keyMaps = {};
 
 			var _loop = function _loop(key) {
@@ -16928,14 +16915,14 @@ var SimpleMDE = function (_Action) {
 			keyMaps["Tab"] = "tabAndIndentMarkdownList";
 			keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
 			keyMaps["Esc"] = function (cm) {
-				return cm.getOption("fullScreen") && _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, self);
+				return cm.getOption("fullScreen") && _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, _this2);
 			};
 
 			document.addEventListener("keydown", function () {
 				var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.event;
 
 				if (e.keyCode == 27) {
-					if (self.codemirror.getOption("fullScreen")) _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, self);
+					if (_this2.codemirror.getOption("fullScreen")) _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, _this2);
 				}
 			}, false);
 
@@ -17001,18 +16988,19 @@ var SimpleMDE = function (_Action) {
 	}, {
 		key: 'autosave',
 		value: function autosave() {
+			var _this3 = this;
+
 			if (!_utils2.default.isLocalStorageAvailable()) {
 				return console.log("SimpleMDE: localStorage not available, cannot autosave");
 			}
-			var simplemde = this;
 
 			if (this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
 				return console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
 			}
 
-			if (simplemde.element.form != null && simplemde.element.form != undefined) {
-				simplemde.element.form.addEventListener("submit", function () {
-					localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+			if (this.element.form != null && this.element.form != undefined) {
+				this.element.form.addEventListener("submit", function () {
+					localStorage.removeItem("smde_" + _this3.options.autosave.uniqueId);
 				});
 			}
 
@@ -17025,7 +17013,7 @@ var SimpleMDE = function (_Action) {
 				this.options.autosave.loaded = true;
 			}
 
-			localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
+			localStorage.setItem("smde_" + this.options.autosave.uniqueId, this.value());
 
 			var el = document.getElementById("autosaved");
 			if (el != null && el != undefined && el != "") {
@@ -17042,7 +17030,7 @@ var SimpleMDE = function (_Action) {
 			}
 
 			this.autosaveTimeoutId = setTimeout(function () {
-				simplemde.autosave();
+				_this3.autosave();
 			}, this.options.autosave.delay || 10000);
 		}
 	}, {
@@ -17096,7 +17084,7 @@ var SimpleMDE = function (_Action) {
 	}, {
 		key: 'createToolbar',
 		value: function createToolbar() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.toolbar;
 
@@ -17112,8 +17100,8 @@ var SimpleMDE = function (_Action) {
 			var toolbarData = {};
 			var nextLoop = function nextLoop(v, i) {
 				var name = v.name;
-				if (name == "guide" && _this3.options.toolbarGuideIcon === false) return true;
-				if (_this3.options.hideIcons && _this3.options.hideIcons.indexOf(name) != -1) return true;
+				if (name == "guide" && _this4.options.toolbarGuideIcon === false) return true;
+				if (_this4.options.hideIcons && _this4.options.hideIcons.indexOf(name) != -1) return true;
 
 				// Fullscreen does not work well on mobile devices (even tablets)
 				// In the future, hopefully this can be resolved
@@ -17122,8 +17110,8 @@ var SimpleMDE = function (_Action) {
 				// Don't include trailing separators
 				if (v === "|") {
 					var nonSeparatorIconsFollow = true;
-					for (var x = i + 1; x < _this3.toolbar.length; x++) {
-						if (_this3.toolbar[x] !== "|" && (!_this3.options.hideIcons || _this3.options.hideIcons.indexOf(name) == -1)) {
+					for (var x = i + 1; x < _this4.toolbar.length; x++) {
+						if (_this4.toolbar[x] !== "|" && (!_this4.options.hideIcons || _this4.options.hideIcons.indexOf(name) == -1)) {
 							nonSeparatorIconsFollow = false;
 						}
 					}
@@ -17133,7 +17121,7 @@ var SimpleMDE = function (_Action) {
 			};
 			var createElement = function createElement(v) {
 				if (v === "|") return createSep();
-				return createIcon(v, _this3.options.toolbarTips, _this3.options.shortcuts);
+				return createIcon(v, _this4.options.toolbarTips, _this4.options.shortcuts);
 			};
 
 			this.toolbar.forEach(function (v, i) {
@@ -17147,7 +17135,7 @@ var SimpleMDE = function (_Action) {
 				if (v.action) {
 					el.onclick = function (e) {
 						e.preventDefault();
-						isCustomMethods ? v.action(_this3) : _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), v.action, _this3).call(_this3, _this3);
+						isCustomMethods ? v.action(_this4) : _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), v.action, _this4).call(_this4, _this4);
 					};
 				}
 
@@ -17156,7 +17144,7 @@ var SimpleMDE = function (_Action) {
 			});
 			this.toolbarElements = toolbarData;
 			this.codemirror.on("cursorActivity", function () {
-				var stat = _base2.default.getState(_this3.codemirror);
+				var stat = _base2.default.getState(_this4.codemirror);
 				for (var key in toolbarData) {
 					var el = toolbarData[key];
 					if (stat[key]) {
@@ -17176,7 +17164,7 @@ var SimpleMDE = function (_Action) {
 	}, {
 		key: 'createStatusbar',
 		value: function createStatusbar() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.status;
 
@@ -17254,7 +17242,7 @@ var SimpleMDE = function (_Action) {
 				if (typeof v.defaultValue === "function") v.defaultValue(el);
 				if (typeof v.onUpdate === "function") {
 					// Create a closure around the span of the current action, then execute the onUpdate handler
-					_this4.codemirror.on("update", function () {
+					_this5.codemirror.on("update", function () {
 						return v.onUpdate(el);
 					});
 				}
@@ -17289,8 +17277,7 @@ var SimpleMDE = function (_Action) {
    */
 
 		value: function isPreviewActive() {
-			var cm = this.codemirror;
-			var wrapper = cm.getWrapperElement();
+			var wrapper = this.codemirror.getWrapperElement();
 			var preview = wrapper.lastChild;
 
 			return (/editor-preview-active/.test(preview.className)
@@ -17299,8 +17286,7 @@ var SimpleMDE = function (_Action) {
 	}, {
 		key: 'isSideBySideActive',
 		value: function isSideBySideActive() {
-			var cm = this.codemirror;
-			var wrapper = cm.getWrapperElement();
+			var wrapper = this.codemirror.getWrapperElement();
 			var preview = wrapper.nextSibling;
 
 			return (/editor-preview-active-side/.test(preview.className)
@@ -17309,22 +17295,17 @@ var SimpleMDE = function (_Action) {
 	}, {
 		key: 'isFullscreenActive',
 		value: function isFullscreenActive() {
-			var cm = this.codemirror;
-
-			return cm.getOption("fullScreen");
+			return this.codemirror.getOption("fullScreen");
 		}
 	}, {
 		key: 'getState',
 		value: function getState() {
-			var cm = this.codemirror;
-
-			return _base2.default.getState(cm);
+			return _base2.default.getState(this.codemirror);
 		}
 	}, {
 		key: 'toTextArea',
 		value: function toTextArea() {
-			var cm = this.codemirror;
-			var wrapper = cm.getWrapperElement();
+			var wrapper = this.codemirror.getWrapperElement();
 
 			if (wrapper.parentNode) {
 				if (this.gui.toolbar) {
@@ -17338,7 +17319,7 @@ var SimpleMDE = function (_Action) {
 				}
 			}
 
-			cm.toTextArea();
+			this.codemirror.toTextArea();
 
 			if (this.autosaveTimeoutId) {
 				clearTimeout(this.autosaveTimeoutId);
