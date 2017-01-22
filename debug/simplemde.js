@@ -16073,13 +16073,15 @@ var Action = function () {
 exports.default = Action;
 
 },{"./base":21}],21:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16093,50 +16095,54 @@ exports.default = new (function () {
 	}
 
 	_createClass(Base, [{
-		key: "getState",
+		key: 'getState',
 		value: function getState(cm) {
 			var pos = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : cm.getCursor("start");
 
 			var stat = cm.getTokenAt(pos);
 			if (!stat.type) return {};
-			var types = stat.type.split(" ");
-
-			var ret = {},
-			    data = void 0,
-			    text = void 0;
-			for (var i = 0; i < types.length; i++) {
-				data = types[i];
-				if (data === "strong") {
-					ret.bold = true;
-				} else if (data === "variable-2") {
-					text = cm.getLine(pos.line);
-					if (/^\s*\d+\.\s/.test(text)) {
-						ret["ordered-list"] = true;
-					} else {
-						ret["unordered-list"] = true;
-					}
-				} else if (data === "atom") {
-					ret.quote = true;
-				} else if (data === "em") {
-					ret.italic = true;
-				} else if (data === "quote") {
-					ret.quote = true;
-				} else if (data === "strikethrough") {
-					ret.strikethrough = true;
-				} else if (data === "comment") {
-					ret.code = true;
-				} else if (data === "link") {
-					ret.link = true;
-				} else if (data === "tag") {
-					ret.image = true;
-				} else if (data.match(/^header(\-[1-6])?$/)) {
-					ret[data.replace("header", "heading")] = true;
+			var typeMap = {
+				'strong': function strong() {
+					return { bold: true };
+				},
+				'variable-2': function variable2() {
+					return _defineProperty({}, /^\s*\d+\.\s/.test(cm.getLine(pos.line)) ? 'ordered-list' : 'unordered-list', true);
+				},
+				'atom': function atom() {
+					return { quote: true };
+				},
+				'em': function em() {
+					return { italic: true };
+				},
+				'quote': function quote() {
+					return { quote: true };
+				},
+				'strikethrough': function strikethrough() {
+					return { strikethrough: true };
+				},
+				'comment': function comment() {
+					return { code: true };
+				},
+				'link': function link() {
+					return { link: true };
+				},
+				'tag': function tag() {
+					return { image: true };
+				},
+				'_other': function _other(v) {
+					return v.match(/^header(\-[1-6])?$/) ? _defineProperty({}, v.replace("header", "heading"), true) : {};
 				}
-			}
-			return ret;
+			};
+			var objectResult = stat.type.split(" ").map(function (v) {
+				return typeMap[v] ? typeMap[v]() : typeMap['_other'](v);
+			}).reduce(function (pv, cv) {
+				return Object.assign(pv, cv);
+			}, {});
+
+			return objectResult;
 		}
 	}, {
-		key: "toggleBlock",
+		key: 'toggleBlock',
 		value: function toggleBlock(editor, type, start_chars, end_chars) {
 			if (/editor-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className)) return;
 
@@ -16205,7 +16211,7 @@ exports.default = new (function () {
 			cm.focus();
 		}
 	}, {
-		key: "replaceSelection",
+		key: 'replaceSelection',
 		value: function replaceSelection(cm, active, startEnd, url) {
 			if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className)) return;
 
@@ -16238,7 +16244,7 @@ exports.default = new (function () {
 			cm.focus();
 		}
 	}, {
-		key: "toggleHeading",
+		key: 'toggleHeading',
 		value: function toggleHeading(cm, direction, size) {
 			if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className)) return;
 
@@ -16307,7 +16313,7 @@ exports.default = new (function () {
 			cm.focus();
 		}
 	}, {
-		key: "toggleLine",
+		key: 'toggleLine',
 		value: function toggleLine(cm, name) {
 			if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className)) return;
 
@@ -16344,7 +16350,7 @@ exports.default = new (function () {
 			cm.focus();
 		}
 	}, {
-		key: "cleanBlock",
+		key: 'cleanBlock',
 		value: function cleanBlock(cm) {
 			if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className)) return;
 
