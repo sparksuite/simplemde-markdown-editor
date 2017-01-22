@@ -53,12 +53,9 @@ const createSep = () => {
 
 const createTootlip = (title, action, shortcuts) => {
 	if(!action) return title
-	const actionName = bindings.find(action)
-	if(actionName && shortcuts[actionName]) {
-		title += ` ( ${utils.fixShortcut(shortcuts[actionName])} )`
-	}
+	if(!shortcuts[bindings.find(action)]) return title
 
-	return title;
+	return `${title} ( ${utils.fixShortcut(shortcuts[actionName])} )`
 }
 
 /**

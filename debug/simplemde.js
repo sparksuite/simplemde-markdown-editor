@@ -16761,12 +16761,9 @@ var createSep = function createSep() {
 
 var createTootlip = function createTootlip(title, action, shortcuts) {
 	if (!action) return title;
-	var actionName = _metadata.bindings.find(action);
-	if (actionName && shortcuts[actionName]) {
-		title += ' ( ' + _utils2.default.fixShortcut(shortcuts[actionName]) + ' )';
-	}
+	if (!shortcuts[_metadata.bindings.find(action)]) return title;
 
-	return title;
+	return title + ' ( ' + _utils2.default.fixShortcut(shortcuts[actionName]) + ' )';
 };
 
 /**
