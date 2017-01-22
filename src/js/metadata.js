@@ -4,28 +4,28 @@
 import Action from './action'
 
 export const bindings = {
-	"toggleBold": Action.toggleBold,
-	"toggleItalic": Action.toggleItalic,
-	"drawLink": Action.drawLink,
-	"toggleHeadingSmaller": Action.toggleHeadingSmaller,
-	"toggleHeadingBigger": Action.toggleHeadingBigger,
-	"drawImage": Action.drawImage,
-	"toggleBlockquote": Action.toggleBlockquote,
-	"toggleOrderedList": Action.toggleOrderedList,
-	"toggleUnorderedList": Action.toggleUnorderedList,
-	"toggleCodeBlock": Action.toggleCodeBlock,
-	"togglePreview": Action.togglePreview,
-	"toggleStrikethrough": Action.toggleStrikethrough,
-	"toggleHeading1": Action.toggleHeading1,
-	"toggleHeading2": Action.toggleHeading2,
-	"toggleHeading3": Action.toggleHeading3,
-	"cleanBlock": Action.cleanBlock,
-	"drawTable": Action.drawTable,
-	"drawHorizontalRule": Action.drawHorizontalRule,
-	"undo": Action.undo,
-	"redo": Action.redo,
-	"toggleSideBySide": Action.toggleSideBySide,
-	"toggleFullScreen": Action.toggleFullScreen
+	"toggleBold": 'toggleBold',
+	"toggleItalic": 'toggleItalic',
+	"drawLink": 'drawLink',
+	"toggleHeadingSmaller": 'toggleHeadingSmaller',
+	"toggleHeadingBigger": 'toggleHeadingBigger',
+	"drawImage": 'drawImage',
+	"toggleBlockquote": 'toggleBlockquote',
+	"toggleOrderedList": 'toggleOrderedList',
+	"toggleUnorderedList": 'toggleUnorderedList',
+	"toggleCodeBlock": 'toggleCodeBlock',
+	"togglePreview": 'togglePreview',
+	"toggleStrikethrough": 'toggleStrikethrough',
+	"toggleHeading1": 'toggleHeading1',
+	"toggleHeading2": 'toggleHeading2',
+	"toggleHeading3": 'toggleHeading3',
+	"cleanBlock": 'cleanBlock',
+	"drawTable": 'drawTable',
+	"drawHorizontalRule": 'drawHorizontalRule',
+	"undo": 'undo',
+	"redo": 'redo',
+	"toggleSideBySide": 'toggleSideBySide',
+	"toggleFullScreen": 'toggleFullScreen'
 };
 
 export const shortcuts = {
@@ -48,58 +48,58 @@ export const shortcuts = {
 export const toolbarBuiltInButtons = {
 	"bold": {
 		name: "bold",
-		action: Action.toggleBold,
+		action: 'toggleBold',
 		className: "fa fa-bold",
 		title: "Bold",
 		default: true
 	},
 	"italic": {
 		name: "italic",
-		action: Action.toggleItalic,
+		action: 'toggleItalic',
 		className: "fa fa-italic",
 		title: "Italic",
 		default: true
 	},
 	"strikethrough": {
 		name: "strikethrough",
-		action: Action.toggleStrikethrough,
+		action: 'toggleStrikethrough',
 		className: "fa fa-strikethrough",
 		title: "Strikethrough"
 	},
 	"heading": {
 		name: "heading",
-		action: Action.toggleHeadingSmaller,
+		action: 'toggleHeadingSmaller',
 		className: "fa fa-header",
 		title: "Heading",
 		default: true
 	},
 	"heading-smaller": {
 		name: "heading-smaller",
-		action: Action.toggleHeadingSmaller,
+		action: 'toggleHeadingSmaller',
 		className: "fa fa-header fa-header-x fa-header-smaller",
 		title: "Smaller Heading"
 	},
 	"heading-bigger": {
 		name: "heading-bigger",
-		action: Action.toggleHeadingBigger,
+		action: 'toggleHeadingBigger',
 		className: "fa fa-header fa-header-x fa-header-bigger",
 		title: "Bigger Heading"
 	},
 	"heading-1": {
 		name: "heading-1",
-		action: Action.toggleHeading1,
+		action: 'toggleHeading1',
 		className: "fa fa-header fa-header-x fa-header-1",
 		title: "Big Heading"
 	},
 	"heading-2": {
 		name: "heading-2",
-		action: Action.toggleHeading2,
+		action: 'toggleHeading2',
 		className: "fa fa-header fa-header-x fa-header-2",
 		title: "Medium Heading"
 	},
 	"heading-3": {
 		name: "heading-3",
-		action: Action.toggleHeading3,
+		action: 'toggleHeading3',
 		className: "fa fa-header fa-header-x fa-header-3",
 		title: "Small Heading"
 	},
@@ -108,34 +108,34 @@ export const toolbarBuiltInButtons = {
 	},
 	"code": {
 		name: "code",
-		action: Action.toggleCodeBlock,
+		action: 'toggleCodeBlock',
 		className: "fa fa-code",
 		title: "Code"
 	},
 	"quote": {
 		name: "quote",
-		action: Action.toggleBlockquote,
+		action: 'toggleBlockquote',
 		className: "fa fa-quote-left",
 		title: "Quote",
 		default: true
 	},
 	"unordered-list": {
 		name: "unordered-list",
-		action: Action.toggleUnorderedList,
+		action: 'toggleUnorderedList',
 		className: "fa fa-list-ul",
 		title: "Generic List",
 		default: true
 	},
 	"ordered-list": {
 		name: "ordered-list",
-		action: Action.toggleOrderedList,
+		action: 'toggleOrderedList',
 		className: "fa fa-list-ol",
 		title: "Numbered List",
 		default: true
 	},
 	"clean-block": {
 		name: "clean-block",
-		action: Action.cleanBlock,
+		action: 'cleanBlock',
 		className: "fa fa-eraser fa-clean-block",
 		title: "Clean block"
 	},
@@ -144,27 +144,27 @@ export const toolbarBuiltInButtons = {
 	},
 	"link": {
 		name: "link",
-		action: Action.drawLink,
+		action: 'drawLink',
 		className: "fa fa-link",
 		title: "Create Link",
 		default: true
 	},
 	"image": {
 		name: "image",
-		action: Action.drawImage,
+		action: 'drawImage',
 		className: "fa fa-picture-o",
 		title: "Insert Image",
 		default: true
 	},
 	"table": {
 		name: "table",
-		action: Action.drawTable,
+		action: 'drawTable',
 		className: "fa fa-table",
 		title: "Insert Table"
 	},
 	"horizontal-rule": {
 		name: "horizontal-rule",
-		action: Action.drawHorizontalRule,
+		action: 'drawHorizontalRule',
 		className: "fa fa-minus",
 		title: "Insert Horizontal Line"
 	},
@@ -173,21 +173,21 @@ export const toolbarBuiltInButtons = {
 	},
 	"preview": {
 		name: "preview",
-		action: Action.togglePreview,
+		action: 'togglePreview',
 		className: "fa fa-eye no-disable",
 		title: "Toggle Preview",
 		default: true
 	},
 	"side-by-side": {
 		name: "side-by-side",
-		action: Action.toggleSideBySide,
+		action: 'toggleSideBySide',
 		className: "fa fa-columns no-disable no-mobile",
 		title: "Toggle Side by Side",
 		default: true
 	},
 	"fullscreen": {
 		name: "fullscreen",
-		action: Action.toggleFullScreen,
+		action: 'toggleFullScreen',
 		className: "fa fa-arrows-alt no-disable no-mobile",
 		title: "Toggle Fullscreen",
 		default: true
@@ -207,13 +207,13 @@ export const toolbarBuiltInButtons = {
 	},
 	"undo": {
 		name: "undo",
-		action: Action.undo,
+		action: 'undo',
 		className: "fa fa-undo no-disable",
 		title: "Undo"
 	},
 	"redo": {
 		name: "redo",
-		action: Action.redo,
+		action: 'redo',
 		className: "fa fa-repeat no-disable",
 		title: "Redo"
 	}

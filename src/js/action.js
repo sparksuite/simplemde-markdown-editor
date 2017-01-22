@@ -11,21 +11,21 @@ export default class Action {
 	/**
 	 * Action for toggling bold.
 	 */
-	static toggleBold (editor){
+	toggleBold (editor){
 		base.toggleBlock(editor, "bold", editor.options.blockStyles.bold);
 	}
 
 	/**
 	 * Action for toggling italic.
 	 */
-	static toggleItalic (editor){
+	toggleItalic (editor){
 		base.toggleBlock(editor, "italic", editor.options.blockStyles.italic);
 	}
 
 	/**
 	 * Action for drawing a link.
 	 */
-	static drawLink (editor){
+	drawLink (editor){
 		const cm = editor.codemirror;
 		const stat = base.getState(cm);
 		const options = editor.options;
@@ -40,7 +40,7 @@ export default class Action {
 	/**
 	 * Action for toggling heading size: normal -> h1 -> h2 -> h3 -> h4 -> h5 -> h6 -> normal
 	 */
-	static toggleHeadingSmaller (editor){
+	toggleHeadingSmaller (editor){
 		const cm = editor.codemirror;
 		base.toggleHeading(cm, "smaller");
 	}
@@ -48,7 +48,7 @@ export default class Action {
 	/**
 	 * Action for toggling heading size: normal -> h6 -> h5 -> h4 -> h3 -> h2 -> h1 -> normal
 	 */
-	static toggleHeadingBigger (editor){
+	toggleHeadingBigger (editor){
 		const cm = editor.codemirror;
 		base.toggleHeading(cm, "bigger");
 	}
@@ -56,7 +56,7 @@ export default class Action {
 	/**
 	 * Action for drawing an img.
 	 */
-	static drawImage (editor){
+	drawImage (editor){
 		const cm = editor.codemirror;
 		const stat = base.getState(cm);
 		const options = editor.options;
@@ -71,7 +71,7 @@ export default class Action {
 	/**
 	 * Action for toggling blockquote.
 	 */
-	static toggleBlockquote (editor){
+	toggleBlockquote (editor){
 		const cm = editor.codemirror;
 		base.toggleLine(cm, "quote");
 	}
@@ -79,7 +79,7 @@ export default class Action {
 	/**
 	 * Action for toggling ol.
 	 */
-	static toggleOrderedList (editor){
+	toggleOrderedList (editor){
 		const cm = editor.codemirror;
 		base.toggleLine(cm, "ordered-list");
 	}
@@ -87,7 +87,7 @@ export default class Action {
 	/**
 	 * Action for toggling ul.
 	 */
-	static toggleUnorderedList (editor){
+	toggleUnorderedList (editor){
 		const cm = editor.codemirror;
 		base.toggleLine(cm, "unordered-list");
 	}
@@ -95,7 +95,7 @@ export default class Action {
 	/**
 	 * Action for toggling code block.
 	 */
-	static toggleCodeBlock (editor){
+	toggleCodeBlock (editor){
 		let fenceCharsToInsert = editor.options.blockStyles.code;
 
 		const fencing_line = line =>{
@@ -379,7 +379,7 @@ export default class Action {
 	/**
 	 * Toggle full screen of the editor.
 	 */
-	static toggleFullScreen (editor){
+	toggleFullScreen (editor){
 		// Set fullscreen
 		let cm = editor.codemirror;
 		cm.setOption("fullScreen", !cm.getOption("fullScreen"));
@@ -424,7 +424,7 @@ export default class Action {
 	/**
 	 * Toggle side by side preview
 	 */
-	static toggleSideBySide (editor){
+	toggleSideBySide (editor){
 		let cm = editor.codemirror;
 		let wrapper = cm.getWrapperElement();
 		let preview = wrapper.nextSibling;
@@ -484,7 +484,7 @@ export default class Action {
 	/**
 	 * Preview action.
 	 */
-	static togglePreview (editor){
+	togglePreview (editor){
 		const cm = editor.codemirror;
 		const wrapper = cm.getWrapperElement();
 		let toolbar_div = wrapper.previousSibling;
@@ -526,24 +526,24 @@ export default class Action {
 	/**
 	 * Action for toggling strikethrough.
 	 */
-	static toggleStrikethrough (editor){
+	toggleStrikethrough (editor){
 		base.toggleBlock(editor, "strikethrough", "~~");
 	}
 
 	/**
 	 * Action for toggling heading size 1, 2, 3
 	 */
-	static toggleHeading1 (editor){
+	toggleHeading1 (editor){
 		const cm = editor.codemirror;
 		base.toggleHeading(cm, undefined, 1);
 	}
 
-	static toggleHeading2 (editor){
+	toggleHeading2 (editor){
 		const cm = editor.codemirror;
 		base.toggleHeading(cm, undefined, 2);
 	}
 
-	static toggleHeading3 (editor){
+	toggleHeading3 (editor){
 		const cm = editor.codemirror;
 		base.toggleHeading(cm, undefined, 3);
 	}
@@ -551,7 +551,7 @@ export default class Action {
 	/**
 	 * Action for clean block (remove headline, list, blockquote code, markers)
 	 */
-	static cleanBlock (editor){
+	cleanBlock (editor){
 		const cm = editor.codemirror;
 		base.cleanBlock(cm);
 	}
@@ -559,7 +559,7 @@ export default class Action {
 	/**
 	 * Action for drawing a table.
 	 */
-	static drawTable (editor){
+	drawTable (editor){
 		const cm = editor.codemirror;
 		const stat = base.getState(cm);
 		const options = editor.options;
@@ -569,7 +569,7 @@ export default class Action {
 	/**
 	 * Action for drawing a horizontal rule.
 	 */
-	static drawHorizontalRule (editor){
+	drawHorizontalRule (editor){
 		const cm = editor.codemirror;
 		const stat = base.getState(cm);
 		const options = editor.options;
@@ -579,7 +579,7 @@ export default class Action {
 	/**
 	 * Undo action.
 	 */
-	static undo (editor){
+	undo (editor){
 		const cm = editor.codemirror;
 		cm.undo();
 		cm.focus();
@@ -588,7 +588,7 @@ export default class Action {
 	/**
 	 * Redo action.
 	 */
-	static redo (editor){
+	redo (editor){
 		const cm = editor.codemirror;
 		cm.redo();
 		cm.focus();

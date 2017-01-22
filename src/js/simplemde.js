@@ -179,18 +179,18 @@ class SimpleMDE extends Action {
 		for(const key in options.shortcuts) {
 			// null stands for "do not bind this command"
 			if(options.shortcuts[key] !== null && bindings[key] !== null) {
-				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => bindings[key](self);
+				keyMaps[utils.fixShortcut(options.shortcuts[key])] = () => super[bindings[key]](self);
 			}
 		}
 
 		keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
 		keyMaps["Tab"] = "tabAndIndentMarkdownList";
 		keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
-		keyMaps["Esc"] = cm => cm.getOption("fullScreen") && Action.toggleFullScreen(self);
+		keyMaps["Esc"] = cm => cm.getOption("fullScreen") && super.toggleFullScreen(self);
 
 		document.addEventListener("keydown", (e = window.event) => {
 			if(e.keyCode == 27) {
-				if(self.codemirror.getOption("fullScreen")) Action.toggleFullScreen(self);
+				if(self.codemirror.getOption("fullScreen")) super.toggleFullScreen(self);
 			}
 		}, false);
 
@@ -377,43 +377,40 @@ class SimpleMDE extends Action {
 			return createIcon(v, this.options.toolbarTips, this.options.shortcuts)
 		}
 
-		this.toolbar.every((v, i) => {
-			if(nextLoop(v, i)) return false;
+		this.toolbar.forEach((v, i) => {
+			if(nextLoop(v, i)) return;
 
 			// Create the icon and append to the toolbar
-			let el = createElement(v)
+			const el = createElement(v)
+			const isCustomMethods = typeof v.action === "function"
 
 			// bind events, special for info
 			if(v.action) {
-				if(typeof v.action === "function") {
-					el.onclick = e => {
-						e.preventDefault();
-						v.action(this);
-					};
-				}
-				if(typeof v.action === "string") {
-					el.href = v.action;
-					el.target = "_blank";
-				}
+				el.onclick = e => {
+					e.preventDefault();
+					isCustomMethods ? v.action(this) : super[v.action](this)
+				};
 			}
+			// Link can be converted to a function
+			// todo
+			// if(typeof v.action === "string") {
+			// 	el.href = v.action;
+			// 	el.target = "_blank";
+			// }
 
 			toolbarData[v.name || v] = el;
 			bar.appendChild(el);
-			return true;
 		})
 		this.toolbarElements = toolbarData;
 		this.codemirror.on("cursorActivity", () => {
-			let stat = base.getState(this.codemirror);
-
+			const stat = base.getState(this.codemirror);
 			for(const key in toolbarData) {
-				(function(key) {
-					let el = toolbarData[key];
-					if(stat[key]) {
-						el.className += " active";
-					} else if(key != "fullscreen" && key != "side-by-side") {
-						el.className = el.className.replace(/\s*active\s*/g, "");
-					}
-				})(key);
+				let el = toolbarData[key];
+				if(stat[key]) {
+					el.className += " active";
+				} else if(key != "fullscreen" && key != "side-by-side") {
+					el.className = el.className.replace(/\s*active\s*/g, "");
+				}
 			}
 		});
 
@@ -513,73 +510,7 @@ class SimpleMDE extends Action {
 	/**
 	 * Bind instance methods for exports.
 	 */
-	toggleBold() {
-		Action.toggleBold(this);
-	};
-	toggleItalic() {
-		Action.toggleItalic(this);
-	};
-	toggleStrikethrough() {
-		Action.toggleStrikethrough(this);
-	};
-	toggleBlockquote() {
-		Action.toggleBlockquote(this);
-	};
-	toggleHeadingSmaller() {
-		Action.toggleHeadingSmaller(this);
-	};
-	toggleHeadingBigger() {
-		Action.toggleHeadingBigger(this);
-	};
-	toggleHeading1() {
-		Action.toggleHeading1(this);
-	};
-	toggleHeading2() {
-		Action.toggleHeading2(this);
-	};
-	toggleHeading3() {
-		Action.toggleHeading3(this);
-	};
-	toggleCodeBlock() {
-		Action.toggleCodeBlock(this);
-	};
-	toggleUnorderedList() {
-		Action.toggleUnorderedList(this);
-	};
-	toggleOrderedList() {
-		Action.toggleOrderedList(this);
-	};
-	cleanBlock() {
-		Action.cleanBlock(this);
-	};
-	drawLink() {
-		Action.drawLink(this);
-	};
-	drawImage() {
-		Action.drawImage(this);
-	};
-	drawTable() {
-		Action.drawTable(this);
-	};
-	drawHorizontalRule() {
-		Action.drawHorizontalRule(this);
-	};
-	undo() {
-		Action.undo(this);
-	};
-	redo() {
-		Action.redo(this);
-	};
-	togglePreview() {
-		Action.togglePreview(this);
-	};
 
-	toggleSideBySide() {
-		Action.toggleSideBySide(this);
-	};
-	toggleFullScreen() {
-		Action.toggleFullScreen(this);
-	};
 
 	isPreviewActive() {
 		const cm = this.codemirror;

@@ -15427,7 +15427,7 @@ var Action = function () {
   */
 
 
-	_createClass(Action, null, [{
+	_createClass(Action, [{
 		key: 'toggleBold',
 		value: function toggleBold(editor) {
 			_base2.default.toggleBlock(editor, "bold", editor.options.blockStyles.bold);
@@ -16435,42 +16435,42 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })();
 
 },{"./simplemde":25}],24:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.promptTexts = exports.insertTexts = exports.blockStyles = exports.toolbarBuiltInButtons = exports.shortcuts = exports.bindings = undefined;
 
-var _action = require("./action");
+var _action = require('./action');
 
 var _action2 = _interopRequireDefault(_action);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var bindings = exports.bindings = {
-	"toggleBold": _action2.default.toggleBold,
-	"toggleItalic": _action2.default.toggleItalic,
-	"drawLink": _action2.default.drawLink,
-	"toggleHeadingSmaller": _action2.default.toggleHeadingSmaller,
-	"toggleHeadingBigger": _action2.default.toggleHeadingBigger,
-	"drawImage": _action2.default.drawImage,
-	"toggleBlockquote": _action2.default.toggleBlockquote,
-	"toggleOrderedList": _action2.default.toggleOrderedList,
-	"toggleUnorderedList": _action2.default.toggleUnorderedList,
-	"toggleCodeBlock": _action2.default.toggleCodeBlock,
-	"togglePreview": _action2.default.togglePreview,
-	"toggleStrikethrough": _action2.default.toggleStrikethrough,
-	"toggleHeading1": _action2.default.toggleHeading1,
-	"toggleHeading2": _action2.default.toggleHeading2,
-	"toggleHeading3": _action2.default.toggleHeading3,
-	"cleanBlock": _action2.default.cleanBlock,
-	"drawTable": _action2.default.drawTable,
-	"drawHorizontalRule": _action2.default.drawHorizontalRule,
-	"undo": _action2.default.undo,
-	"redo": _action2.default.redo,
-	"toggleSideBySide": _action2.default.toggleSideBySide,
-	"toggleFullScreen": _action2.default.toggleFullScreen
+	"toggleBold": 'toggleBold',
+	"toggleItalic": 'toggleItalic',
+	"drawLink": 'drawLink',
+	"toggleHeadingSmaller": 'toggleHeadingSmaller',
+	"toggleHeadingBigger": 'toggleHeadingBigger',
+	"drawImage": 'drawImage',
+	"toggleBlockquote": 'toggleBlockquote',
+	"toggleOrderedList": 'toggleOrderedList',
+	"toggleUnorderedList": 'toggleUnorderedList',
+	"toggleCodeBlock": 'toggleCodeBlock',
+	"togglePreview": 'togglePreview',
+	"toggleStrikethrough": 'toggleStrikethrough',
+	"toggleHeading1": 'toggleHeading1',
+	"toggleHeading2": 'toggleHeading2',
+	"toggleHeading3": 'toggleHeading3',
+	"cleanBlock": 'cleanBlock',
+	"drawTable": 'drawTable',
+	"drawHorizontalRule": 'drawHorizontalRule',
+	"undo": 'undo',
+	"redo": 'redo',
+	"toggleSideBySide": 'toggleSideBySide',
+	"toggleFullScreen": 'toggleFullScreen'
 }; /**
     * @description :: metadata, immutable
     */
@@ -16494,58 +16494,58 @@ var shortcuts = exports.shortcuts = {
 var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	"bold": {
 		name: "bold",
-		action: _action2.default.toggleBold,
+		action: 'toggleBold',
 		className: "fa fa-bold",
 		title: "Bold",
 		default: true
 	},
 	"italic": {
 		name: "italic",
-		action: _action2.default.toggleItalic,
+		action: 'toggleItalic',
 		className: "fa fa-italic",
 		title: "Italic",
 		default: true
 	},
 	"strikethrough": {
 		name: "strikethrough",
-		action: _action2.default.toggleStrikethrough,
+		action: 'toggleStrikethrough',
 		className: "fa fa-strikethrough",
 		title: "Strikethrough"
 	},
 	"heading": {
 		name: "heading",
-		action: _action2.default.toggleHeadingSmaller,
+		action: 'toggleHeadingSmaller',
 		className: "fa fa-header",
 		title: "Heading",
 		default: true
 	},
 	"heading-smaller": {
 		name: "heading-smaller",
-		action: _action2.default.toggleHeadingSmaller,
+		action: 'toggleHeadingSmaller',
 		className: "fa fa-header fa-header-x fa-header-smaller",
 		title: "Smaller Heading"
 	},
 	"heading-bigger": {
 		name: "heading-bigger",
-		action: _action2.default.toggleHeadingBigger,
+		action: 'toggleHeadingBigger',
 		className: "fa fa-header fa-header-x fa-header-bigger",
 		title: "Bigger Heading"
 	},
 	"heading-1": {
 		name: "heading-1",
-		action: _action2.default.toggleHeading1,
+		action: 'toggleHeading1',
 		className: "fa fa-header fa-header-x fa-header-1",
 		title: "Big Heading"
 	},
 	"heading-2": {
 		name: "heading-2",
-		action: _action2.default.toggleHeading2,
+		action: 'toggleHeading2',
 		className: "fa fa-header fa-header-x fa-header-2",
 		title: "Medium Heading"
 	},
 	"heading-3": {
 		name: "heading-3",
-		action: _action2.default.toggleHeading3,
+		action: 'toggleHeading3',
 		className: "fa fa-header fa-header-x fa-header-3",
 		title: "Small Heading"
 	},
@@ -16554,34 +16554,34 @@ var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	},
 	"code": {
 		name: "code",
-		action: _action2.default.toggleCodeBlock,
+		action: 'toggleCodeBlock',
 		className: "fa fa-code",
 		title: "Code"
 	},
 	"quote": {
 		name: "quote",
-		action: _action2.default.toggleBlockquote,
+		action: 'toggleBlockquote',
 		className: "fa fa-quote-left",
 		title: "Quote",
 		default: true
 	},
 	"unordered-list": {
 		name: "unordered-list",
-		action: _action2.default.toggleUnorderedList,
+		action: 'toggleUnorderedList',
 		className: "fa fa-list-ul",
 		title: "Generic List",
 		default: true
 	},
 	"ordered-list": {
 		name: "ordered-list",
-		action: _action2.default.toggleOrderedList,
+		action: 'toggleOrderedList',
 		className: "fa fa-list-ol",
 		title: "Numbered List",
 		default: true
 	},
 	"clean-block": {
 		name: "clean-block",
-		action: _action2.default.cleanBlock,
+		action: 'cleanBlock',
 		className: "fa fa-eraser fa-clean-block",
 		title: "Clean block"
 	},
@@ -16590,27 +16590,27 @@ var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	},
 	"link": {
 		name: "link",
-		action: _action2.default.drawLink,
+		action: 'drawLink',
 		className: "fa fa-link",
 		title: "Create Link",
 		default: true
 	},
 	"image": {
 		name: "image",
-		action: _action2.default.drawImage,
+		action: 'drawImage',
 		className: "fa fa-picture-o",
 		title: "Insert Image",
 		default: true
 	},
 	"table": {
 		name: "table",
-		action: _action2.default.drawTable,
+		action: 'drawTable',
 		className: "fa fa-table",
 		title: "Insert Table"
 	},
 	"horizontal-rule": {
 		name: "horizontal-rule",
-		action: _action2.default.drawHorizontalRule,
+		action: 'drawHorizontalRule',
 		className: "fa fa-minus",
 		title: "Insert Horizontal Line"
 	},
@@ -16619,21 +16619,21 @@ var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	},
 	"preview": {
 		name: "preview",
-		action: _action2.default.togglePreview,
+		action: 'togglePreview',
 		className: "fa fa-eye no-disable",
 		title: "Toggle Preview",
 		default: true
 	},
 	"side-by-side": {
 		name: "side-by-side",
-		action: _action2.default.toggleSideBySide,
+		action: 'toggleSideBySide',
 		className: "fa fa-columns no-disable no-mobile",
 		title: "Toggle Side by Side",
 		default: true
 	},
 	"fullscreen": {
 		name: "fullscreen",
-		action: _action2.default.toggleFullScreen,
+		action: 'toggleFullScreen',
 		className: "fa fa-arrows-alt no-disable no-mobile",
 		title: "Toggle Fullscreen",
 		default: true
@@ -16653,13 +16653,13 @@ var toolbarBuiltInButtons = exports.toolbarBuiltInButtons = {
 	},
 	"undo": {
 		name: "undo",
-		action: _action2.default.undo,
+		action: 'undo',
 		className: "fa fa-undo no-disable",
 		title: "Undo"
 	},
 	"redo": {
 		name: "redo",
-		action: _action2.default.redo,
+		action: 'redo',
 		className: "fa fa-repeat no-disable",
 		title: "Redo"
 	}
@@ -16693,6 +16693,8 @@ Object.defineProperty(exports, "__esModule", {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _codemirror = require('codemirror');
 
@@ -16931,7 +16933,7 @@ var SimpleMDE = function (_Action) {
 				// null stands for "do not bind this command"
 				if (options.shortcuts[key] !== null && _metadata.bindings[key] !== null) {
 					keyMaps[_utils2.default.fixShortcut(options.shortcuts[key])] = function () {
-						return _metadata.bindings[key](self);
+						return _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), _metadata.bindings[key], _this2).call(_this2, self);
 					};
 				}
 			};
@@ -16944,14 +16946,14 @@ var SimpleMDE = function (_Action) {
 			keyMaps["Tab"] = "tabAndIndentMarkdownList";
 			keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
 			keyMaps["Esc"] = function (cm) {
-				return cm.getOption("fullScreen") && _action2.default.toggleFullScreen(self);
+				return cm.getOption("fullScreen") && _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, self);
 			};
 
 			document.addEventListener("keydown", function () {
 				var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.event;
 
 				if (e.keyCode == 27) {
-					if (self.codemirror.getOption("fullScreen")) _action2.default.toggleFullScreen(self);
+					if (self.codemirror.getOption("fullScreen")) _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), 'toggleFullScreen', _this2).call(_this2, self);
 				}
 			}, false);
 
@@ -17152,43 +17154,41 @@ var SimpleMDE = function (_Action) {
 				return createIcon(v, _this3.options.toolbarTips, _this3.options.shortcuts);
 			};
 
-			this.toolbar.every(function (v, i) {
-				if (nextLoop(v, i)) return false;
+			this.toolbar.forEach(function (v, i) {
+				if (nextLoop(v, i)) return;
 
 				// Create the icon and append to the toolbar
 				var el = createElement(v);
+				var isCustomMethods = typeof v.action === "function";
 
 				// bind events, special for info
 				if (v.action) {
-					if (typeof v.action === "function") {
-						el.onclick = function (e) {
-							e.preventDefault();
-							v.action(_this3);
-						};
-					}
-					if (typeof v.action === "string") {
-						el.href = v.action;
-						el.target = "_blank";
-					}
+					el.onclick = function (e) {
+						e.preventDefault();
+						isCustomMethods ? v.action(_this3) : _get(SimpleMDE.prototype.__proto__ || Object.getPrototypeOf(SimpleMDE.prototype), v.action, _this3).call(_this3, _this3);
+					};
 				}
+				// Link can be converted to a function
+				// todo
+				// if(typeof v.action === "string") {
+				// 	el.href = v.action;
+				// 	el.target = "_blank";
+				// }
 
 				toolbarData[v.name || v] = el;
 				bar.appendChild(el);
-				return true;
 			});
 			this.toolbarElements = toolbarData;
 			this.codemirror.on("cursorActivity", function () {
 				var stat = _base2.default.getState(_this3.codemirror);
-
+				console.log(toolbarData, 1);
 				for (var key in toolbarData) {
-					(function (key) {
-						var el = toolbarData[key];
-						if (stat[key]) {
-							el.className += " active";
-						} else if (key != "fullscreen" && key != "side-by-side") {
-							el.className = el.className.replace(/\s*active\s*/g, "");
-						}
-					})(key);
+					var el = toolbarData[key];
+					if (stat[key]) {
+						el.className += " active";
+					} else if (key != "fullscreen" && key != "side-by-side") {
+						el.className = el.className.replace(/\s*active\s*/g, "");
+					}
 				}
 			});
 
@@ -17306,122 +17306,13 @@ var SimpleMDE = function (_Action) {
 			return this;
 		}
 	}, {
-		key: 'toggleBold',
+		key: 'isPreviewActive',
 
 
 		/**
    * Bind instance methods for exports.
    */
-		value: function toggleBold() {
-			_action2.default.toggleBold(this);
-		}
-	}, {
-		key: 'toggleItalic',
-		value: function toggleItalic() {
-			_action2.default.toggleItalic(this);
-		}
-	}, {
-		key: 'toggleStrikethrough',
-		value: function toggleStrikethrough() {
-			_action2.default.toggleStrikethrough(this);
-		}
-	}, {
-		key: 'toggleBlockquote',
-		value: function toggleBlockquote() {
-			_action2.default.toggleBlockquote(this);
-		}
-	}, {
-		key: 'toggleHeadingSmaller',
-		value: function toggleHeadingSmaller() {
-			_action2.default.toggleHeadingSmaller(this);
-		}
-	}, {
-		key: 'toggleHeadingBigger',
-		value: function toggleHeadingBigger() {
-			_action2.default.toggleHeadingBigger(this);
-		}
-	}, {
-		key: 'toggleHeading1',
-		value: function toggleHeading1() {
-			_action2.default.toggleHeading1(this);
-		}
-	}, {
-		key: 'toggleHeading2',
-		value: function toggleHeading2() {
-			_action2.default.toggleHeading2(this);
-		}
-	}, {
-		key: 'toggleHeading3',
-		value: function toggleHeading3() {
-			_action2.default.toggleHeading3(this);
-		}
-	}, {
-		key: 'toggleCodeBlock',
-		value: function toggleCodeBlock() {
-			_action2.default.toggleCodeBlock(this);
-		}
-	}, {
-		key: 'toggleUnorderedList',
-		value: function toggleUnorderedList() {
-			_action2.default.toggleUnorderedList(this);
-		}
-	}, {
-		key: 'toggleOrderedList',
-		value: function toggleOrderedList() {
-			_action2.default.toggleOrderedList(this);
-		}
-	}, {
-		key: 'cleanBlock',
-		value: function cleanBlock() {
-			_action2.default.cleanBlock(this);
-		}
-	}, {
-		key: 'drawLink',
-		value: function drawLink() {
-			_action2.default.drawLink(this);
-		}
-	}, {
-		key: 'drawImage',
-		value: function drawImage() {
-			_action2.default.drawImage(this);
-		}
-	}, {
-		key: 'drawTable',
-		value: function drawTable() {
-			_action2.default.drawTable(this);
-		}
-	}, {
-		key: 'drawHorizontalRule',
-		value: function drawHorizontalRule() {
-			_action2.default.drawHorizontalRule(this);
-		}
-	}, {
-		key: 'undo',
-		value: function undo() {
-			_action2.default.undo(this);
-		}
-	}, {
-		key: 'redo',
-		value: function redo() {
-			_action2.default.redo(this);
-		}
-	}, {
-		key: 'togglePreview',
-		value: function togglePreview() {
-			_action2.default.togglePreview(this);
-		}
-	}, {
-		key: 'toggleSideBySide',
-		value: function toggleSideBySide() {
-			_action2.default.toggleSideBySide(this);
-		}
-	}, {
-		key: 'toggleFullScreen',
-		value: function toggleFullScreen() {
-			_action2.default.toggleFullScreen(this);
-		}
-	}, {
-		key: 'isPreviewActive',
+
 		value: function isPreviewActive() {
 			var cm = this.codemirror;
 			var wrapper = cm.getWrapperElement();
