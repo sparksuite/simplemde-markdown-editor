@@ -324,6 +324,24 @@ simplemde.isSideBySideActive(); // returns boolean
 simplemde.isFullscreenActive(); // returns boolean
 simplemde.clearAutosavedValue(); // no returned value
 ```
+## jQuery validation
+To mimic the jQuery validation on the editor, you can use the following code.
+
+```js
+    editor.codemirror.on("change", function() {
+        var element = $(editor.element);
+        $(element).val(editor.value());
+        $(element).trigger('keyup');
+    });
+
+    editor.codemirror.on("focus", function() {
+        $(editor.element).trigger('focus');
+    });
+
+    editor.codemirror.on("blur", function() {
+        $(editor.element).trigger('blur');
+    });
+```
 
 ## How it works
 SimpleMDE began as an improvement of [lepture's Editor project](https://github.com/lepture/editor), but has now taken on an identity of its own. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and depends on [Font Awesome](http://fontawesome.io).
