@@ -242,6 +242,7 @@
     display: none;
     box-sizing: border-box;
     border: 1px solid #ddd;
+    word-wrap: break-word;
 }
 
 .editor-preview-active-side {
