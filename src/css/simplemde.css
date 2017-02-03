@@ -8,6 +8,7 @@
     padding: 10px;
     font: inherit;
     z-index: 1;
+    word-wrap: break-word;
 }
 
 .CodeMirror-scroll {
