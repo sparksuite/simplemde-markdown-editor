@@ -96,7 +96,7 @@ function fixShortcut(name) {
  */
 function createIcon(options, enableTooltips, shortcuts) {
 	options = options || {};
-	var el = document.createElement("a");
+	var el = document.createElement("button");
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
