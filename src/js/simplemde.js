@@ -1667,6 +1667,7 @@ SimpleMDE.prototype.createSideBySide = function() {
 		wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
 	}
 
+	if(this.options.syncPreviewSideScroll === false) return preview;
 	// Syncs scroll  editor -> preview
 	var cScroll = false;
 	var pScroll = false;
