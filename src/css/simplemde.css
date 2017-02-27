@@ -114,7 +114,9 @@
     padding: 0;
 }
 
-.editor-toolbar a {
+.editor-toolbar a,
+.editor-toolbar button {
+    background: transparent;
     display: inline-block;
     text-align: center;
     text-decoration: none!important;
@@ -122,18 +124,22 @@
     width: 30px;
     height: 30px;
     margin: 0;
+    padding: 0;
     border: 1px solid transparent;
     border-radius: 3px;
     cursor: pointer;
 }
 
 .editor-toolbar a.active,
-.editor-toolbar a:hover {
+.editor-toolbar a:hover,
+.editor-toolbar button.active,
+.editor-toolbar button:hover {
     background: #fcfcfc;
     border-color: #95a5a6;
 }
 
-.editor-toolbar a:before {
+.editor-toolbar a:before,
+.editor-toolbar button:before {
     line-height: 30px
 }
 
