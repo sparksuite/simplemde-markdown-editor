@@ -211,12 +211,14 @@ function toggleFullScreen(editor) {
 
 
 	// Update toolbar button
-	var toolbarButton = editor.toolbarElements.fullscreen;
+	if (editor.toolbarElements.fullscreen) {
+		var toolbarButton = editor.toolbarElements.fullscreen;
 
-	if(!/active/.test(toolbarButton.className)) {
-		toolbarButton.className += " active";
-	} else {
-		toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
+		if(!/active/.test(toolbarButton.className)) {
+			toolbarButton.className += " active";
+		} else {
+			toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
+		}
 	}
 
 
