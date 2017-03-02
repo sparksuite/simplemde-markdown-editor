@@ -177,6 +177,7 @@ var simplemde = new SimpleMDE({
 		}
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	styleSelectedText: false,
+	syncSideBySidePreviewScroll: false,
 	tabSize: 4,
 	toolbar: false,
 	toolbarTips: false,
