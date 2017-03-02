@@ -27,7 +27,7 @@ gulp.task("prettify-js", [], function() {
 		.pipe(prettify({js: {brace_style: "collapse", indent_char: "\t", indent_size: 1, max_preserve_newlines: 3, space_before_conditional: false}}))
 		.pipe(gulp.dest("./src/js"));
 });
- 
+
 gulp.task("prettify-css", [], function() {
 	return gulp.src("./src/css/simplemde.css")
 		.pipe(prettify({css: {indentChar: "\t", indentSize: 1}}))
@@ -65,7 +65,7 @@ gulp.task("browserify", ["lint"], function() {
 
 gulp.task("scripts", ["browserify:debug", "browserify", "lint"], function() {
 	var js_files = ["./debug/simplemde.js"];
-	
+
 	return gulp.src(js_files)
 		.pipe(concat("simplemde.min.js"))
 		.pipe(uglify())
@@ -78,9 +78,10 @@ gulp.task("styles", ["prettify-css"], function() {
 	var css_files = [
 		"./node_modules/codemirror/lib/codemirror.css",
 		"./src/css/*.css",
-		"./node_modules/codemirror-spell-checker/src/css/spell-checker.css"
+		"./node_modules/codemirror-spell-checker/src/css/spell-checker.css",
+		"./node_modules/sweetalert2/dist/sweetalert2.min.css"
 	];
-	
+
 	return gulp.src(css_files)
 		.pipe(concat("simplemde.css"))
 		.pipe(buffer())

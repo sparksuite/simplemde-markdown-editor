@@ -23,7 +23,9 @@
   "dependencies": {
     "codemirror": "*",
     "codemirror-spell-checker": "*",
-    "marked": "*"
+    "marked": "*",
+    "sweetalert2": "*",
+    "es6-promise": "*"
   },
   "devDependencies": {
     "browserify": "*",
