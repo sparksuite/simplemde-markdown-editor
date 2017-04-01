@@ -618,13 +618,29 @@ function drawLink(editor) {
 	var stat = getState(cm);
 	var options = editor.options;
 	var url = "http://";
-	if(options.promptURLs) {
-		url = prompt(options.promptTexts.link);
-		if(!url) {
-			return false;
+	if(options.drawLink) {
+		options.drawLink(__drawLink(editor));
+	} else {
+		if(options.promptURLs) {
+			url = prompt(options.promptTexts.link);
+			if(!url) {
+				return false;
+			}
 		}
+		_replaceSelection(cm, stat.link, options.insertTexts.link, url);
 	}
-	_replaceSelection(cm, stat.link, options.insertTexts.link, url);
+}
+/**
+ * Custom Action for drawing a link
+ * by ucev
+ */
+function __drawLink(editor) {
+	var cm = editor.codemirror;
+	var stat = getState(cm);
+	var options = editor.options;
+	return function(url) {
+		_replaceSelection(cm, stat.link, options.insertTexts.link, url);
+	};
 }
 
 /**
@@ -634,14 +650,30 @@ function drawImage(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
-	if(options.promptURLs) {
-		url = prompt(options.promptTexts.image);
-		if(!url) {
-			return false;
+	if(options.drawImage) {
+		options.drawImage(__drawImage(editor));
+	} else {
+		var url = "http://";
+		if(options.promptURLs) {
+			url = prompt(options.promptTexts.image);
+			if(!url) {
+				return false;
+			}
 		}
+		_replaceSelection(cm, stat.image, options.insertTexts.image, url);
 	}
-	_replaceSelection(cm, stat.image, options.insertTexts.image, url);
+}
+/**
+ * Custom Action for drawing am img.
+ * by ucev
+ */
+function __drawImage(editor) {
+	var cm = editor.codemirror;
+	var stat = getState(cm);
+	var options = editor.options;
+	return function(url) {
+		_replaceSelection(cm, stat.image, options.insertTexts.image, url);
+	};
 }
 
 /**
@@ -1242,7 +1274,7 @@ var toolbarBuiltInButtons = {
 
 var insertTexts = {
 	link: ["[", "](#url#)"],
-	image: ["![](", "#url#)"],
+	image: ["![", "](#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
