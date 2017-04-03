@@ -96,7 +96,7 @@ function fixShortcut(name) {
  */
 function createIcon(options, enableTooltips, shortcuts) {
 	options = options || {};
-	var el = document.createElement("button");
+	var el = document.createElement("a");
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
@@ -619,7 +619,7 @@ function drawLink(editor) {
 	var options = editor.options;
 	var url = "http://";
 	if(options.drawLink) {
-		options.drawLink(__drawLink(editor));
+		options.drawLink();
 	} else {
 		if(options.promptURLs) {
 			url = prompt(options.promptTexts.link);
@@ -651,7 +651,7 @@ function drawImage(editor) {
 	var stat = getState(cm);
 	var options = editor.options;
 	if(options.drawImage) {
-		options.drawImage(__drawImage(editor));
+		options.drawImage();
 	} else {
 		var url = "http://";
 		if(options.promptURLs) {
@@ -2033,8 +2033,14 @@ SimpleMDE.prototype.cleanBlock = function() {
 SimpleMDE.prototype.drawLink = function() {
 	drawLink(this);
 };
+SimpleMDE.prototype.__drawLink = function(url) {
+	__drawLink(this)(url);
+};
 SimpleMDE.prototype.drawImage = function() {
 	drawImage(this);
+};
+SimpleMDE.prototype.__drawImage = function(url) {
+	__drawImage(this)(url);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);

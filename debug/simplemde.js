@@ -172,13 +172,7 @@ function typedArraySupport () {
   try {
     var arr = new Uint8Array(1)
     arr.__proto__ = {__proto__: Uint8Array.prototype, foo: function () { return 42 }}
-<<<<<<< HEAD
     return arr.foo() === 42
-=======
-    return arr.foo() === 42 && // typed array instances can be augmented
-        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
   } catch (e) {
     return false
   }
@@ -297,17 +291,7 @@ Buffer.alloc = function (size, fill, encoding) {
 
 function allocUnsafe (size) {
   assertSize(size)
-<<<<<<< HEAD
   return createBuffer(size < 0 ? 0 : checked(size) | 0)
-=======
-  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0)
-  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < size; ++i) {
-      that[i] = 0
-    }
-  }
-  return that
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 }
 
 /**
@@ -365,18 +349,11 @@ function fromArrayBuffer (array, byteOffset, length) {
     throw new RangeError('\'length\' is out of bounds')
   }
 
-<<<<<<< HEAD
   var buf
   if (byteOffset === undefined && length === undefined) {
     buf = new Uint8Array(array)
   } else if (length === undefined) {
     buf = new Uint8Array(array, byteOffset)
-=======
-  if (byteOffset === undefined && length === undefined) {
-    array = new Uint8Array(array)
-  } else if (length === undefined) {
-    array = new Uint8Array(array, byteOffset)
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
   } else {
     buf = new Uint8Array(array, byteOffset, length)
   }
@@ -529,11 +506,6 @@ function byteLength (string, encoding) {
       case 'ascii':
       case 'latin1':
       case 'binary':
-<<<<<<< HEAD
-=======
-      case 'raw':
-      case 'raws':
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
         return len
       case 'utf8':
       case 'utf-8':
@@ -852,7 +824,6 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
     }
   }
 
-<<<<<<< HEAD
   var i
   if (dir) {
     var foundIndex = -1
@@ -864,47 +835,6 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
         if (foundIndex !== -1) i -= i - foundIndex
         foundIndex = -1
       }
-=======
-  var foundIndex = -1
-  for (var i = byteOffset; i < arrLength; ++i) {
-    if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
-      if (foundIndex === -1) foundIndex = i
-      if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
-    } else {
-      if (foundIndex !== -1) i -= i - foundIndex
-      foundIndex = -1
-    }
-  }
-
-  return -1
-}
-
-Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
-  if (typeof byteOffset === 'string') {
-    encoding = byteOffset
-    byteOffset = 0
-  } else if (byteOffset > 0x7fffffff) {
-    byteOffset = 0x7fffffff
-  } else if (byteOffset < -0x80000000) {
-    byteOffset = -0x80000000
-  }
-  byteOffset >>= 0
-
-  if (this.length === 0) return -1
-  if (byteOffset >= this.length) return -1
-
-  // Negative offsets start from the end of the buffer
-  if (byteOffset < 0) byteOffset = Math.max(this.length + byteOffset, 0)
-
-  if (typeof val === 'string') {
-    val = Buffer.from(val, encoding)
-  }
-
-  if (Buffer.isBuffer(val)) {
-    // special case: looking for empty string/buffer always fails
-    if (val.length === 0) {
-      return -1
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
     }
   } else {
     if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength
@@ -1227,24 +1157,9 @@ Buffer.prototype.slice = function slice (start, end) {
 
   if (end < start) end = start
 
-<<<<<<< HEAD
   var newBuf = this.subarray(start, end)
   // Return an augmented `Uint8Array` instance
   newBuf.__proto__ = Buffer.prototype
-=======
-  var newBuf
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
-    newBuf = this.subarray(start, end)
-    newBuf.__proto__ = Buffer.prototype
-  } else {
-    var sliceLen = end - start
-    newBuf = new Buffer(sliceLen, undefined)
-    for (var i = 0; i < sliceLen; ++i) {
-      newBuf[i] = this[i + start]
-    }
-  }
-
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
   return newBuf
 }
 
@@ -1478,17 +1393,6 @@ Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   return offset + 1
 }
 
-<<<<<<< HEAD
-=======
-function objectWriteUInt16 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
-    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
-      (littleEndian ? i : 1 - i) * 8
-  }
-}
-
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
   value = +value
   offset = offset >>> 0
@@ -1507,16 +1411,6 @@ Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert
   return offset + 2
 }
 
-<<<<<<< HEAD
-=======
-function objectWriteUInt32 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffffffff + value + 1
-  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
-    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
-  }
-}
-
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
   value = +value
   offset = offset >>> 0
@@ -3600,7 +3494,6 @@ function moveVisually(cm, line, start, dir) {
   };
   var wrappedLineExtent = getWrappedLineExtent(start.sticky == "before" ? mv(start, -1) : start.ch);
 
-<<<<<<< HEAD
   if (cm.doc.direction == "rtl" || part.level == 1) {
     var moveInStorageOrder = (part.level == 1) == (dir < 0);
     var ch = mv(start, moveInStorageOrder ? 1 : -1);
@@ -3610,41 +3503,6 @@ function moveVisually(cm, line, start, dir) {
       return new Pos(start.line, ch, sticky)
     }
   }
-=======
-  function hiddenTextarea() {
-    var te = elt("textarea", null, null, "position: absolute; bottom: -1em; padding: 0; width: 1px; height: 1em; outline: none");
-    var div = elt("div", [te], null, "overflow: hidden; position: relative; width: 3px; height: 0px;");
-    // The textarea is kept positioned near the cursor to prevent the
-    // fact that it'll be scrolled into view on input from scrolling
-    // our fake cursor out of view. On webkit, when wrap=off, paste is
-    // very slow. So make the area wide instead.
-    if (webkit) te.style.width = "1000px";
-    else te.setAttribute("wrap", "off");
-    // If border: 0; -- iOS fails to open keyboard (issue #1287)
-    if (ios) te.style.border = "1px solid black";
-    disableBrowserMagic(te);
-    return div;
-  }
-
-  TextareaInput.prototype = copyObj({
-    init: function(display) {
-      var input = this, cm = this.cm;
-
-      // Wraps and hides input textarea
-      var div = this.wrapper = hiddenTextarea();
-      // The semihidden textarea that is focused when the editor is
-      // focused, and receives input.
-      var te = this.textarea = div.firstChild;
-      display.wrapper.insertBefore(div, display.wrapper.firstChild);
-
-      // Needed to hide big blue blinking cursor on Mobile Safari (doesn't seem to work in iOS 8 anymore)
-      if (ios) te.style.width = "0px";
-
-      on(te, "input", function() {
-        if (ie && ie_version >= 9 && input.hasSelection) input.hasSelection = null;
-        input.poll();
-      });
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
   // Case 3: Could not move within this bidi part in this visual line, so leave
   // the current bidi part
@@ -5015,7 +4873,6 @@ function nodeAndOffsetInLineMap(map$$1, ch, bias) {
   return {node: node, start: start, end: end, collapse: collapse, coverStart: mStart, coverEnd: mEnd}
 }
 
-<<<<<<< HEAD
 function getUsefulRect(rects, bias) {
   var rect = nullRect;
   if (bias == "left") { for (var i = 0; i < rects.length; i++) {
@@ -5037,49 +4894,6 @@ function measureCharInner(cm, prepared, ch, bias) {
       while (place.coverStart + end < place.coverEnd && isExtendingChar(prepared.line.text.charAt(place.coverStart + end))) { ++end; }
       if (ie && ie_version < 9 && start == 0 && end == place.coverEnd - place.coverStart)
         { rect = node.parentNode.getBoundingClientRect(); }
-=======
-  function getUsefulRect(rects, bias) {
-    var rect = nullRect
-    if (bias == "left") for (var i = 0; i < rects.length; i++) {
-      if ((rect = rects[i]).left != rect.right) break
-    } else for (var i = rects.length - 1; i >= 0; i--) {
-      if ((rect = rects[i]).left != rect.right) break
-    }
-    return rect
-  }
-
-  function measureCharInner(cm, prepared, ch, bias) {
-    var place = nodeAndOffsetInLineMap(prepared.map, ch, bias);
-    var node = place.node, start = place.start, end = place.end, collapse = place.collapse;
-
-    var rect;
-    if (node.nodeType == 3) { // If it is a text node, use a range to retrieve the coordinates.
-      for (var i = 0; i < 4; i++) { // Retry a maximum of 4 times when nonsense rectangles are returned
-        while (start && isExtendingChar(prepared.line.text.charAt(place.coverStart + start))) --start;
-        while (place.coverStart + end < place.coverEnd && isExtendingChar(prepared.line.text.charAt(place.coverStart + end))) ++end;
-        if (ie && ie_version < 9 && start == 0 && end == place.coverEnd - place.coverStart)
-          rect = node.parentNode.getBoundingClientRect();
-        else
-          rect = getUsefulRect(range(node, start, end).getClientRects(), bias)
-        if (rect.left || rect.right || start == 0) break;
-        end = start;
-        start = start - 1;
-        collapse = "right";
-      }
-      if (ie && ie_version < 11) rect = maybeUpdateRectForZooming(cm.display.measure, rect);
-    } else { // If it is a widget, simply get the box for the whole widget.
-      if (start > 0) collapse = bias = "right";
-      var rects;
-      if (cm.options.lineWrapping && (rects = node.getClientRects()).length > 1)
-        rect = rects[bias == "right" ? rects.length - 1 : 0];
-      else
-        rect = node.getBoundingClientRect();
-    }
-    if (ie && ie_version < 9 && !start && (!rect || !rect.left && !rect.right)) {
-      var rSpan = node.parentNode.getClientRects()[0];
-      if (rSpan)
-        rect = {left: rSpan.left, right: rSpan.left + charWidth(cm.display), top: rSpan.top, bottom: rSpan.bottom};
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
       else
         { rect = getUsefulRect(range(node, start, end).getClientRects(), bias); }
       if (rect.left || rect.right || start == 0) { break }
@@ -5148,121 +4962,12 @@ function clearLineMeasurementCache(cm) {
     { clearLineMeasurementCacheFor(cm.display.view[i]); }
 }
 
-<<<<<<< HEAD
 function clearCaches(cm) {
   clearLineMeasurementCache(cm);
   cm.display.cachedCharWidth = cm.display.cachedTextHeight = cm.display.cachedPaddingH = null;
   if (!cm.options.lineWrapping) { cm.display.maxLineChanged = true; }
   cm.display.lineNumChars = null;
 }
-=======
-    if (x > toX) return PosWithInfo(lineNo, to, toOutside, 1);
-    // Do a binary search between these bounds.
-    for (;;) {
-      if (bidi ? to == from || to == moveVisually(lineObj, from, 1) : to - from <= 1) {
-        var ch = x < fromX || x - fromX <= toX - x ? from : to;
-        var outside = ch == from ? fromOutside : toOutside
-        var xDiff = x - (ch == from ? fromX : toX);
-        // This is a kludge to handle the case where the coordinates
-        // are after a line-wrapped line. We should replace it with a
-        // more general handling of cursor positions around line
-        // breaks. (Issue #4078)
-        if (toOutside && !bidi && !/\s/.test(lineObj.text.charAt(ch)) && xDiff > 0 &&
-            ch < lineObj.text.length && preparedMeasure.view.measure.heights.length > 1) {
-          var charSize = measureCharPrepared(cm, preparedMeasure, ch, "right");
-          if (innerOff <= charSize.bottom && innerOff >= charSize.top && Math.abs(x - charSize.right) < xDiff) {
-            outside = false
-            ch++
-            xDiff = x - charSize.right
-          }
-        }
-        while (isExtendingChar(lineObj.text.charAt(ch))) ++ch;
-        var pos = PosWithInfo(lineNo, ch, outside, xDiff < -1 ? -1 : xDiff > 1 ? 1 : 0);
-        return pos;
-      }
-      var step = Math.ceil(dist / 2), middle = from + step;
-      if (bidi) {
-        middle = from;
-        for (var i = 0; i < step; ++i) middle = moveVisually(lineObj, middle, 1);
-      }
-      var middleX = getX(middle);
-      if (middleX > x) {to = middle; toX = middleX; if (toOutside = wrongLine) toX += 1000; dist = step;}
-      else {from = middle; fromX = middleX; fromOutside = wrongLine; dist -= step;}
-    }
-  }
-
-  var measureText;
-  // Compute the default text height.
-  function textHeight(display) {
-    if (display.cachedTextHeight != null) return display.cachedTextHeight;
-    if (measureText == null) {
-      measureText = elt("pre");
-      // Measure a bunch of lines, for browsers that compute
-      // fractional heights.
-      for (var i = 0; i < 49; ++i) {
-        measureText.appendChild(document.createTextNode("x"));
-        measureText.appendChild(elt("br"));
-      }
-      measureText.appendChild(document.createTextNode("x"));
-    }
-    removeChildrenAndAdd(display.measure, measureText);
-    var height = measureText.offsetHeight / 50;
-    if (height > 3) display.cachedTextHeight = height;
-    removeChildren(display.measure);
-    return height || 1;
-  }
-
-  // Compute the default character width.
-  function charWidth(display) {
-    if (display.cachedCharWidth != null) return display.cachedCharWidth;
-    var anchor = elt("span", "xxxxxxxxxx");
-    var pre = elt("pre", [anchor]);
-    removeChildrenAndAdd(display.measure, pre);
-    var rect = anchor.getBoundingClientRect(), width = (rect.right - rect.left) / 10;
-    if (width > 2) display.cachedCharWidth = width;
-    return width || 10;
-  }
-
-  // OPERATIONS
-
-  // Operations are used to wrap a series of changes to the editor
-  // state in such a way that each change won't have to update the
-  // cursor and display (which would be awkward, slow, and
-  // error-prone). Instead, display updates are batched and then all
-  // combined and executed at once.
-
-  var operationGroup = null;
-
-  var nextOpId = 0;
-  // Start a new operation.
-  function startOperation(cm) {
-    cm.curOp = {
-      cm: cm,
-      viewChanged: false,      // Flag that indicates that lines might need to be redrawn
-      startHeight: cm.doc.height, // Used to detect need to update scrollbar
-      forceUpdate: false,      // Used to force a redraw
-      updateInput: null,       // Whether to reset the input textarea
-      typing: false,           // Whether this reset should be careful to leave existing text (for compositing)
-      changeObjs: null,        // Accumulated changes, for firing change events
-      cursorActivityHandlers: null, // Set of handlers to fire cursorActivity on
-      cursorActivityCalled: 0, // Tracks which cursorActivity handlers have been called already
-      selectionChanged: false, // Whether the selection needs to be redrawn
-      updateMaxLine: false,    // Set when the widest line needs to be determined anew
-      scrollLeft: null, scrollTop: null, // Intermediate scroll position, not pushed to DOM yet
-      scrollToPos: null,       // Used to scroll to a specific position
-      focus: false,
-      id: ++nextOpId           // Unique ID
-    };
-    if (operationGroup) {
-      operationGroup.ops.push(cm.curOp);
-    } else {
-      cm.curOp.ownsGroup = operationGroup = {
-        ops: [cm.curOp],
-        delayedCallbacks: []
-      };
-    }
-  }
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
 function pageScrollX() { return window.pageXOffset || (document.documentElement || document.body).scrollLeft }
 function pageScrollY() { return window.pageYOffset || (document.documentElement || document.body).scrollTop }
@@ -5652,130 +5357,11 @@ function drawSelectionRange(cm, range$$1, output) {
       return charCoords(cm, Pos(line, ch), "div", lineObj, bias)
     }
 
-<<<<<<< HEAD
     iterateBidiSections(getOrder(lineObj, doc.direction), fromArg || 0, toArg == null ? lineLen : toArg, function (from, to, dir) {
       var leftPos = coords(from, "left"), rightPos, left, right;
       if (from == to) {
         rightPos = leftPos;
         left = right = leftPos.left;
-=======
-    var sel = cm.doc.sel, modifier = mac ? e.metaKey : e.ctrlKey, contained;
-    if (cm.options.dragDrop && dragAndDrop && !cm.isReadOnly() &&
-        type == "single" && (contained = sel.contains(start)) > -1 &&
-        (cmp((contained = sel.ranges[contained]).from(), start) < 0 || start.xRel > 0) &&
-        (cmp(contained.to(), start) > 0 || start.xRel < 0))
-      leftButtonStartDrag(cm, e, start, modifier);
-    else
-      leftButtonSelect(cm, e, start, type, modifier);
-  }
-
-  // Start a text drag. When it ends, see if any dragging actually
-  // happen, and treat as a click if it didn't.
-  function leftButtonStartDrag(cm, e, start, modifier) {
-    var display = cm.display, startTime = +new Date;
-    var dragEnd = operation(cm, function(e2) {
-      if (webkit) display.scroller.draggable = false;
-      cm.state.draggingText = false;
-      off(document, "mouseup", dragEnd);
-      off(display.scroller, "drop", dragEnd);
-      if (Math.abs(e.clientX - e2.clientX) + Math.abs(e.clientY - e2.clientY) < 10) {
-        e_preventDefault(e2);
-        if (!modifier && +new Date - 200 < startTime)
-          extendSelection(cm.doc, start);
-        // Work around unexplainable focus problem in IE9 (#2127) and Chrome (#3081)
-        if (webkit || ie && ie_version == 9)
-          setTimeout(function() {document.body.focus(); display.input.focus();}, 20);
-        else
-          display.input.focus();
-      }
-    });
-    // Let the drag handler handle this.
-    if (webkit) display.scroller.draggable = true;
-    cm.state.draggingText = dragEnd;
-    dragEnd.copy = mac ? e.altKey : e.ctrlKey
-    // IE's approach to draggable
-    if (display.scroller.dragDrop) display.scroller.dragDrop();
-    on(document, "mouseup", dragEnd);
-    on(display.scroller, "drop", dragEnd);
-  }
-
-  // Normal selection, as opposed to text dragging.
-  function leftButtonSelect(cm, e, start, type, addNew) {
-    var display = cm.display, doc = cm.doc;
-    e_preventDefault(e);
-
-    var ourRange, ourIndex, startSel = doc.sel, ranges = startSel.ranges;
-    if (addNew && !e.shiftKey) {
-      ourIndex = doc.sel.contains(start);
-      if (ourIndex > -1)
-        ourRange = ranges[ourIndex];
-      else
-        ourRange = new Range(start, start);
-    } else {
-      ourRange = doc.sel.primary();
-      ourIndex = doc.sel.primIndex;
-    }
-
-    if (chromeOS ? e.shiftKey && e.metaKey : e.altKey) {
-      type = "rect";
-      if (!addNew) ourRange = new Range(start, start);
-      start = posFromMouse(cm, e, true, true);
-      ourIndex = -1;
-    } else if (type == "double") {
-      var word = cm.findWordAt(start);
-      if (cm.display.shift || doc.extend)
-        ourRange = extendRange(doc, ourRange, word.anchor, word.head);
-      else
-        ourRange = word;
-    } else if (type == "triple") {
-      var line = new Range(Pos(start.line, 0), clipPos(doc, Pos(start.line + 1, 0)));
-      if (cm.display.shift || doc.extend)
-        ourRange = extendRange(doc, ourRange, line.anchor, line.head);
-      else
-        ourRange = line;
-    } else {
-      ourRange = extendRange(doc, ourRange, start);
-    }
-
-    if (!addNew) {
-      ourIndex = 0;
-      setSelection(doc, new Selection([ourRange], 0), sel_mouse);
-      startSel = doc.sel;
-    } else if (ourIndex == -1) {
-      ourIndex = ranges.length;
-      setSelection(doc, normalizeSelection(ranges.concat([ourRange]), ourIndex),
-                   {scroll: false, origin: "*mouse"});
-    } else if (ranges.length > 1 && ranges[ourIndex].empty() && type == "single" && !e.shiftKey) {
-      setSelection(doc, normalizeSelection(ranges.slice(0, ourIndex).concat(ranges.slice(ourIndex + 1)), 0),
-                   {scroll: false, origin: "*mouse"});
-      startSel = doc.sel;
-    } else {
-      replaceOneSelection(doc, ourIndex, ourRange, sel_mouse);
-    }
-
-    var lastPos = start;
-    function extendTo(pos) {
-      if (cmp(lastPos, pos) == 0) return;
-      lastPos = pos;
-
-      if (type == "rect") {
-        var ranges = [], tabSize = cm.options.tabSize;
-        var startCol = countColumn(getLine(doc, start.line).text, start.ch, tabSize);
-        var posCol = countColumn(getLine(doc, pos.line).text, pos.ch, tabSize);
-        var left = Math.min(startCol, posCol), right = Math.max(startCol, posCol);
-        for (var line = Math.min(start.line, pos.line), end = Math.min(cm.lastLine(), Math.max(start.line, pos.line));
-             line <= end; line++) {
-          var text = getLine(doc, line).text, leftPos = findColumn(text, left, tabSize);
-          if (left == right)
-            ranges.push(new Range(Pos(line, leftPos), Pos(line, leftPos)));
-          else if (text.length > leftPos)
-            ranges.push(new Range(Pos(line, leftPos), Pos(line, findColumn(text, right, tabSize))));
-        }
-        if (!ranges.length) ranges.push(new Range(start, start));
-        setSelection(doc, normalizeSelection(startSel.ranges.slice(0, ourIndex).concat(ranges), ourIndex),
-                     {origin: "*mouse", scroll: false});
-        cm.scrollIntoView(pos);
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
       } else {
         rightPos = coords(to - 1, "right");
         if (dir == "rtl") { var tmp = leftPos; leftPos = rightPos; rightPos = tmp; }
@@ -5822,7 +5408,6 @@ function drawSelectionRange(cm, range$$1, output) {
   output.appendChild(fragment);
 }
 
-<<<<<<< HEAD
 // Cursor-blinking
 function restartBlink(cm) {
   if (!cm.state.focused) { return }
@@ -5836,66 +5421,6 @@ function restartBlink(cm) {
   else if (cm.options.cursorBlinkRate < 0)
     { display.cursorDiv.style.visibility = "hidden"; }
 }
-=======
-  function onDrop(e) {
-    var cm = this;
-    clearDragCursor(cm);
-    if (signalDOMEvent(cm, e) || eventInWidget(cm.display, e))
-      return;
-    e_preventDefault(e);
-    if (ie) lastDrop = +new Date;
-    var pos = posFromMouse(cm, e, true), files = e.dataTransfer.files;
-    if (!pos || cm.isReadOnly()) return;
-    // Might be a file drop, in which case we simply extract the text
-    // and insert it.
-    if (files && files.length && window.FileReader && window.File) {
-      var n = files.length, text = Array(n), read = 0;
-      var loadFile = function(file, i) {
-        if (cm.options.allowDropFileTypes &&
-            indexOf(cm.options.allowDropFileTypes, file.type) == -1)
-          return;
-
-        var reader = new FileReader;
-        reader.onload = operation(cm, function() {
-          var content = reader.result;
-          if (/[\x00-\x08\x0e-\x1f]{2}/.test(content)) content = "";
-          text[i] = content;
-          if (++read == n) {
-            pos = clipPos(cm.doc, pos);
-            var change = {from: pos, to: pos,
-                          text: cm.doc.splitLines(text.join(cm.doc.lineSeparator())),
-                          origin: "paste"};
-            makeChange(cm.doc, change);
-            setSelectionReplaceHistory(cm.doc, simpleSelection(pos, changeEnd(change)));
-          }
-        });
-        reader.readAsText(file);
-      };
-      for (var i = 0; i < n; ++i) loadFile(files[i], i);
-    } else { // Normal drop
-      // Don't do a replace if the drop happened inside of the selected text.
-      if (cm.state.draggingText && cm.doc.sel.contains(pos) > -1) {
-        cm.state.draggingText(e);
-        // Ensure the editor is re-focused
-        setTimeout(function() {cm.display.input.focus();}, 20);
-        return;
-      }
-      try {
-        var text = e.dataTransfer.getData("Text");
-        if (text) {
-          if (cm.state.draggingText && !cm.state.draggingText.copy)
-            var selected = cm.listSelections();
-          setSelectionNoUndo(cm.doc, simpleSelection(pos, pos));
-          if (selected) for (var i = 0; i < selected.length; ++i)
-            replaceRange(cm.doc, "", selected[i].anchor, selected[i].head, "drag");
-          cm.replaceSelection(text, "around", "paste");
-          cm.display.input.focus();
-        }
-      }
-      catch(e){}
-    }
-  }
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
 function ensureFocus(cm) {
   if (!cm.state.focused) { cm.display.input.focus(); onFocus(cm); }
@@ -6482,7 +6007,6 @@ function resolveScrollToPos(cm) {
   }
 }
 
-<<<<<<< HEAD
 // Operations are used to wrap a series of changes to the editor
 // state in such a way that each change won't have to update the
 // cursor and display (which would be awkward, slow, and
@@ -6511,24 +6035,6 @@ function startOperation(cm) {
   };
   pushOperation(cm.curOp);
 }
-=======
-  // Revert a change stored in a document's history.
-  function makeChangeFromHistory(doc, type, allowSelectionOnly) {
-    if (doc.cm && doc.cm.state.suppressEdits && !allowSelectionOnly) return;
-
-    var hist = doc.history, event, selAfter = doc.sel;
-    var source = type == "undo" ? hist.done : hist.undone, dest = type == "undo" ? hist.undone : hist.done;
-
-    // Verify that there is a useable event (so that ctrl-z won't
-    // needlessly clear selection events)
-    for (var i = 0; i < source.length; i++) {
-      event = source[i];
-      if (allowSelectionOnly ? event.ranges && !event.equals(doc.sel) : !event.ranges)
-        break;
-    }
-    if (i == source.length) return;
-    hist.lastOrigin = hist.lastSelOrigin = null;
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
 // Finish an operation, updating the display and signalling delayed events
 function endOperation(cm) {
@@ -10669,86 +10175,6 @@ var addEditorMethods = function(CodeMirror) {
           end = range$$1.head.line;
           if (i == this$1.doc.sel.primIndex) { ensureCursorVisible(this$1); }
         }
-<<<<<<< HEAD
-=======
-      }, lineClasses);
-    }
-
-    return {styles: st, classes: lineClasses.bgClass || lineClasses.textClass ? lineClasses : null};
-  }
-
-  function getLineStyles(cm, line, updateFrontier) {
-    if (!line.styles || line.styles[0] != cm.state.modeGen) {
-      var state = getStateBefore(cm, lineNo(line));
-      var result = highlightLine(cm, line, line.text.length > cm.options.maxHighlightLength ? copyState(cm.doc.mode, state) : state);
-      line.stateAfter = state;
-      line.styles = result.styles;
-      if (result.classes) line.styleClasses = result.classes;
-      else if (line.styleClasses) line.styleClasses = null;
-      if (updateFrontier === cm.doc.frontier) cm.doc.frontier++;
-    }
-    return line.styles;
-  }
-
-  // Lightweight form of highlight -- proceed over this line and
-  // update state, but don't save a style array. Used for lines that
-  // aren't currently visible.
-  function processLine(cm, text, state, startAt) {
-    var mode = cm.doc.mode;
-    var stream = new StringStream(text, cm.options.tabSize);
-    stream.start = stream.pos = startAt || 0;
-    if (text == "") callBlankLine(mode, state);
-    while (!stream.eol()) {
-      readToken(mode, stream, state);
-      stream.start = stream.pos;
-    }
-  }
-
-  // Convert a style as returned by a mode (either null, or a string
-  // containing one or more styles) to a CSS style. This is cached,
-  // and also looks for line-wide styles.
-  var styleToClassCache = {}, styleToClassCacheWithMode = {};
-  function interpretTokenStyle(style, options) {
-    if (!style || /^\s*$/.test(style)) return null;
-    var cache = options.addModeClass ? styleToClassCacheWithMode : styleToClassCache;
-    return cache[style] ||
-      (cache[style] = style.replace(/\S+/g, "cm-$&"));
-  }
-
-  // Render the DOM representation of the text of a line. Also builds
-  // up a 'line map', which points at the DOM nodes that represent
-  // specific stretches of text, and is used by the measuring code.
-  // The returned object contains the DOM node, this map, and
-  // information about line-wide styles that were set by the mode.
-  function buildLineContent(cm, lineView) {
-    // The padding-right forces the element to have a 'border', which
-    // is needed on Webkit to be able to get line-level bounding
-    // rectangles for it (in measureChar).
-    var content = elt("span", null, null, webkit ? "padding-right: .1px" : null);
-    var builder = {pre: elt("pre", [content], "CodeMirror-line"), content: content,
-                   col: 0, pos: 0, cm: cm,
-                   trailingSpace: false,
-                   splitSpaces: (ie || webkit) && cm.getOption("lineWrapping")};
-    lineView.measure = {};
-
-    // Iterate over the logical lines that make up this visual line.
-    for (var i = 0; i <= (lineView.rest ? lineView.rest.length : 0); i++) {
-      var line = i ? lineView.rest[i - 1] : lineView.line, order;
-      builder.pos = 0;
-      builder.addToken = buildToken;
-      // Optionally wire in some hacks into the token-rendering
-      // algorithm, to deal with browser quirks.
-      if (hasBadBidiRects(cm.display.measure) && (order = getOrder(line)))
-        builder.addToken = buildTokenBadBidi(builder.addToken, order);
-      builder.map = [];
-      var allowFrontierUpdate = lineView != cm.display.externalMeasured && lineNo(line);
-      insertLineContent(line, builder, getLineStyles(cm, line, allowFrontierUpdate));
-      if (line.styleClasses) {
-        if (line.styleClasses.bgClass)
-          builder.bgClass = joinClasses(line.styleClasses.bgClass, builder.bgClass || "");
-        if (line.styleClasses.textClass)
-          builder.textClass = joinClasses(line.styleClasses.textClass, builder.textClass || "");
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
       }
     }),
 
@@ -10791,7 +10217,6 @@ var addEditorMethods = function(CodeMirror) {
     getHelpers: function(pos, type) {
       var this$1 = this;
 
-<<<<<<< HEAD
       var found = [];
       if (!helpers.hasOwnProperty(type)) { return found }
       var help = helpers[type], mode = this.getModeAt(pos);
@@ -10801,135 +10226,25 @@ var addEditorMethods = function(CodeMirror) {
         for (var i = 0; i < mode[type].length; i++) {
           var val = help[mode[type][i]];
           if (val) { found.push(val); }
-=======
-  // Build up the DOM representation for a single token, and add it to
-  // the line map. Takes care to render special characters separately.
-  function buildToken(builder, text, style, startStyle, endStyle, title, css) {
-    if (!text) return;
-    var displayText = builder.splitSpaces ? splitSpaces(text, builder.trailingSpace) : text
-    var special = builder.cm.state.specialChars, mustWrap = false;
-    if (!special.test(text)) {
-      builder.col += text.length;
-      var content = document.createTextNode(displayText);
-      builder.map.push(builder.pos, builder.pos + text.length, content);
-      if (ie && ie_version < 9) mustWrap = true;
-      builder.pos += text.length;
-    } else {
-      var content = document.createDocumentFragment(), pos = 0;
-      while (true) {
-        special.lastIndex = pos;
-        var m = special.exec(text);
-        var skipped = m ? m.index - pos : text.length - pos;
-        if (skipped) {
-          var txt = document.createTextNode(displayText.slice(pos, pos + skipped));
-          if (ie && ie_version < 9) content.appendChild(elt("span", [txt]));
-          else content.appendChild(txt);
-          builder.map.push(builder.pos, builder.pos + skipped, txt);
-          builder.col += skipped;
-          builder.pos += skipped;
-        }
-        if (!m) break;
-        pos += skipped + 1;
-        if (m[0] == "\t") {
-          var tabSize = builder.cm.options.tabSize, tabWidth = tabSize - builder.col % tabSize;
-          var txt = content.appendChild(elt("span", spaceStr(tabWidth), "cm-tab"));
-          txt.setAttribute("role", "presentation");
-          txt.setAttribute("cm-text", "\t");
-          builder.col += tabWidth;
-        } else if (m[0] == "\r" || m[0] == "\n") {
-          var txt = content.appendChild(elt("span", m[0] == "\r" ? "\u240d" : "\u2424", "cm-invalidchar"));
-          txt.setAttribute("cm-text", m[0]);
-          builder.col += 1;
-        } else {
-          var txt = builder.cm.options.specialCharPlaceholder(m[0]);
-          txt.setAttribute("cm-text", m[0]);
-          if (ie && ie_version < 9) content.appendChild(elt("span", [txt]));
-          else content.appendChild(txt);
-          builder.col += 1;
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
         }
       } else if (mode.helperType && help[mode.helperType]) {
         found.push(help[mode.helperType]);
       } else if (help[mode.name]) {
         found.push(help[mode.name]);
       }
-<<<<<<< HEAD
       for (var i$1 = 0; i$1 < help._global.length; i$1++) {
         var cur = help._global[i$1];
         if (cur.pred(mode, this$1) && indexOf(found, cur.val) == -1)
           { found.push(cur.val); }
-=======
-    }
-    builder.trailingSpace = displayText.charCodeAt(text.length - 1) == 32
-    if (style || startStyle || endStyle || mustWrap || css) {
-      var fullStyle = style || "";
-      if (startStyle) fullStyle += startStyle;
-      if (endStyle) fullStyle += endStyle;
-      var token = elt("span", [content], fullStyle, css);
-      if (title) token.title = title;
-      return builder.content.appendChild(token);
-    }
-    builder.content.appendChild(content);
-  }
-
-  function splitSpaces(text, trailingBefore) {
-    if (text.length > 1 && !/  /.test(text)) return text
-    var spaceBefore = trailingBefore, result = ""
-    for (var i = 0; i < text.length; i++) {
-      var ch = text.charAt(i)
-      if (ch == " " && spaceBefore && (i == text.length - 1 || text.charCodeAt(i + 1) == 32))
-        ch = "\u00a0"
-      result += ch
-      spaceBefore = ch == " "
-    }
-    return result
-  }
-
-  // Work around nonsense dimensions being reported for stretches of
-  // right-to-left text.
-  function buildTokenBadBidi(inner, order) {
-    return function(builder, text, style, startStyle, endStyle, title, css) {
-      style = style ? style + " cm-force-border" : "cm-force-border";
-      var start = builder.pos, end = start + text.length;
-      for (;;) {
-        // Find the part that overlaps with the start of this text
-        for (var i = 0; i < order.length; i++) {
-          var part = order[i];
-          if (part.to > start && part.from <= start) break;
-        }
-        if (part.to >= end) return inner(builder, text, style, startStyle, endStyle, title, css);
-        inner(builder, text.slice(0, part.to - start), style, startStyle, null, title, css);
-        startStyle = null;
-        text = text.slice(part.to - start);
-        start = part.to;
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
       }
       return found
     },
 
-<<<<<<< HEAD
     getStateAfter: function(line, precise) {
       var doc = this.doc;
       line = clipLine(doc, line == null ? doc.first + doc.size - 1: line);
       return getStateBefore(this, line + 1, precise)
     },
-=======
-  function buildCollapsedSpan(builder, size, marker, ignoreWidget) {
-    var widget = !ignoreWidget && marker.widgetNode;
-    if (widget) builder.map.push(builder.pos, builder.pos + size, widget);
-    if (!ignoreWidget && builder.cm.display.input.needsContentAttribute) {
-      if (!widget)
-        widget = builder.content.appendChild(document.createElement("span"));
-      widget.setAttribute("cm-marker", marker.id);
-    }
-    if (widget) {
-      builder.cm.display.input.setUneditable(widget);
-      builder.content.appendChild(widget);
-    }
-    builder.pos += size;
-    builder.trailingSpace = false
-  }
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
     cursorCoords: function(start, mode) {
       var pos, range$$1 = this.doc.sel.primary();
@@ -12064,78 +11379,9 @@ TextareaInput.prototype.poll = function () {
   return true
 };
 
-<<<<<<< HEAD
 TextareaInput.prototype.ensurePolled = function () {
   if (this.pollingFast && this.poll()) { this.pollingFast = false; }
 };
-=======
-  // FEATURE DETECTION
-
-  // Detect drag-and-drop
-  var dragAndDrop = function() {
-    // There is *some* kind of drag-and-drop support in IE6-8, but I
-    // couldn't get it to work yet.
-    if (ie && ie_version < 9) return false;
-    var div = elt('div');
-    return "draggable" in div || "dragDrop" in div;
-  }();
-
-  var zwspSupported;
-  function zeroWidthElement(measure) {
-    if (zwspSupported == null) {
-      var test = elt("span", "\u200b");
-      removeChildrenAndAdd(measure, elt("span", [test, document.createTextNode("x")]));
-      if (measure.firstChild.offsetHeight != 0)
-        zwspSupported = test.offsetWidth <= 1 && test.offsetHeight > 2 && !(ie && ie_version < 8);
-    }
-    var node = zwspSupported ? elt("span", "\u200b") :
-      elt("span", "\u00a0", null, "display: inline-block; width: 1px; margin-right: -1px");
-    node.setAttribute("cm-text", "");
-    return node;
-  }
-
-  // Feature-detect IE's crummy client rect reporting for bidi text
-  var badBidiRects;
-  function hasBadBidiRects(measure) {
-    if (badBidiRects != null) return badBidiRects;
-    var txt = removeChildrenAndAdd(measure, document.createTextNode("A\u062eA"));
-    var r0 = range(txt, 0, 1).getBoundingClientRect();
-    var r1 = range(txt, 1, 2).getBoundingClientRect();
-    removeChildren(measure);
-    if (!r0 || r0.left == r0.right) return false; // Safari returns null in some cases (#2780)
-    return badBidiRects = (r1.right - r0.right < 3);
-  }
-
-  // See if "".split is the broken IE version, if so, provide an
-  // alternative way to split lines.
-  var splitLinesAuto = CodeMirror.splitLines = "\n\nb".split(/\n/).length != 3 ? function(string) {
-    var pos = 0, result = [], l = string.length;
-    while (pos <= l) {
-      var nl = string.indexOf("\n", pos);
-      if (nl == -1) nl = string.length;
-      var line = string.slice(pos, string.charAt(nl - 1) == "\r" ? nl - 1 : nl);
-      var rt = line.indexOf("\r");
-      if (rt != -1) {
-        result.push(line.slice(0, rt));
-        pos += rt + 1;
-      } else {
-        result.push(line);
-        pos = nl + 1;
-      }
-    }
-    return result;
-  } : function(string){return string.split(/\r\n?|\n/);};
-
-  var hasSelection = window.getSelection ? function(te) {
-    try { return te.selectionStart != te.selectionEnd; }
-    catch(e) { return false; }
-  } : function(te) {
-    try {var range = te.ownerDocument.selection.createRange();}
-    catch(e) {}
-    if (!range || range.parentElement() != te) return false;
-    return range.compareEndPoints("StartToEnd", range) != 0;
-  };
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
 TextareaInput.prototype.onKeyPress = function () {
   if (ie && ie_version >= 9) { this.hasSelection = null; }
@@ -12347,11 +11593,7 @@ eventMixin(Doc);
 
 // INPUT HANDLING
 
-<<<<<<< HEAD
 CodeMirror$1.inputStyles = {"textarea": TextareaInput, "contenteditable": ContentEditableInput};
-=======
-  CodeMirror.version = "5.17.0";
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
 
 // MODE DEFINITION AND QUERYING
 
@@ -12954,11 +12196,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
       return getType(state);
     }
 
-<<<<<<< HEAD
     if (ch === '[' && state.imageMarker && stream.match(/[^\]]*\](\(.*?\)| ?\[.*?\])/, false)) {
-=======
-    if (ch === '[' && state.imageMarker) {
->>>>>>> b117a697026dd96c26829874e6d99f53d26cad62
       state.imageMarker = false;
       state.imageAltText = true
       if (modeCfg.highlightFormatting) state.formatting = "image";
@@ -16405,7 +15643,7 @@ function createIcon(options, enableTooltips, shortcuts) {
 	enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
 	if(options.title && enableTooltips) {
-		el.title = createTootlip(options.title, options.action, shortcuts);
+		el.title = createTooltip(options.title, options.action, shortcuts);
 
 		if(isMac) {
 			el.title = el.title.replace("Ctrl", "⌘");
@@ -16425,7 +15663,7 @@ function createSep() {
 	return el;
 }
 
-function createTootlip(title, action, shortcuts) {
+function createTooltip(title, action, shortcuts) {
 	var actionName;
 	var tooltip = title;
 
@@ -16924,7 +16162,7 @@ function drawLink(editor) {
 	var options = editor.options;
 	var url = "http://";
 	if(options.drawLink) {
-		options.drawLink(__drawLink(editor));
+		options.drawLink();
 	} else {
 		if(options.promptURLs) {
 			url = prompt(options.promptTexts.link);
@@ -16956,7 +16194,7 @@ function drawImage(editor) {
 	var stat = getState(cm);
 	var options = editor.options;
 	if(options.drawImage) {
-		options.drawImage(__drawImage(editor));
+		options.drawImage();
 	} else {
 		var url = "http://";
 		if(options.promptURLs) {
@@ -17246,11 +16484,29 @@ function _toggleLine(cm, name) {
 		"unordered-list": listRegexp,
 		"ordered-list": listRegexp
 	};
-	var map = {
-		"quote": ">",
-		"unordered-list": "*",
-		"ordered-list": "1."
+
+	var _getChar = function(name, i) {
+		var map = {
+			"quote": ">",
+			"unordered-list": "*",
+			"ordered-list": "%%i."
+		};
+
+		return map[name].replace("%%i", i);
 	};
+
+	var _checkChar = function(name, char) {
+		var map = {
+			"quote": "\>",
+			"unordered-list": "\*",
+			"ordered-list": "\d+."
+		};
+		var rt = new RegExp(map[name]);
+
+		return char && rt.test(char);
+	};
+
+	var line = 1;
 	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
 			var text = cm.getLine(i);
@@ -17258,15 +16514,16 @@ function _toggleLine(cm, name) {
 				text = text.replace(repl[name], "$1");
 			} else {
 				var arr = listRegexp.exec(text);
+				var char = _getChar(name, line);
 				if(arr !== null) {
-					var char = map[name];
-					if(arr[2] && arr[2] == map[name]) {
+					if(_checkChar(name, arr[2])) {
 						char = "";
 					}
 					text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
 				} else {
-					text = map[name] + " " + text;
+					text = char + " " + text;
 				}
+				line += 1;
 			}
 			cm.replaceRange(text, {
 				line: i,
@@ -17705,7 +16962,7 @@ function SimpleMDE(options) {
 
 
 	// Merging the promptTexts, with the given options
-	options.promptTexts = promptTexts;
+	options.promptTexts = extend({}, promptTexts, options.promptTexts || {});
 
 
 	// Merging the blockStyles, with the given options
@@ -18233,10 +17490,16 @@ SimpleMDE.prototype.createStatusbar = function(status) {
  * Get or set the text content.
  */
 SimpleMDE.prototype.value = function(val) {
+	var cm = this.codemirror;
 	if(val === undefined) {
-		return this.codemirror.getValue();
+		return cm.getValue();
 	} else {
-		this.codemirror.getDoc().setValue(val);
+		cm.getDoc().setValue(val);
+		if(this.isPreviewActive()) {
+			var wrapper = cm.getWrapperElement();
+			var preview = wrapper.lastChild;
+			preview.innerHTML = this.options.previewRender(val, preview);
+		}
 		return this;
 	}
 };
@@ -18313,8 +17576,14 @@ SimpleMDE.prototype.cleanBlock = function() {
 SimpleMDE.prototype.drawLink = function() {
 	drawLink(this);
 };
+SimpleMDE.prototype.__drawLink = function(url) {
+	__drawLink(this)(url);
+};
 SimpleMDE.prototype.drawImage = function() {
 	drawImage(this);
+};
+SimpleMDE.prototype.__drawImage = function(url) {
+	__drawImage(this)(url);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
