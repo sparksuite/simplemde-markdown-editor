@@ -96,6 +96,9 @@ simplemde.value("This text will appear in the editor");
 - **placeholder**: If set, displays a custom placeholder message.
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
 - **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
+- **promptTexts**: Customize the text used to prompt for URLs.
+  - **image**: The text to use when prompting for an image's URL.  Defaults to `URL of the image:`.
+  - **link**: The text to use when prompting for a link's URL. Defaults to `URL for the link:`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
   - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page or pass in using the `hljs` option. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
   - **hljs**: An injectible instance of [highlight.js](https://github.com/isagalaev/highlight.js). If you don't want to rely on the global namespace (`window.hljs`), you can provide an instance here. Defaults to `undefined`.
@@ -155,6 +158,10 @@ var simplemde = new SimpleMDE({
 		return "Loading...";
 	},
 	promptURLs: true,
+	promptTexts: {
+		image: "Custom prompt for URL:",
+		link: "Custom prompt for URL:",
+	},
 	renderingConfig: {
 		singleLineBreaks: false,
 		codeSyntaxHighlighting: true,
