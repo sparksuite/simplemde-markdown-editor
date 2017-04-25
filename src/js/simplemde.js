@@ -1389,7 +1389,7 @@ function SimpleMDE(options) {
 
 
 	// Merging the promptTexts, with the given options
-	options.promptTexts = promptTexts;
+	options.promptTexts = extend({}, promptTexts, options.promptTexts || {});
 
 
 	// Merging the blockStyles, with the given options
