@@ -1601,10 +1601,22 @@ SimpleMDE.prototype.autosave = function() {
 			return;
 		}
 
-		if(simplemde.element.form != null && simplemde.element.form != undefined) {
-			simplemde.element.form.addEventListener("submit", function() {
-				localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
-			});
+		if(this.options.autosave.binded !== true) {
+			if(simplemde.element.form != null && simplemde.element.form != undefined) {
+				simplemde.element.form.addEventListener("submit", function() {
+					clearTimeout(simplemde.autosaveTimeoutId);
+					simplemde.autosaveTimeoutId = undefined;
+
+					localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+
+					// Restart autosaving in case the submit will be cancelled down the line
+					setTimeout(function() {
+						simplemde.autosave();
+					}, 10000);
+				});
+			}
+
+			this.options.autosave.binded = true;
 		}
 
 		if(this.options.autosave.loaded !== true) {
