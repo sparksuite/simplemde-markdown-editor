@@ -632,17 +632,22 @@ function drawLink(editor) {
 /**
  * Action for drawing an img.
  */
-function drawImage(editor) {
+function drawImage(editor,imageUrl) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
 	var url = "http://";
-	if(options.promptURLs) {
+    if(options.onDrawImage && !imageUrl) {
+        options.onDrawImage();
+        return;
+    }
+    if(options.promptURLs) {
 		url = prompt(options.promptTexts.image);
 		if(!url) {
 			return false;
 		}
 	}
+	url = imageUrl || url;
 	_replaceSelection(cm, stat.image, options.insertTexts.image, url);
 }
 
@@ -2004,8 +2009,8 @@ SimpleMDE.prototype.cleanBlock = function() {
 SimpleMDE.prototype.drawLink = function() {
 	drawLink(this);
 };
-SimpleMDE.prototype.drawImage = function() {
-	drawImage(this);
+SimpleMDE.prototype.drawImage = function(url) {
+	drawImage(this,url);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
