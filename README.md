@@ -20,11 +20,11 @@ Via [bower](https://www.bower.io).
 bower install simplemde --save
 ```
 
-Via [jsDelivr](https://www.jsdelivr.com/#!simplemde). *Please note, jsDelivr may take a few days to update to the latest release.*
+Via [jsDelivr](https://www.jsdelivr.com/).
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.js"></script>
 ```
 
 ## Quick start
