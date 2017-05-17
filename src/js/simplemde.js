@@ -108,6 +108,10 @@ function createIcon(options, enableTooltips, shortcuts) {
 		}
 	}
 
+	if(options.innerHTML) {
+		el.innerHTML = options.innerHTML;
+	}
+	
 	el.tabIndex = -1;
 	el.className = options.className;
 	return el;
