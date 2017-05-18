@@ -1601,10 +1601,12 @@ SimpleMDE.prototype.autosave = function() {
 			return;
 		}
 
-		if(simplemde.element.form != null && simplemde.element.form != undefined) {
+		if(this.element.form != null && this.element.form != undefined && !this.options.autosave.isEventListening) {
 			simplemde.element.form.addEventListener("submit", function() {
 				localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+				simplemde.options.autosave.stop = true;
 			});
+			this.options.autosave.isEventListening = true;
 		}
 
 		if(this.options.autosave.loaded !== true) {
@@ -1616,6 +1618,9 @@ SimpleMDE.prototype.autosave = function() {
 			this.options.autosave.loaded = true;
 		}
 
+		if (this.options.autosave.stop)
+			return;
+            
 		localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
 
 		var el = document.getElementById("autosaved");
