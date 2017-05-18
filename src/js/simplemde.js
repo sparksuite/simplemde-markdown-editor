@@ -1603,6 +1603,11 @@ SimpleMDE.prototype.autosave = function() {
 
 		if(simplemde.element.form != null && simplemde.element.form != undefined) {
 			simplemde.element.form.addEventListener("submit", function() {
+				/**
+				 * Remove the autosave function to stop resaving the MDE after the
+				 * submit has been started.
+				 */
+				SimpleMDE.prototype.autosave = function(){};
 				localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
 			});
 		}
