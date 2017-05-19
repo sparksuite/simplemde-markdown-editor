@@ -563,6 +563,14 @@ function toggleHeadingBigger(editor) {
 }
 
 /**
+ * Action for removing heading
+ */
+function removeHeading(editor) {
+	var cm = editor.codemirror;
+	_toggleHeading(cm, undefined, 0);
+}
+
+/**
  * Action for toggling heading size 1
  */
 function toggleHeading1(editor) {
@@ -856,7 +864,11 @@ function _toggleHeading(cm, direction, size) {
 					}
 				}
 			} else {
-				if(size == 1) {
+				if (size == 0) {
+					if (currHeadingLevel > 0) {
+						text = text.substr(currHeadingLevel + 1);
+					}
+				} else if(size == 1) {
 					if(currHeadingLevel <= 0) {
 						text = "# " + text;
 					} else if(currHeadingLevel == size) {
@@ -1942,6 +1954,7 @@ SimpleMDE.toggleStrikethrough = toggleStrikethrough;
 SimpleMDE.toggleBlockquote = toggleBlockquote;
 SimpleMDE.toggleHeadingSmaller = toggleHeadingSmaller;
 SimpleMDE.toggleHeadingBigger = toggleHeadingBigger;
+SimpleMDE.removeHeading = removeHeading;
 SimpleMDE.toggleHeading1 = toggleHeading1;
 SimpleMDE.toggleHeading2 = toggleHeading2;
 SimpleMDE.toggleHeading3 = toggleHeading3;
@@ -1979,6 +1992,9 @@ SimpleMDE.prototype.toggleHeadingSmaller = function() {
 };
 SimpleMDE.prototype.toggleHeadingBigger = function() {
 	toggleHeadingBigger(this);
+};
+SimpleMDE.prototype.removeHeading = function() {
+	removeHeading(this);
 };
 SimpleMDE.prototype.toggleHeading1 = function() {
 	toggleHeading1(this);
