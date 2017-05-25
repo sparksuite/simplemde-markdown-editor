@@ -27,6 +27,13 @@ Via [jsDelivr](https://www.jsdelivr.com/).
 <script src="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.js"></script>
 ```
 
+Via [cdnjs](https://cdnjs.com/libraries/simplemde). *Please note, this example is for v1.10.0, you can change the version number you need.*
+
+```HTML
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.10.0/simplemde.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.10.0/simplemde.min.js"></script>
+```
+
 ## Quick start
 
 After installing, load SimpleMDE on the first textarea on a page
