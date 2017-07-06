@@ -16360,8 +16360,9 @@ function drawLink(editor) {
 /**
  * Action for drawing an img.
  */
-function drawImage(editor, url) {
+function drawImage(editor, url, desc) {
 	url = (typeof url != "undefined") ? url : "http://";
+	desc = (typeof desc != "undefined") ? desc : "";
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
@@ -16371,7 +16372,7 @@ function drawImage(editor, url) {
 			return false;
 		}
 	}
-	_replaceSelection(cm, stat.image, options.insertTexts.image, url);
+	_replaceSelection(cm, stat.image, options.insertTexts.image, url, desc);
 }
 
 /**
@@ -16518,7 +16519,8 @@ function togglePreview(editor) {
 		toggleSideBySide(editor);
 }
 
-function _replaceSelection(cm, active, startEnd, url) {
+function _replaceSelection(cm, active, startEnd, url, desc) {
+	desc = (typeof desc != "undefined") ? desc : "";
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
@@ -16528,6 +16530,7 @@ function _replaceSelection(cm, active, startEnd, url) {
 	var startPoint = cm.getCursor("start");
 	var endPoint = cm.getCursor("end");
 	if(url) {
+		start = start.replace("#desc#", desc);
 		end = end.replace("#url#", url);
 	}
 	if(active) {
@@ -16972,7 +16975,7 @@ var toolbarBuiltInButtons = {
 
 var insertTexts = {
 	link: ["[", "](#url#)"],
-	image: ["![](", "#url#)"],
+	image: ["![#desc#](", "#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
@@ -17677,8 +17680,8 @@ SimpleMDE.prototype.cleanBlock = function() {
 SimpleMDE.prototype.drawLink = function() {
 	drawLink(this);
 };
-SimpleMDE.prototype.drawImage = function(url) {
-	drawImage(this, url);
+SimpleMDE.prototype.drawImage = function(url, desc) {
+	drawImage(this, url, desc);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
