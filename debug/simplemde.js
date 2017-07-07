@@ -16358,13 +16358,30 @@ function drawLink(editor) {
 }
 
 /**
+ * Insert image at cursor
+ */
+function insertAtCursor(cm, text, url, desc, point) {
+	var start = text[0];
+	var end = text[1];
+	if(typeof point != "undefined") {
+		point = cm.coordsChar(point);
+	} else {
+		point = cm.getCursor("start");
+	}
+	start = start.replace("#desc#", desc);
+	end = end.replace("#url#", url);
+	cm.replaceRange(start + end, point);
+	cm.focus();
+}
+
+
+/**
  * Action for drawing an img.
  */
 function drawImage(editor, url, desc) {
 	url = (typeof url != "undefined") ? url : "http://";
 	desc = (typeof desc != "undefined") ? desc : "";
 	var cm = editor.codemirror;
-	var stat = getState(cm);
 	var options = editor.options;
 	if(options.promptURLs) {
 		url = prompt(options.promptTexts.image);
@@ -16372,7 +16389,7 @@ function drawImage(editor, url, desc) {
 			return false;
 		}
 	}
-	_replaceSelection(cm, stat.image, options.insertTexts.image, url, desc);
+	insertAtCursor(cm, options.insertTexts.image, url, desc);
 }
 
 /**
