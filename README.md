@@ -77,6 +77,7 @@ simplemde.value("This text will appear in the editor");
   - **bold** Can be set to `**` or `__`. Defaults to `**`.
   - **code** Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic** Can be set to `*` or `_`. Defaults to `*`.
+- **disabled**: If set to `true`, disables editing and general use of SimpleMDE. Defaults to `false`.
 - **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
 - **forceSync**: If set to `true`, force text changes made in SimpleMDE to be immediately stored in original textarea. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
@@ -121,6 +122,7 @@ var simplemde = new SimpleMDE({
 		bold: "__",
 		italic: "_"
 	},
+	disabled: false,
 	element: document.getElementById("MyID"),
 	forceSync: true,
 	hideIcons: ["guide", "heading"],
@@ -177,6 +179,8 @@ var simplemde = new SimpleMDE({
 	toolbarTips: false,
 });
 ```
+
+**Note:** if you wish to dynamically disable / enable the SimpleMDE, make sure you use the `setDisabled` method (see below under "Useful methods"). You can access the current state of SimpleMDE via `simplemde.disabled`, however DO NOT change this property - treat it as a constant, or otherwise bad things will happen.
 
 #### Toolbar icons
 
@@ -323,6 +327,9 @@ simplemde.isPreviewActive(); // returns boolean
 simplemde.isSideBySideActive(); // returns boolean
 simplemde.isFullscreenActive(); // returns boolean
 simplemde.clearAutosavedValue(); // no returned value
+simplemde.setDisabled(true); // disables simpleMDE
+simplemde.setDisabled(false); // enables simpleMDE
+simplemde.setDisabled(!simplemde.disabled); // toggles simpleMDE
 ```
 
 ## How it works
