@@ -9,6 +9,19 @@
     z-index: 1;
 }
 
+.CodeMirror.SimpleMDE-disabled {
+    opacity: 0.5;
+}
+
+.CodeMirror.SimpleMDE-disabled,
+.CodeMirror.SimpleMDE-disabled * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: not-allowed;
+}
+
 .CodeMirror-scroll {
     min-height: 300px
 }
@@ -128,10 +141,22 @@
     cursor: pointer;
 }
 
+.editor-toolbar.SimpleMDE-disabled a {
+    opacity: 0.5;
+    cursor: not-allowed;
+    outline: none;
+}
+
 .editor-toolbar a.active,
 .editor-toolbar a:hover {
     background: #fcfcfc;
     border-color: #95a5a6;
+}
+
+.editor-toolbar.SimpleMDE-disabled a.active,
+.editor-toolbar.SimpleMDE-disabled a:hover {
+    background: transparent;
+    border-color: transparent;
 }
 
 .editor-toolbar a:before {
