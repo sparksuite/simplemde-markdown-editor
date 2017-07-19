@@ -1348,7 +1348,7 @@ function SimpleMDE(options) {
 
 
 	// Handle toolbar
-	if(options.toolbar !== false && options.toolbar instanceof Object) {
+	if(options.toolbar === undefined || (options.toolbar !== false && options.toolbar instanceof Object)) {
 		// Initialize
 		var toolbar = [];
 
