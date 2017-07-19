@@ -110,7 +110,7 @@ function createIcon(options, enableTooltips, shortcuts) {
 
 	// create element hook
 	if(options.whenEleCreate && typeof options.whenEleCreate === "function") {
-		el = options.whenEleCreate(el);
+		el = options.whenEleCreate.call(this, el);
 	}
 
 	el.tabIndex = -1;
@@ -1450,6 +1450,9 @@ function SimpleMDE(options) {
 	}
 }
 
+// support replaceSelection to user
+SimpleMDE.prototype.replaceSelection = _replaceSelection;
+
 /**
  * Default markdown render.
  */
@@ -1777,7 +1780,7 @@ SimpleMDE.prototype.createToolbar = function(items) {
 			if(item === "|") {
 				el = createSep();
 			} else {
-				el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
+				el = createIcon.call(self, item, self.options.toolbarTips, self.options.shortcuts);
 			}
 
 			// bind events, special for info
