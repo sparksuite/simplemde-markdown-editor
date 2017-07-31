@@ -224,6 +224,9 @@ function toggleFullScreen(editor) {
 	var sidebyside = cm.getWrapperElement().nextSibling;
 	if(/editor-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
+	// Add toggle fullscreen callback
+	if ('fullScreenCallback' in editor.options)
+		editor.options.fullScreenCallback(cm.getOption("fullScreen"));
 }
 
 
