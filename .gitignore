@@ -7,3 +7,7 @@ bower_components/
 *.ipr
 *.iws
 .idea/
+
+#MacOS junk files (could add more, see : https://github.com/github/gitignore/blob/master/Global/macOS.gitignore)
+.DS_Store
+._*
