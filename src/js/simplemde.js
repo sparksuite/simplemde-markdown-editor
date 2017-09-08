@@ -12,6 +12,8 @@ require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
 var CodeMirrorSpellChecker = require("codemirror-spell-checker");
 var marked = require("marked");
+var patchHTML = require("html2idom").patchHTML;
+var _ = require("lodash");
 
 
 // Some variables
@@ -211,7 +213,7 @@ function toggleFullScreen(editor) {
 
 
 	// Update toolbar button
-	if (editor.toolbarElements.fullscreen) {
+	if(editor.toolbarElements.fullscreen) {
 		var toolbarButton = editor.toolbarElements.fullscreen;
 
 		if(!/active/.test(toolbarButton.className)) {
@@ -691,29 +693,26 @@ function redo(editor) {
  * Toggle side by side preview
  */
 function toggleSideBySide(editor) {
+
 	var cm = editor.codemirror;
 	var wrapper = cm.getWrapperElement();
 	var preview = wrapper.nextSibling;
 	var toolbarButton = editor.toolbarElements["side-by-side"];
-	var useSideBySideListener = false;
+
 	if(/editor-preview-active-side/.test(preview.className)) {
+		editor.renderPreview(false); // stop rendering
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active-side\s*/g, ""
 		);
 		toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
 		wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, " ");
 	} else {
-		// When the preview button is clicked for the first time,
-		// give some time for the transition from editor.css to fire and the view to slide from right to left,
-		// instead of just appearing.
-		setTimeout(function() {
-			if(!cm.getOption("fullScreen"))
-				toggleFullScreen(editor);
-			preview.className += " editor-preview-active-side";
-		}, 1);
+		editor.renderPreview(preview);
+		if(!cm.getOption("fullScreen"))
+			toggleFullScreen(editor);
+		preview.className += " editor-preview-active-side";
 		toolbarButton.className += " active";
 		wrapper.className += " CodeMirror-sided";
-		useSideBySideListener = true;
 	}
 
 	// Hide normal preview if active
@@ -726,21 +725,6 @@ function toggleSideBySide(editor) {
 		var toolbar_div = wrapper.previousSibling;
 		toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
 		toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
-	}
-
-	var sideBySideRenderingFunction = function() {
-		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
-	};
-
-	if(!cm.sideBySideRenderingFunction) {
-		cm.sideBySideRenderingFunction = sideBySideRenderingFunction;
-	}
-
-	if(useSideBySideListener) {
-		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
-		cm.on("update", cm.sideBySideRenderingFunction);
-	} else {
-		cm.off("update", cm.sideBySideRenderingFunction);
 	}
 
 	// Refresh to fix selection being off (#309)
@@ -757,12 +741,15 @@ function togglePreview(editor) {
 	var toolbar_div = wrapper.previousSibling;
 	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
 	var preview = wrapper.lastChild;
+
 	if(!preview || !/editor-preview/.test(preview.className)) {
+		// initialize the preview element and the preview function
 		preview = document.createElement("div");
 		preview.className = "editor-preview";
 		wrapper.appendChild(preview);
 	}
 	if(/editor-preview-active/.test(preview.className)) {
+		editor.renderPreview(false); // stop rendering
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active\s*/g, ""
 		);
@@ -771,6 +758,7 @@ function togglePreview(editor) {
 			toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
 		}
 	} else {
+		editor.renderPreview(preview);
 		// When the preview button is clicked for the first time,
 		// give some time for the transition from editor.css to fire and the view to slide from right to left,
 		// instead of just appearing.
@@ -782,7 +770,6 @@ function togglePreview(editor) {
 			toolbar_div.className += " disabled-for-preview";
 		}
 	}
-	preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 
 	// Turn off side by side if needed
 	var sidebyside = cm.getWrapperElement().nextSibling;
@@ -1470,19 +1457,20 @@ SimpleMDE.prototype.markdown = function(text) {
  * Render editor to the given element.
  */
 SimpleMDE.prototype.render = function(el) {
+	var editor = this;
+
 	if(!el) {
-		el = this.element || document.getElementsByTagName("textarea")[0];
+		el = editor.element || document.getElementsByTagName("textarea")[0];
 	}
 
-	if(this._rendered && this._rendered === el) {
+	if(editor._rendered && editor._rendered === el) {
 		// Already rendered.
 		return;
 	}
 
-	this.element = el;
-	var options = this.options;
+	editor.element = el;
+	var options = editor.options;
 
-	var self = this;
 	var keyMaps = {};
 
 	for(var key in options.shortcuts) {
@@ -1490,7 +1478,7 @@ SimpleMDE.prototype.render = function(el) {
 		if(options.shortcuts[key] !== null && bindings[key] !== null) {
 			(function(key) {
 				keyMaps[fixShortcut(options.shortcuts[key])] = function() {
-					bindings[key](self);
+					bindings[key](editor);
 				};
 			})(key);
 		}
@@ -1500,14 +1488,14 @@ SimpleMDE.prototype.render = function(el) {
 	keyMaps["Tab"] = "tabAndIndentMarkdownList";
 	keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
 	keyMaps["Esc"] = function(cm) {
-		if(cm.getOption("fullScreen")) toggleFullScreen(self);
+		if(cm.getOption("fullScreen")) toggleFullScreen(editor);
 	};
 
 	document.addEventListener("keydown", function(e) {
 		e = e || window.event;
 
 		if(e.keyCode == 27) {
-			if(self.codemirror.getOption("fullScreen")) toggleFullScreen(self);
+			if(editor.codemirror.getOption("fullScreen")) toggleFullScreen(editor);
 		}
 	}, false);
 
@@ -1527,7 +1515,7 @@ SimpleMDE.prototype.render = function(el) {
 		mode.gitHubSpice = false;
 	}
 
-	this.codemirror = CodeMirror.fromTextArea(el, {
+	var cm = editor.codemirror = CodeMirror.fromTextArea(el, {
 		mode: mode,
 		backdrop: backdrop,
 		theme: "paper",
@@ -1543,37 +1531,36 @@ SimpleMDE.prototype.render = function(el) {
 		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : !isMobile(),
 	});
 
-	this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
+	cm.getScrollerElement().style.minHeight = options.minHeight;
 
-	if(options.forceSync === true) {
-		var cm = this.codemirror;
-		cm.on("change", function() {
-			cm.save();
-		});
-	}
+	// Throttle preview update and save on text changes
+	cm.on("change", _.throttle(function() {
+		editor.renderPreview();
+		if(options.forceSync === true) cm.save();
+	}, 200, {
+		leading: true
+	}));
 
-	this.gui = {};
+	editor.gui = {};
 
 	if(options.toolbar !== false) {
-		this.gui.toolbar = this.createToolbar();
+		editor.gui.toolbar = editor.createToolbar();
 	}
 	if(options.status !== false) {
-		this.gui.statusbar = this.createStatusbar();
+		editor.gui.statusbar = editor.createStatusbar();
 	}
 	if(options.autosave != undefined && options.autosave.enabled === true) {
-		this.autosave();
+		editor.autosave();
 	}
 
-	this.gui.sideBySide = this.createSideBySide();
+	editor.gui.sideBySide = editor.createSideBySide();
 
-	this._rendered = this.element;
-
+	editor._rendered = editor.element;
 
 	// Fixes CodeMirror bug (#344)
-	var temp_cm = this.codemirror;
 	setTimeout(function() {
-		temp_cm.refresh();
-	}.bind(temp_cm), 0);
+		cm.refresh();
+	}, 0);
 };
 
 // Safari, in Private Browsing Mode, looks like it supports localStorage but all calls to setItem throw QuotaExceededError. We're going to detect this and set a variable accordingly.
@@ -1915,20 +1902,38 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 };
 
 /**
+ * Set preview target and remember it
+ * Render the current markdown content inside it
+ */
+SimpleMDE.prototype.renderPreview = function(previewTarget) {
+	var editor = this;
+	if(previewTarget === false) {
+		// stop rendering preview
+		editor.previewElement = null;
+	}
+	if((typeof previewTarget === "object") && (previewTarget.nodeType === 1)) {
+		// remember new preview target
+		editor.previewElement = previewTarget;
+	}
+	if(!editor.previewElement) {
+		return;
+	}
+	patchHTML(editor.previewElement, editor.options.previewRender(editor.value()));
+};
+
+/**
  * Get or set the text content.
  */
 SimpleMDE.prototype.value = function(val) {
-	var cm = this.codemirror;
+	var editor = this,
+		cm = editor.codemirror;
 	if(val === undefined) {
 		return cm.getValue();
 	} else {
 		cm.getDoc().setValue(val);
-		if(this.isPreviewActive()) {
-			var wrapper = cm.getWrapperElement();
-			var preview = wrapper.lastChild;
-			preview.innerHTML = this.options.previewRender(val, preview);
-		}
-		return this;
+		editor.renderPreview();
+
+		return editor;
 	}
 };
 
