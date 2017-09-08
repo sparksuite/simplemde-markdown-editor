@@ -1310,19 +1310,19 @@ html-parse-stringify@^1.0.2:
   dependencies:
     void-elements "^1.0.0"
 
-html2idom@^0.0.5:
+"html2idom@https://github.com/zipang/html2IDOM":
   version "0.0.5"
-  resolved "https://registry.yarnpkg.com/html2idom/-/html2idom-0.0.5.tgz#832fdd916403b1caef082f3e700cac7f721cac95"
+  resolved "https://github.com/zipang/html2IDOM#bf475eeb3484d967a07fbf27f02bc39df8e92b07"
   dependencies:
     html-parse-stringify "^1.0.2"
-    htmlparser2 "^3.8.3"
-    incremental-dom "^0.1.0"
+    htmlparser2 "^3.9.2"
+    incremental-dom "^0.5.1"
 
 htmlescape@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/htmlescape/-/htmlescape-1.1.1.tgz#3a03edc2214bca3b66424a3e7959349509cb0351"
 
-htmlparser2@^3.8.3:
+htmlparser2@^3.9.2:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
   dependencies:
@@ -1353,9 +1353,9 @@ imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
 
-incremental-dom@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/incremental-dom/-/incremental-dom-0.1.0.tgz#c39618777134e94c58aea8e31075d3249184662e"
+incremental-dom@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/incremental-dom/-/incremental-dom-0.5.1.tgz#52f4539c3e9eee7cd112a6da052fb7162fefb0c3"
 
 indexof@0.0.1:
   version "0.0.1"
