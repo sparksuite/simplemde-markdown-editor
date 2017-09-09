@@ -23,7 +23,7 @@
   "dependencies": {
     "codemirror": "*",
     "codemirror-spell-checker": "*",
-    "html2idom": "https://github.com/zipang/html2IDOM",
+    "html2idom": "*",
     "marked": "*"
   },
   "devDependencies": {

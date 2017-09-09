@@ -1310,9 +1310,9 @@ html-parse-stringify@^1.0.2:
   dependencies:
     void-elements "^1.0.0"
 
-"html2idom@https://github.com/zipang/html2IDOM":
-  version "0.0.5"
-  resolved "https://github.com/zipang/html2IDOM#bf475eeb3484d967a07fbf27f02bc39df8e92b07"
+html2idom@*:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/html2idom/-/html2idom-0.1.0.tgz#112fdd563387ce529f2c16d172be81282339d671"
   dependencies:
     html-parse-stringify "^1.0.2"
     htmlparser2 "^3.9.2"
