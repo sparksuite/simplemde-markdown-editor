@@ -632,11 +632,11 @@ function drawLink(editor) {
 /**
  * Action for drawing an img.
  */
-function drawImage(editor) {
+function drawImage(editor, url) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
+	url || (url = "http://");
 	if(options.promptURLs) {
 		url = prompt(options.promptTexts.image);
 		if(!url) {
@@ -2006,6 +2006,9 @@ SimpleMDE.prototype.drawLink = function() {
 };
 SimpleMDE.prototype.drawImage = function() {
 	drawImage(this);
+};
+SimpleMDE.prototype.drawImageUrl = function(url) {
+	drawImage(this, url);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
