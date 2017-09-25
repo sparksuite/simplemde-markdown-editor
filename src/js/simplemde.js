@@ -1494,6 +1494,7 @@ SimpleMDE.prototype.render = function(el) {
 		placeholder: options.placeholder || el.getAttribute("placeholder") || "",
 		styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
 	});
+	this.codemirror.display.wrapper.className += ' simplemde-editor';
 
 	if(options.forceSync === true) {
 		var cm = this.codemirror;

@@ -1,4 +1,4 @@
-.CodeMirror {
+.simplemde-editor.CodeMirror {
     height: auto;
     min-height: 300px;
     border: 1px solid #ddd;
@@ -9,11 +9,11 @@
     z-index: 1;
 }
 
-.CodeMirror-scroll {
+.simplemde-editor .CodeMirror-scroll {
     min-height: 300px
 }
 
-.CodeMirror-fullscreen {
+.simplemde-editor .CodeMirror-fullscreen {
     background: #fff;
     position: fixed !important;
     top: 50px;
@@ -24,11 +24,11 @@
     z-index: 9;
 }
 
-.CodeMirror-sided {
+.simplemde-editor .CodeMirror-sided {
     width: 50% !important;
 }
 
-.editor-toolbar {
+.simplemde-editor .editor-toolbar {
     position: relative;
     opacity: .6;
     -webkit-user-select: none;
@@ -270,59 +270,59 @@
     padding: 5px;
 }
 
-.CodeMirror .CodeMirror-code .cm-tag {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-tag {
     color: #63a35c;
 }
 
-.CodeMirror .CodeMirror-code .cm-attribute {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-attribute {
     color: #795da3;
 }
 
-.CodeMirror .CodeMirror-code .cm-string {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-string {
     color: #183691;
 }
 
-.CodeMirror .CodeMirror-selected {
+.simplemde-editor.CodeMirror .CodeMirror-selected {
     background: #d9d9d9;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-1 {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-header-1 {
     font-size: 200%;
     line-height: 200%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-2 {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-header-2 {
     font-size: 160%;
     line-height: 160%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-3 {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-header-3 {
     font-size: 125%;
     line-height: 125%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-4 {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-header-4 {
     font-size: 110%;
     line-height: 110%;
 }
 
-.CodeMirror .CodeMirror-code .cm-comment {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-comment {
     background: rgba(0, 0, 0, .05);
     border-radius: 2px;
 }
 
-.CodeMirror .CodeMirror-code .cm-link {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-link {
     color: #7f8c8d;
 }
 
-.CodeMirror .CodeMirror-code .cm-url {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-url {
     color: #aab2b3;
 }
 
-.CodeMirror .CodeMirror-code .cm-strikethrough {
+.simplemde-editor.CodeMirror .CodeMirror-code .cm-strikethrough {
     text-decoration: line-through;
 }
 
-.CodeMirror .CodeMirror-placeholder {
+.simplemde-editor.CodeMirror .CodeMirror-placeholder {
     opacity: .5;
 }
