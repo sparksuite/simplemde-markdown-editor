@@ -109,7 +109,12 @@ function createIcon(options, enableTooltips, shortcuts) {
 	}
 
 	el.tabIndex = -1;
-	el.className = options.className;
+	
+	// Create icon element and append as a child to the button.
+	var icon = document.createElement("i");
+	icon.className = options.className;
+	el.appendChild(icon);
+
 	return el;
 }
 
