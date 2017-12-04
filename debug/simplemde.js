@@ -16113,8 +16113,21 @@ function createIcon(options, enableTooltips, shortcuts) {
 		}
 	}
 
+	if(options.noDisable) {
+		el.classList.add("no-disable");
+	}
+
+	if(options.noMobile) {
+		el.classList.add("no-mobile");
+	}
+
 	el.tabIndex = -1;
-	el.className = options.className;
+
+	// Create icon element and append as a child to the button
+	var icon = document.createElement("i");
+	icon.className = options.className;
+	el.appendChild(icon);
+
 	return el;
 }
 
@@ -17130,7 +17143,7 @@ var toolbarBuiltInButtons = {
 	"heading": {
 		name: "heading",
 		action: toggleHeadingSmaller,
-		className: "fa fa-header",
+		className: "fa fa-header fa-heading",
 		title: "Heading",
 		default: true
 	},
@@ -17213,7 +17226,7 @@ var toolbarBuiltInButtons = {
 	"image": {
 		name: "image",
 		action: drawImage,
-		className: "fa fa-picture-o",
+		className: "fa fa-image",
 		title: "Insert Image",
 		default: true
 	},
@@ -17235,21 +17248,26 @@ var toolbarBuiltInButtons = {
 	"preview": {
 		name: "preview",
 		action: togglePreview,
-		className: "fa fa-eye no-disable",
+		className: "fa fa-eye",
+		noDisable: true,
 		title: "Toggle Preview",
 		default: true
 	},
 	"side-by-side": {
 		name: "side-by-side",
 		action: toggleSideBySide,
-		className: "fa fa-columns no-disable no-mobile",
+		className: "fa fa-columns",
+		noDisable: true,
+		noMobile: true,
 		title: "Toggle Side by Side",
 		default: true
 	},
 	"fullscreen": {
 		name: "fullscreen",
 		action: toggleFullScreen,
-		className: "fa fa-arrows-alt no-disable no-mobile",
+		className: "fa fa-arrows-alt",
+		noDisable: true,
+		noMobile: true,
 		title: "Toggle Fullscreen",
 		default: true
 	},
@@ -17269,13 +17287,15 @@ var toolbarBuiltInButtons = {
 	"undo": {
 		name: "undo",
 		action: undo,
-		className: "fa fa-undo no-disable",
+		className: "fa fa-undo",
+		noDisable: true,
 		title: "Undo"
 	},
 	"redo": {
 		name: "redo",
 		action: redo,
-		className: "fa fa-repeat no-disable",
+		className: "fa fa-repeat",
+		noDisable: true,
 		title: "Redo"
 	}
 };
