@@ -17278,6 +17278,7 @@ var toolbarBuiltInButtons = {
 		name: "guide",
 		action: "https://simplemde.com/markdown-guide",
 		className: "fa fa-question-circle",
+		noDisable: true,
 		title: "Markdown Guide",
 		default: true
 	},
