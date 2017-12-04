@@ -11,6 +11,7 @@
   font-family: monospace;
   height: 300px;
   color: black;
+  direction: ltr;
 }
 
 /* PADDING */
@@ -64,7 +65,12 @@
 .cm-fat-cursor div.CodeMirror-cursors {
   z-index: 1;
 }
-
+.cm-fat-cursor-mark {
+  background-color: rgba(20, 255, 20, 0.5);
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite;
+}
 .cm-animate-fat-cursor {
   width: auto;
   border: 0;
@@ -94,8 +100,14 @@
 
 .cm-tab { display: inline-block; text-decoration: inherit; }
 
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0; right: 0; top: -50px; bottom: -20px;
+  overflow: hidden;
+}
 .CodeMirror-ruler {
   border-left: 1px solid #ccc;
+  top: 0; bottom: 0;
   position: absolute;
 }
 
@@ -119,7 +131,7 @@
 .cm-s-default .cm-property,
 .cm-s-default .cm-operator {}
 .cm-s-default .cm-variable-2 {color: #05a;}
-.cm-s-default .cm-variable-3 {color: #085;}
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {color: #085;}
 .cm-s-default .cm-comment {color: #a50;}
 .cm-s-default .cm-string {color: #a11;}
 .cm-s-default .cm-string-2 {color: #f50;}
@@ -139,8 +151,8 @@
 
 /* Default styles for common addons */
 
-div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
-div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0b0;}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #a22;}
 .CodeMirror-matchingtag { background: rgba(255, 150, 0, .3); }
 .CodeMirror-activeline-background {background: #e8f2ff;}
 
@@ -206,9 +218,6 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   display: inline-block;
   vertical-align: top;
   margin-bottom: -30px;
-  /* Hack to make IE7 behave */
-  *zoom:1;
-  *display:inline;
 }
 .CodeMirror-gutter-wrapper {
   position: absolute;
@@ -226,11 +235,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   cursor: default;
   z-index: 4;
 }
-.CodeMirror-gutter-wrapper {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
+.CodeMirror-gutter-wrapper ::selection { background-color: transparent }
+.CodeMirror-gutter-wrapper ::-moz-selection { background-color: transparent }
 
 .CodeMirror-lines {
   cursor: text;
@@ -252,8 +258,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
-  -webkit-font-variant-ligatures: none;
-  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual;
 }
 .CodeMirror-wrap pre {
   word-wrap: break-word;
@@ -274,6 +280,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 
 .CodeMirror-widget {}
+
+.CodeMirror-rtl pre { direction: rtl; }
 
 .CodeMirror-code {
   outline: none;
@@ -297,7 +305,10 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   visibility: hidden;
 }
 
-.CodeMirror-cursor { position: absolute; }
+.CodeMirror-cursor {
+  position: absolute;
+  pointer-events: none;
+}
 .CodeMirror-measure pre { position: static; }
 
 div.CodeMirror-cursors {
@@ -320,12 +331,9 @@ div.CodeMirror-dragcursors {
 .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d7d4f0; }
 
 .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, .4);
+  background-color: #ffa;
+  background-color: rgba(255, 255, 0, .4);
 }
-
-/* IE7 hack to prevent it from returning funny offsetTops on the spans */
-.CodeMirror span { *vertical-align: text-bottom; }
 
 /* Used to force a border model for a node */
 .cm-force-border { padding-right: .1px; }
@@ -375,7 +383,6 @@ span.CodeMirror-selectedtext { background: none; }
 
 .editor-toolbar {
     position: relative;
-    opacity: .6;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -402,12 +409,6 @@ span.CodeMirror-selectedtext { background: none; }
 
 .editor-toolbar:after {
     margin-top: 8px
-}
-
-.editor-toolbar:hover,
-.editor-wrapper input.title:focus,
-.editor-wrapper input.title:hover {
-    opacity: .8
 }
 
 .editor-toolbar.fullscreen {
@@ -464,7 +465,6 @@ span.CodeMirror-selectedtext { background: none; }
     display: inline-block;
     text-align: center;
     text-decoration: none!important;
-    color: #2c3e50!important;
     width: 30px;
     height: 30px;
     margin: 0;
@@ -522,6 +522,7 @@ span.CodeMirror-selectedtext { background: none; }
 }
 
 .editor-toolbar.disabled-for-preview a:not(.no-disable) {
+    opacity: .6;
     pointer-events: none;
     background: #fff;
     border-color: transparent;
