@@ -382,7 +382,6 @@ span.CodeMirror-selectedtext { background: none; }
 
 .editor-toolbar {
     position: relative;
-    opacity: .6;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -409,12 +408,6 @@ span.CodeMirror-selectedtext { background: none; }
 
 .editor-toolbar:after {
     margin-top: 8px
-}
-
-.editor-toolbar:hover,
-.editor-wrapper input.title:focus,
-.editor-wrapper input.title:hover {
-    opacity: .8
 }
 
 .editor-toolbar.fullscreen {
@@ -473,7 +466,6 @@ span.CodeMirror-selectedtext { background: none; }
     display: inline-block;
     text-align: center;
     text-decoration: none!important;
-    color: #2c3e50!important;
     width: 30px;
     height: 30px;
     margin: 0;
@@ -534,11 +526,9 @@ span.CodeMirror-selectedtext { background: none; }
     content: "▼";
 }
 
-.editor-toolbar.disabled-for-preview a:not(.no-disable) {
+.editor-toolbar.disabled-for-preview button:not(.no-disable) {
+    opacity: .6;
     pointer-events: none;
-    background: #fff;
-    border-color: transparent;
-    text-shadow: inherit;
 }
 
 @media only screen and (max-width: 700px) {
