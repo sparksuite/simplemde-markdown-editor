@@ -30,7 +30,6 @@
 
 .editor-toolbar {
     position: relative;
-    opacity: .6;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -57,12 +56,6 @@
 
 .editor-toolbar:after {
     margin-top: 8px
-}
-
-.editor-toolbar:hover,
-.editor-wrapper input.title:focus,
-.editor-wrapper input.title:hover {
-    opacity: .8
 }
 
 .editor-toolbar.fullscreen {
@@ -119,7 +112,6 @@
     display: inline-block;
     text-align: center;
     text-decoration: none!important;
-    color: #2c3e50!important;
     width: 30px;
     height: 30px;
     margin: 0;
@@ -177,6 +169,7 @@
 }
 
 .editor-toolbar.disabled-for-preview a:not(.no-disable) {
+    opacity: .6;
     pointer-events: none;
     background: #fff;
     border-color: transparent;
