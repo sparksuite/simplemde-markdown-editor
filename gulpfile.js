@@ -45,9 +45,6 @@ gulp.task('styles', function () {
 
     return gulp.src(css_files)
         .pipe(concat('simplemde.css'))
-        .pipe(buffer())
-        .pipe(header(banner, {pkg: pkg}))
-        .pipe(gulp.dest('./debug/'))
         .pipe(minifycss())
         .pipe(rename('simplemde.min.css'))
         .pipe(buffer())
