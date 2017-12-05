@@ -15,11 +15,6 @@ Via [npm](https://www.npmjs.com/package/simplemde).
 npm install simplemde --save
 ```
 
-Via [bower](https://www.bower.io).
-```
-bower install simplemde --save
-```
-
 Via [jsDelivr](https://www.jsdelivr.com/).
 
 ```HTML
