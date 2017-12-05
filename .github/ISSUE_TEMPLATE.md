@@ -1,5 +1,13 @@
-If you're submitting a bug, complete these tasks:
+<!-- Please help me process issues faster by providing the following information -->
+### I'm submitting a...
+- [x] Bug report
+- [ ] Feature request
 
-- Set up a [JSFiddle](https://jsfiddle.net/) that replicates the bug
-- Link to your JSFiddle
-- Provide an exact list of step-by-step instructions that will replicate the bug
+### Reproduction steps
+<!-- Bonus points if you set up a [JSFiddle](https://jsfiddle.net/) that replicates the bug and link it in the issue. -->
+1. ...
+2. ...
+
+### Version information
+Browser type and version:
+SimpleMDE version:
