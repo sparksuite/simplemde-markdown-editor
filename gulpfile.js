@@ -7,7 +7,6 @@ var gulp = require('gulp'),
     header = require('gulp-header'),
     buffer = require('vinyl-buffer'),
     pkg = require('./package.json'),
-    debug = require('gulp-debug'),
     eslint = require('gulp-eslint'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
@@ -23,40 +22,16 @@ var banner = ['/**',
 
 gulp.task('lint', function () {
     gulp.src('./src/js/**/*.js')
-        .pipe(debug())
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });
 
-function taskBrowserify(opts) {
-    return browserify('./src/js/simplemde.js', opts)
-        .bundle();
-}
-
-gulp.task('browserify:debug', ['lint'], function () {
-    return taskBrowserify({debug: true, standalone: 'SimpleMDE'})
-        .pipe(source('simplemde.debug.js'))
+gulp.task('scripts', ['lint'], function () {
+    return browserify({entries: './src/js/simplemde.js', standalone: 'SimpleMDE'}).bundle()
+        .pipe(source('simplemde.min.js'))
         .pipe(buffer())
-        .pipe(header(banner, {pkg: pkg}))
-        .pipe(gulp.dest('./debug/'));
-});
-
-gulp.task('browserify', ['lint'], function () {
-    return taskBrowserify({standalone: 'SimpleMDE'})
-        .pipe(source('simplemde.js'))
-        .pipe(buffer())
-        .pipe(header(banner, {pkg: pkg}))
-        .pipe(gulp.dest('./debug/'));
-});
-
-gulp.task('scripts', ['browserify:debug', 'browserify', 'lint'], function () {
-    var js_files = ['./debug/simplemde.js'];
-
-    return gulp.src(js_files)
-        .pipe(concat('simplemde.min.js'))
         .pipe(uglify())
-        .pipe(buffer())
         .pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest('./dist/'));
 });
