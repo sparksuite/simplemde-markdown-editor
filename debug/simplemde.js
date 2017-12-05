@@ -15960,7 +15960,7 @@ if (typeof module !== 'undefined') {
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
-var CodeMirror = require("codemirror");
+var CodeMirror = require('codemirror');
 
 CodeMirror.commands.tabAndIndentMarkdownList = function (cm) {
     var ranges = cm.listSelections();
@@ -15969,15 +15969,15 @@ CodeMirror.commands.tabAndIndentMarkdownList = function (cm) {
     var inList = eolState.list !== false;
 
     if (inList) {
-        cm.execCommand("indentMore");
+        cm.execCommand('indentMore');
         return;
     }
 
     if (cm.options.indentWithTabs) {
-        cm.execCommand("insertTab");
+        cm.execCommand('insertTab');
     }
     else {
-        var spaces = Array(cm.options.tabSize + 1).join(" ");
+        var spaces = Array(cm.options.tabSize + 1).join(' ');
         cm.replaceSelection(spaces);
     }
 };
@@ -15989,34 +15989,34 @@ CodeMirror.commands.shiftTabAndUnindentMarkdownList = function (cm) {
     var inList = eolState.list !== false;
 
     if (inList) {
-        cm.execCommand("indentLess");
+        cm.execCommand('indentLess');
         return;
     }
 
     if (cm.options.indentWithTabs) {
-        cm.execCommand("insertTab");
+        cm.execCommand('insertTab');
     }
     else {
-        var spaces = Array(cm.options.tabSize + 1).join(" ");
+        var spaces = Array(cm.options.tabSize + 1).join(' ');
         cm.replaceSelection(spaces);
     }
 };
 
 },{"codemirror":10}],19:[function(require,module,exports){
 /*global require,module*/
-"use strict";
-var CodeMirror = require("codemirror");
-require("codemirror/addon/edit/continuelist.js");
-require("./codemirror/tablist");
-require("codemirror/addon/display/fullscreen.js");
-require("codemirror/mode/markdown/markdown.js");
-require("codemirror/addon/mode/overlay.js");
-require("codemirror/addon/display/placeholder.js");
-require("codemirror/addon/selection/mark-selection.js");
-require("codemirror/mode/gfm/gfm.js");
-require("codemirror/mode/xml/xml.js");
-var CodeMirrorSpellChecker = require("codemirror-spell-checker");
-var marked = require("marked");
+'use strict';
+var CodeMirror = require('codemirror');
+require('codemirror/addon/edit/continuelist.js');
+require('./codemirror/tablist');
+require('codemirror/addon/display/fullscreen.js');
+require('codemirror/mode/markdown/markdown.js');
+require('codemirror/addon/mode/overlay.js');
+require('codemirror/addon/display/placeholder.js');
+require('codemirror/addon/selection/mark-selection.js');
+require('codemirror/mode/gfm/gfm.js');
+require('codemirror/mode/xml/xml.js');
+var CodeMirrorSpellChecker = require('codemirror-spell-checker');
+var marked = require('marked');
 
 
 // Some variables
@@ -16024,45 +16024,45 @@ var isMac = /Mac/.test(navigator.platform);
 
 // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
 var bindings = {
-    "toggleBold": toggleBold,
-    "toggleItalic": toggleItalic,
-    "drawLink": drawLink,
-    "toggleHeadingSmaller": toggleHeadingSmaller,
-    "toggleHeadingBigger": toggleHeadingBigger,
-    "drawImage": drawImage,
-    "toggleBlockquote": toggleBlockquote,
-    "toggleOrderedList": toggleOrderedList,
-    "toggleUnorderedList": toggleUnorderedList,
-    "toggleCodeBlock": toggleCodeBlock,
-    "togglePreview": togglePreview,
-    "toggleStrikethrough": toggleStrikethrough,
-    "toggleHeading1": toggleHeading1,
-    "toggleHeading2": toggleHeading2,
-    "toggleHeading3": toggleHeading3,
-    "cleanBlock": cleanBlock,
-    "drawTable": drawTable,
-    "drawHorizontalRule": drawHorizontalRule,
-    "undo": undo,
-    "redo": redo,
-    "toggleSideBySide": toggleSideBySide,
-    "toggleFullScreen": toggleFullScreen
+    'toggleBold': toggleBold,
+    'toggleItalic': toggleItalic,
+    'drawLink': drawLink,
+    'toggleHeadingSmaller': toggleHeadingSmaller,
+    'toggleHeadingBigger': toggleHeadingBigger,
+    'drawImage': drawImage,
+    'toggleBlockquote': toggleBlockquote,
+    'toggleOrderedList': toggleOrderedList,
+    'toggleUnorderedList': toggleUnorderedList,
+    'toggleCodeBlock': toggleCodeBlock,
+    'togglePreview': togglePreview,
+    'toggleStrikethrough': toggleStrikethrough,
+    'toggleHeading1': toggleHeading1,
+    'toggleHeading2': toggleHeading2,
+    'toggleHeading3': toggleHeading3,
+    'cleanBlock': cleanBlock,
+    'drawTable': drawTable,
+    'drawHorizontalRule': drawHorizontalRule,
+    'undo': undo,
+    'redo': redo,
+    'toggleSideBySide': toggleSideBySide,
+    'toggleFullScreen': toggleFullScreen
 };
 
 var shortcuts = {
-    "toggleBold": "Cmd-B",
-    "toggleItalic": "Cmd-I",
-    "drawLink": "Cmd-K",
-    "toggleHeadingSmaller": "Cmd-H",
-    "toggleHeadingBigger": "Shift-Cmd-H",
-    "cleanBlock": "Cmd-E",
-    "drawImage": "Cmd-Alt-I",
-    "toggleBlockquote": "Cmd-'",
-    "toggleOrderedList": "Cmd-Alt-L",
-    "toggleUnorderedList": "Cmd-L",
-    "toggleCodeBlock": "Cmd-Alt-C",
-    "togglePreview": "Cmd-P",
-    "toggleSideBySide": "F9",
-    "toggleFullScreen": "F11"
+    'toggleBold': 'Cmd-B',
+    'toggleItalic': 'Cmd-I',
+    'drawLink': 'Cmd-K',
+    'toggleHeadingSmaller': 'Cmd-H',
+    'toggleHeadingBigger': 'Shift-Cmd-H',
+    'cleanBlock': 'Cmd-E',
+    'drawImage': 'Cmd-Alt-I',
+    'toggleBlockquote': 'Cmd-\'',
+    'toggleOrderedList': 'Cmd-Alt-L',
+    'toggleUnorderedList': 'Cmd-L',
+    'toggleCodeBlock': 'Cmd-Alt-C',
+    'togglePreview': 'Cmd-P',
+    'toggleSideBySide': 'F9',
+    'toggleFullScreen': 'F11'
 };
 
 var getBindingName = function (f) {
@@ -16088,9 +16088,9 @@ var isMobile = function () {
  */
 function fixShortcut(name) {
     if (isMac) {
-        name = name.replace("Ctrl", "Cmd");
+        name = name.replace('Ctrl', 'Cmd');
     } else {
-        name = name.replace("Cmd", "Ctrl");
+        name = name.replace('Cmd', 'Ctrl');
     }
     return name;
 }
@@ -16101,30 +16101,30 @@ function fixShortcut(name) {
  */
 function createIcon(options, enableTooltips, shortcuts) {
     options = options || {};
-    var el = document.createElement("button");
+    var el = document.createElement('button');
     enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
     if (options.title && enableTooltips) {
         el.title = createTooltip(options.title, options.action, shortcuts);
 
         if (isMac) {
-            el.title = el.title.replace("Ctrl", "⌘");
-            el.title = el.title.replace("Alt", "⌥");
+            el.title = el.title.replace('Ctrl', '⌘');
+            el.title = el.title.replace('Alt', '⌥');
         }
     }
 
     if (options.noDisable) {
-        el.classList.add("no-disable");
+        el.classList.add('no-disable');
     }
 
     if (options.noMobile) {
-        el.classList.add("no-mobile");
+        el.classList.add('no-mobile');
     }
 
     el.tabIndex = -1;
 
     // Create icon element and append as a child to the button
-    var icon = document.createElement("i");
+    var icon = document.createElement('i');
     icon.className = options.className;
     el.appendChild(icon);
 
@@ -16132,9 +16132,9 @@ function createIcon(options, enableTooltips, shortcuts) {
 }
 
 function createSep() {
-    var el = document.createElement("i");
-    el.className = "separator";
-    el.innerHTML = "|";
+    var el = document.createElement('i');
+    el.className = 'separator';
+    el.innerHTML = '|';
     return el;
 }
 
@@ -16145,7 +16145,7 @@ function createTooltip(title, action, shortcuts) {
     if (action) {
         actionName = getBindingName(action);
         if (shortcuts[actionName]) {
-            tooltip += " (" + fixShortcut(shortcuts[actionName]) + ")";
+            tooltip += ' (' + fixShortcut(shortcuts[actionName]) + ')';
         }
     }
 
@@ -16156,41 +16156,41 @@ function createTooltip(title, action, shortcuts) {
  * The state of CodeMirror at the given position.
  */
 function getState(cm, pos) {
-    pos = pos || cm.getCursor("start");
+    pos = pos || cm.getCursor('start');
     var stat = cm.getTokenAt(pos);
     if (!stat.type) return {};
 
-    var types = stat.type.split(" ");
+    var types = stat.type.split(' ');
 
     var ret = {},
         data, text;
     for (var i = 0; i < types.length; i++) {
         data = types[i];
-        if (data === "strong") {
+        if (data === 'strong') {
             ret.bold = true;
-        } else if (data === "variable-2") {
+        } else if (data === 'variable-2') {
             text = cm.getLine(pos.line);
             if (/^\s*\d+\.\s/.test(text)) {
-                ret["ordered-list"] = true;
+                ret['ordered-list'] = true;
             } else {
-                ret["unordered-list"] = true;
+                ret['unordered-list'] = true;
             }
-        } else if (data === "atom") {
+        } else if (data === 'atom') {
             ret.quote = true;
-        } else if (data === "em") {
+        } else if (data === 'em') {
             ret.italic = true;
-        } else if (data === "quote") {
+        } else if (data === 'quote') {
             ret.quote = true;
-        } else if (data === "strikethrough") {
+        } else if (data === 'strikethrough') {
             ret.strikethrough = true;
-        } else if (data === "comment") {
+        } else if (data === 'comment') {
             ret.code = true;
-        } else if (data === "link") {
+        } else if (data === 'link') {
             ret.link = true;
-        } else if (data === "tag") {
+        } else if (data === 'tag') {
             ret.image = true;
         } else if (data.match(/^header(-[1-6])?$/)) {
-            ret[data.replace("header", "heading")] = true;
+            ret[data.replace('header', 'heading')] = true;
         }
     }
     return ret;
@@ -16198,7 +16198,7 @@ function getState(cm, pos) {
 
 
 // Saved overflow setting
-var saved_overflow = "";
+var saved_overflow = '';
 
 /**
  * Toggle full screen of the editor.
@@ -16206,13 +16206,13 @@ var saved_overflow = "";
 function toggleFullScreen(editor) {
     // Set fullscreen
     var cm = editor.codemirror;
-    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+    cm.setOption('fullScreen', !cm.getOption('fullScreen'));
 
 
     // Prevent scrolling on body during fullscreen active
-    if (cm.getOption("fullScreen")) {
+    if (cm.getOption('fullScreen')) {
         saved_overflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow = 'hidden';
     } else {
         document.body.style.overflow = saved_overflow;
     }
@@ -16222,9 +16222,9 @@ function toggleFullScreen(editor) {
     var wrap = cm.getWrapperElement();
 
     if (!/fullscreen/.test(wrap.previousSibling.className)) {
-        wrap.previousSibling.className += " fullscreen";
+        wrap.previousSibling.className += ' fullscreen';
     } else {
-        wrap.previousSibling.className = wrap.previousSibling.className.replace(/\s*fullscreen\b/, "");
+        wrap.previousSibling.className = wrap.previousSibling.className.replace(/\s*fullscreen\b/, '');
     }
 
 
@@ -16233,9 +16233,9 @@ function toggleFullScreen(editor) {
         var toolbarButton = editor.toolbarElements.fullscreen;
 
         if (!/active/.test(toolbarButton.className)) {
-            toolbarButton.className += " active";
+            toolbarButton.className += ' active';
         } else {
-            toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
+            toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
         }
     }
 
@@ -16251,7 +16251,7 @@ function toggleFullScreen(editor) {
  * Action for toggling bold.
  */
 function toggleBold(editor) {
-    _toggleBlock(editor, "bold", editor.options.blockStyles.bold);
+    _toggleBlock(editor, 'bold', editor.options.blockStyles.bold);
 }
 
 
@@ -16259,7 +16259,7 @@ function toggleBold(editor) {
  * Action for toggling italic.
  */
 function toggleItalic(editor) {
-    _toggleBlock(editor, "italic", editor.options.blockStyles.italic);
+    _toggleBlock(editor, 'italic', editor.options.blockStyles.italic);
 }
 
 
@@ -16267,7 +16267,7 @@ function toggleItalic(editor) {
  * Action for toggling strikethrough.
  */
 function toggleStrikethrough(editor) {
-    _toggleBlock(editor, "strikethrough", "~~");
+    _toggleBlock(editor, 'strikethrough', '~~');
 }
 
 /**
@@ -16278,10 +16278,10 @@ function toggleCodeBlock(editor) {
 
     function fencing_line(line) {
         /* return true, if this is a ``` or ~~~ line */
-        if (typeof line !== "object") {
-            throw "fencing_line() takes a 'line' object (not a line number, or line text).  Got: " + typeof line + ": " + line;
+        if (typeof line !== 'object') {
+            throw 'fencing_line() takes a \'line\' object (not a line number, or line text).  Got: ' + typeof line + ': ' + line;
         }
-        return line.styles && line.styles[2] && line.styles[2].indexOf("formatting-code-block") !== -1;
+        return line.styles && line.styles[2] && line.styles[2].indexOf('formatting-code-block') !== -1;
     }
 
     function token_state(token) {
@@ -16305,17 +16305,17 @@ function toggleCodeBlock(editor) {
             line: line_num,
             ch: line.text.length - 1
         }));
-        var types = firstTok.type ? firstTok.type.split(" ") : [];
+        var types = firstTok.type ? firstTok.type.split(' ') : [];
         if (lastTok && token_state(lastTok).indentedCode) {
             // have to check last char, since first chars of first line aren"t marked as indented
-            return "indented";
-        } else if (types.indexOf("comment") === -1) {
+            return 'indented';
+        } else if (types.indexOf('comment') === -1) {
             // has to be after "indented" check, since first chars of first indented line aren"t marked as such
             return false;
         } else if (token_state(firstTok).fencedChars || token_state(lastTok).fencedChars || fencing_line(line)) {
-            return "fenced";
+            return 'fenced';
         } else {
-            return "single";
+            return 'single';
         }
     }
 
@@ -16323,14 +16323,14 @@ function toggleCodeBlock(editor) {
         var start_line_sel = cur_start.line + 1,
             end_line_sel = cur_end.line + 1,
             sel_multi = cur_start.line !== cur_end.line,
-            repl_start = fenceCharsToInsert + "\n",
-            repl_end = "\n" + fenceCharsToInsert;
+            repl_start = fenceCharsToInsert + '\n',
+            repl_end = '\n' + fenceCharsToInsert;
         if (sel_multi) {
             end_line_sel++;
         }
         // handle last char including \n or not
         if (sel_multi && cur_end.ch === 0) {
-            repl_end = fenceCharsToInsert + "\n";
+            repl_end = fenceCharsToInsert + '\n';
             end_line_sel--;
         }
         _replaceSelection(cm, false, [repl_start, repl_end]);
@@ -16344,8 +16344,8 @@ function toggleCodeBlock(editor) {
     }
 
     var cm = editor.codemirror,
-        cur_start = cm.getCursor("start"),
-        cur_end = cm.getCursor("end"),
+        cur_start = cm.getCursor('start'),
+        cur_end = cm.getCursor('end'),
         tok = cm.getTokenAt({
             line: cur_start.line,
             ch: cur_start.ch || 1
@@ -16354,10 +16354,10 @@ function toggleCodeBlock(editor) {
         is_code = code_type(cm, cur_start.line, line, tok);
     var block_start, block_end, lineCount;
 
-    if (is_code === "single") {
+    if (is_code === 'single') {
         // similar to some SimpleMDE _toggleBlock logic
-        var start = line.text.slice(0, cur_start.ch).replace("`", ""),
-            end = line.text.slice(cur_start.ch).replace("`", "");
+        var start = line.text.slice(0, cur_start.ch).replace('`', ''),
+            end = line.text.slice(cur_start.ch).replace('`', '');
         cm.replaceRange(start + end, {
             line: cur_start.line,
             ch: 0
@@ -16371,7 +16371,7 @@ function toggleCodeBlock(editor) {
         }
         cm.setSelection(cur_start, cur_end);
         cm.focus();
-    } else if (is_code === "fenced") {
+    } else if (is_code === 'fenced') {
         if (cur_start.line !== cur_end.line || cur_start.ch !== cur_end.ch) {
             // use selection
 
@@ -16391,26 +16391,26 @@ function toggleCodeBlock(editor) {
             var end_text, end_line;
             // check for selection going up against fenced lines, in which case we don't want to add more fencing
             if (fencing_line(cm.getLineHandle(cur_start.line))) {
-                start_text = "";
+                start_text = '';
                 start_line = cur_start.line;
             } else if (fencing_line(cm.getLineHandle(cur_start.line - 1))) {
-                start_text = "";
+                start_text = '';
                 start_line = cur_start.line - 1;
             } else {
-                start_text = fence_chars + "\n";
+                start_text = fence_chars + '\n';
                 start_line = cur_start.line;
             }
             if (fencing_line(cm.getLineHandle(cur_end.line))) {
-                end_text = "";
+                end_text = '';
                 end_line = cur_end.line;
                 if (cur_end.ch === 0) {
                     end_line += 1;
                 }
             } else if (cur_end.ch !== 0 && fencing_line(cm.getLineHandle(cur_end.line + 1))) {
-                end_text = "";
+                end_text = '';
                 end_line = cur_end.line + 1;
             } else {
-                end_text = fence_chars + "\n";
+                end_text = fence_chars + '\n';
                 end_line = cur_end.line + 1;
             }
             if (cur_end.ch === 0) {
@@ -16446,7 +16446,7 @@ function toggleCodeBlock(editor) {
             // no selection, search for ends of this fenced block
             var search_from = cur_start.line;
             if (fencing_line(cm.getLineHandle(cur_start.line))) { // gets a little tricky if cursor is right on a fenced line
-                if (code_type(cm, cur_start.line + 1) === "fenced") {
+                if (code_type(cm, cur_start.line + 1) === 'fenced') {
                     block_start = cur_start.line;
                     search_from = cur_start.line + 1; // for searching for "end"
                 } else {
@@ -16472,14 +16472,14 @@ function toggleCodeBlock(editor) {
                 }
             }
             cm.operation(function () {
-                cm.replaceRange("", {
+                cm.replaceRange('', {
                     line: block_start,
                     ch: 0
                 }, {
                     line: block_start + 1,
                     ch: 0
                 });
-                cm.replaceRange("", {
+                cm.replaceRange('', {
                     line: block_end - 1,
                     ch: 0
                 }, {
@@ -16489,7 +16489,7 @@ function toggleCodeBlock(editor) {
             });
             cm.focus();
         }
-    } else if (is_code === "indented") {
+    } else if (is_code === 'indented') {
         if (cur_start.line !== cur_end.line || cur_start.ch !== cur_end.ch) {
             // use selection
             block_start = cur_start.line;
@@ -16505,7 +16505,7 @@ function toggleCodeBlock(editor) {
                     // empty or all whitespace - keep going
                     continue;
                 } else {
-                    if (code_type(cm, block_start, line) !== "indented") {
+                    if (code_type(cm, block_start, line) !== 'indented') {
                         block_start += 1;
                         break;
                     }
@@ -16518,7 +16518,7 @@ function toggleCodeBlock(editor) {
                     // empty or all whitespace - keep going
                     continue;
                 } else {
-                    if (code_type(cm, block_end, line) !== "indented") {
+                    if (code_type(cm, block_end, line) !== 'indented') {
                         block_end -= 1;
                         break;
                     }
@@ -16534,14 +16534,14 @@ function toggleCodeBlock(editor) {
             }),
             next_line_indented = next_line_last_tok && token_state(next_line_last_tok).indentedCode;
         if (next_line_indented) {
-            cm.replaceRange("\n", {
+            cm.replaceRange('\n', {
                 line: block_end + 1,
                 ch: 0
             });
         }
 
         for (var i = block_start; i <= block_end; i++) {
-            cm.indentLine(i, "subtract"); // TODO: this doesn't get tracked in the history, so can't be undone :(
+            cm.indentLine(i, 'subtract'); // TODO: this doesn't get tracked in the history, so can't be undone :(
         }
         cm.focus();
     } else {
@@ -16551,7 +16551,7 @@ function toggleCodeBlock(editor) {
         if (no_sel_and_starting_of_line || sel_multi) {
             insertFencingAtSelection(cm, cur_start, cur_end, fenceCharsToInsert);
         } else {
-            _replaceSelection(cm, false, ["`", "`"]);
+            _replaceSelection(cm, false, ['`', '`']);
         }
     }
 }
@@ -16561,7 +16561,7 @@ function toggleCodeBlock(editor) {
  */
 function toggleBlockquote(editor) {
     var cm = editor.codemirror;
-    _toggleLine(cm, "quote");
+    _toggleLine(cm, 'quote');
 }
 
 /**
@@ -16569,7 +16569,7 @@ function toggleBlockquote(editor) {
  */
 function toggleHeadingSmaller(editor) {
     var cm = editor.codemirror;
-    _toggleHeading(cm, "smaller");
+    _toggleHeading(cm, 'smaller');
 }
 
 /**
@@ -16577,7 +16577,7 @@ function toggleHeadingSmaller(editor) {
  */
 function toggleHeadingBigger(editor) {
     var cm = editor.codemirror;
-    _toggleHeading(cm, "bigger");
+    _toggleHeading(cm, 'bigger');
 }
 
 /**
@@ -16610,7 +16610,7 @@ function toggleHeading3(editor) {
  */
 function toggleUnorderedList(editor) {
     var cm = editor.codemirror;
-    _toggleLine(cm, "unordered-list");
+    _toggleLine(cm, 'unordered-list');
 }
 
 
@@ -16619,7 +16619,7 @@ function toggleUnorderedList(editor) {
  */
 function toggleOrderedList(editor) {
     var cm = editor.codemirror;
-    _toggleLine(cm, "ordered-list");
+    _toggleLine(cm, 'ordered-list');
 }
 
 /**
@@ -16637,7 +16637,7 @@ function drawLink(editor) {
     var cm = editor.codemirror;
     var stat = getState(cm);
     var options = editor.options;
-    var url = "https://";
+    var url = 'https://';
     if (options.promptURLs) {
         url = prompt(options.promptTexts.link);
         if (!url) {
@@ -16654,7 +16654,7 @@ function drawImage(editor) {
     var cm = editor.codemirror;
     var stat = getState(cm);
     var options = editor.options;
-    var url = "https://";
+    var url = 'https://';
     if (options.promptURLs) {
         url = prompt(options.promptTexts.image);
         if (!url) {
@@ -16712,25 +16712,25 @@ function toggleSideBySide(editor) {
     var cm = editor.codemirror;
     var wrapper = cm.getWrapperElement();
     var preview = wrapper.nextSibling;
-    var toolbarButton = editor.toolbarElements["side-by-side"];
+    var toolbarButton = editor.toolbarElements['side-by-side'];
     var useSideBySideListener = false;
     if (/editor-preview-active-side/.test(preview.className)) {
         preview.className = preview.className.replace(
-            /\s*editor-preview-active-side\s*/g, ""
+            /\s*editor-preview-active-side\s*/g, ''
         );
-        toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
-        wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, " ");
+        toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
+        wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, ' ');
     } else {
         // When the preview button is clicked for the first time,
         // give some time for the transition from editor.css to fire and the view to slide from right to left,
         // instead of just appearing.
         setTimeout(function () {
-            if (!cm.getOption("fullScreen"))
+            if (!cm.getOption('fullScreen'))
                 toggleFullScreen(editor);
-            preview.className += " editor-preview-active-side";
+            preview.className += ' editor-preview-active-side';
         }, 1);
-        toolbarButton.className += " active";
-        wrapper.className += " CodeMirror-sided";
+        toolbarButton.className += ' active';
+        wrapper.className += ' CodeMirror-sided';
         useSideBySideListener = true;
     }
 
@@ -16738,12 +16738,12 @@ function toggleSideBySide(editor) {
     var previewNormal = wrapper.lastChild;
     if (/editor-preview-active/.test(previewNormal.className)) {
         previewNormal.className = previewNormal.className.replace(
-            /\s*editor-preview-active\s*/g, ""
+            /\s*editor-preview-active\s*/g, ''
         );
         var toolbar = editor.toolbarElements.preview;
         var toolbar_div = wrapper.previousSibling;
-        toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
-        toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
+        toolbar.className = toolbar.className.replace(/\s*active\s*/g, '');
+        toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, '');
     }
 
     var sideBySideRenderingFunction = function () {
@@ -16756,9 +16756,9 @@ function toggleSideBySide(editor) {
 
     if (useSideBySideListener) {
         preview.innerHTML = editor.options.previewRender(editor.value(), preview);
-        cm.on("update", cm.sideBySideRenderingFunction);
+        cm.on('update', cm.sideBySideRenderingFunction);
     } else {
-        cm.off("update", cm.sideBySideRenderingFunction);
+        cm.off('update', cm.sideBySideRenderingFunction);
     }
 
     // Refresh to fix selection being off (#309)
@@ -16776,28 +16776,28 @@ function togglePreview(editor) {
     var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
     var preview = wrapper.lastChild;
     if (!preview || !/editor-preview/.test(preview.className)) {
-        preview = document.createElement("div");
-        preview.className = "editor-preview";
+        preview = document.createElement('div');
+        preview.className = 'editor-preview';
         wrapper.appendChild(preview);
     }
     if (/editor-preview-active/.test(preview.className)) {
         preview.className = preview.className.replace(
-            /\s*editor-preview-active\s*/g, ""
+            /\s*editor-preview-active\s*/g, ''
         );
         if (toolbar) {
-            toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
-            toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
+            toolbar.className = toolbar.className.replace(/\s*active\s*/g, '');
+            toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, '');
         }
     } else {
         // When the preview button is clicked for the first time,
         // give some time for the transition from editor.css to fire and the view to slide from right to left,
         // instead of just appearing.
         setTimeout(function () {
-            preview.className += " editor-preview-active";
+            preview.className += ' editor-preview-active';
         }, 1);
         if (toolbar) {
-            toolbar.className += " active";
-            toolbar_div.className += " disabled-for-preview";
+            toolbar.className += ' active';
+            toolbar_div.className += ' disabled-for-preview';
         }
     }
     preview.innerHTML = editor.options.previewRender(editor.value(), preview);
@@ -16817,10 +16817,10 @@ function _replaceSelection(cm, active, startEnd, url) {
     var end = startEnd[1];
     var startPoint = {},
         endPoint = {};
-    Object.assign(startPoint, cm.getCursor("start"));
-    Object.assign(endPoint, cm.getCursor("end"));
+    Object.assign(startPoint, cm.getCursor('start'));
+    Object.assign(endPoint, cm.getCursor('end'));
     if (url) {
-        end = end.replace("#url#", url);
+        end = end.replace('#url#', url);
     }
     if (active) {
         text = cm.getLine(startPoint.line);
@@ -16848,8 +16848,8 @@ function _toggleHeading(cm, direction, size) {
     if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
         return;
 
-    var startPoint = cm.getCursor("start");
-    var endPoint = cm.getCursor("end");
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
     for (var i = startPoint.line; i <= endPoint.line; i++) {
         (function (i) {
             var text = cm.getLine(i);
@@ -16857,46 +16857,46 @@ function _toggleHeading(cm, direction, size) {
 
             if (direction !== undefined) {
                 if (currHeadingLevel <= 0) {
-                    if (direction == "bigger") {
-                        text = "###### " + text;
+                    if (direction == 'bigger') {
+                        text = '###### ' + text;
                     } else {
-                        text = "# " + text;
+                        text = '# ' + text;
                     }
-                } else if (currHeadingLevel == 6 && direction == "smaller") {
+                } else if (currHeadingLevel == 6 && direction == 'smaller') {
                     text = text.substr(7);
-                } else if (currHeadingLevel == 1 && direction == "bigger") {
+                } else if (currHeadingLevel == 1 && direction == 'bigger') {
                     text = text.substr(2);
                 } else {
-                    if (direction == "bigger") {
+                    if (direction == 'bigger') {
                         text = text.substr(1);
                     } else {
-                        text = "#" + text;
+                        text = '#' + text;
                     }
                 }
             } else {
                 if (size == 1) {
                     if (currHeadingLevel <= 0) {
-                        text = "# " + text;
+                        text = '# ' + text;
                     } else if (currHeadingLevel == size) {
                         text = text.substr(currHeadingLevel + 1);
                     } else {
-                        text = "# " + text.substr(currHeadingLevel + 1);
+                        text = '# ' + text.substr(currHeadingLevel + 1);
                     }
                 } else if (size == 2) {
                     if (currHeadingLevel <= 0) {
-                        text = "## " + text;
+                        text = '## ' + text;
                     } else if (currHeadingLevel == size) {
                         text = text.substr(currHeadingLevel + 1);
                     } else {
-                        text = "## " + text.substr(currHeadingLevel + 1);
+                        text = '## ' + text.substr(currHeadingLevel + 1);
                     }
                 } else {
                     if (currHeadingLevel <= 0) {
-                        text = "### " + text;
+                        text = '### ' + text;
                     } else if (currHeadingLevel == size) {
                         text = text.substr(currHeadingLevel + 1);
                     } else {
-                        text = "### " + text.substr(currHeadingLevel + 1);
+                        text = '### ' + text.substr(currHeadingLevel + 1);
                     }
                 }
             }
@@ -16922,29 +16922,29 @@ function _toggleLine(cm, name) {
     var whitespacesRegexp = /^\s*/;
 
     var stat = getState(cm);
-    var startPoint = cm.getCursor("start");
-    var endPoint = cm.getCursor("end");
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
     var repl = {
-        "quote": /^(\s*)>\s+/,
-        "unordered-list": listRegexp,
-        "ordered-list": listRegexp
+        'quote': /^(\s*)>\s+/,
+        'unordered-list': listRegexp,
+        'ordered-list': listRegexp
     };
 
     var _getChar = function (name, i) {
         var map = {
-            "quote": ">",
-            "unordered-list": "*",
-            "ordered-list": "%%i."
+            'quote': '>',
+            'unordered-list': '*',
+            'ordered-list': '%%i.'
         };
 
-        return map[name].replace("%%i", i);
+        return map[name].replace('%%i', i);
     };
 
     var _checkChar = function (name, char) {
         var map = {
-            "quote": ">",
-            "unordered-list": "*",
-            "ordered-list": "d+."
+            'quote': '>',
+            'unordered-list': '*',
+            'ordered-list': 'd+.'
         };
         var rt = new RegExp(map[name]);
 
@@ -16956,17 +16956,17 @@ function _toggleLine(cm, name) {
         (function (i) {
             var text = cm.getLine(i);
             if (stat[name]) {
-                text = text.replace(repl[name], "$1");
+                text = text.replace(repl[name], '$1');
             } else {
                 var arr = listRegexp.exec(text);
                 var char = _getChar(name, line);
                 if (arr !== null) {
                     if (_checkChar(name, arr[2])) {
-                        char = "";
+                        char = '';
                     }
-                    text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, "").replace(repl[name], "$1");
+                    text = arr[1] + char + arr[3] + text.replace(whitespacesRegexp, '').replace(repl[name], '$1');
                 } else {
-                    text = char + " " + text;
+                    text = char + ' ' + text;
                 }
                 line += 1;
             }
@@ -16986,7 +16986,7 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
     if (/editor-preview-active/.test(editor.codemirror.getWrapperElement().lastChild.className))
         return;
 
-    end_chars = (typeof end_chars === "undefined") ? start_chars : end_chars;
+    end_chars = (typeof end_chars === 'undefined') ? start_chars : end_chars;
     var cm = editor.codemirror;
     var stat = getState(cm);
 
@@ -16994,22 +16994,22 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
     var start = start_chars;
     var end = end_chars;
 
-    var startPoint = cm.getCursor("start");
-    var endPoint = cm.getCursor("end");
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
 
     if (stat[type]) {
         text = cm.getLine(startPoint.line);
         start = text.slice(0, startPoint.ch);
         end = text.slice(startPoint.ch);
-        if (type == "bold") {
-            start = start.replace(/(\*\*|__)(?![\s\S]*(\*\*|__))/, "");
-            end = end.replace(/(\*\*|__)/, "");
-        } else if (type == "italic") {
-            start = start.replace(/(\*|_)(?![\s\S]*(\*|_))/, "");
-            end = end.replace(/(\*|_)/, "");
-        } else if (type == "strikethrough") {
-            start = start.replace(/(\*\*|~~)(?![\s\S]*(\*\*|~~))/, "");
-            end = end.replace(/(\*\*|~~)/, "");
+        if (type == 'bold') {
+            start = start.replace(/(\*\*|__)(?![\s\S]*(\*\*|__))/, '');
+            end = end.replace(/(\*\*|__)/, '');
+        } else if (type == 'italic') {
+            start = start.replace(/(\*|_)(?![\s\S]*(\*|_))/, '');
+            end = end.replace(/(\*|_)/, '');
+        } else if (type == 'strikethrough') {
+            start = start.replace(/(\*\*|~~)(?![\s\S]*(\*\*|~~))/, '');
+            end = end.replace(/(\*\*|~~)/, '');
         }
         cm.replaceRange(start + end, {
             line: startPoint.line,
@@ -17019,12 +17019,12 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
             ch: 99999999999999
         });
 
-        if (type == "bold" || type == "strikethrough") {
+        if (type == 'bold' || type == 'strikethrough') {
             startPoint.ch -= 2;
             if (startPoint !== endPoint) {
                 endPoint.ch -= 2;
             }
-        } else if (type == "italic") {
+        } else if (type == 'italic') {
             startPoint.ch -= 1;
             if (startPoint !== endPoint) {
                 endPoint.ch -= 1;
@@ -17032,14 +17032,14 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
         }
     } else {
         text = cm.getSelection();
-        if (type == "bold") {
-            text = text.split("**").join("");
-            text = text.split("__").join("");
-        } else if (type == "italic") {
-            text = text.split("*").join("");
-            text = text.split("_").join("");
-        } else if (type == "strikethrough") {
-            text = text.split("~~").join("");
+        if (type == 'bold') {
+            text = text.split('**').join('');
+            text = text.split('__').join('');
+        } else if (type == 'italic') {
+            text = text.split('*').join('');
+            text = text.split('_').join('');
+        } else if (type == 'strikethrough') {
+            text = text.split('~~').join('');
         }
         cm.replaceSelection(start + text + end);
 
@@ -17055,13 +17055,13 @@ function _cleanBlock(cm) {
     if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
         return;
 
-    var startPoint = cm.getCursor("start");
-    var endPoint = cm.getCursor("end");
+    var startPoint = cm.getCursor('start');
+    var endPoint = cm.getCursor('end');
     var text;
 
     for (var line = startPoint.line; line <= endPoint.line; line++) {
         text = cm.getLine(line);
-        text = text.replace(/^[ ]*([# ]+|\*|-|[> ]+|[0-9]+(.|\)))[ ]*/, "");
+        text = text.replace(/^[ ]*([# ]+|\*|-|[> ]+|[0-9]+(.|\)))[ ]*/, '');
 
         cm.replaceRange(text, {
             line: line,
@@ -17081,7 +17081,7 @@ function _mergeProperties(target, source) {
                 target[property] = source[property].concat(target[property] instanceof Array ? target[property] : []);
             } else if (
                 source[property] !== null &&
-                typeof source[property] === "object" &&
+                typeof source[property] === 'object' &&
                 source[property].constructor === Object
             ) {
                 target[property] = _mergeProperties(target[property] || {}, source[property]);
@@ -17120,203 +17120,203 @@ function wordCount(data) {
 }
 
 var toolbarBuiltInButtons = {
-    "bold": {
-        name: "bold",
+    'bold': {
+        name: 'bold',
         action: toggleBold,
-        className: "fa fa-bold",
-        title: "Bold",
+        className: 'fa fa-bold',
+        title: 'Bold',
         default: true
     },
-    "italic": {
-        name: "italic",
+    'italic': {
+        name: 'italic',
         action: toggleItalic,
-        className: "fa fa-italic",
-        title: "Italic",
+        className: 'fa fa-italic',
+        title: 'Italic',
         default: true
     },
-    "strikethrough": {
-        name: "strikethrough",
+    'strikethrough': {
+        name: 'strikethrough',
         action: toggleStrikethrough,
-        className: "fa fa-strikethrough",
-        title: "Strikethrough"
+        className: 'fa fa-strikethrough',
+        title: 'Strikethrough'
     },
-    "heading": {
-        name: "heading",
+    'heading': {
+        name: 'heading',
         action: toggleHeadingSmaller,
-        className: "fa fa-header fa-heading",
-        title: "Heading",
+        className: 'fa fa-header fa-heading',
+        title: 'Heading',
         default: true
     },
-    "heading-smaller": {
-        name: "heading-smaller",
+    'heading-smaller': {
+        name: 'heading-smaller',
         action: toggleHeadingSmaller,
-        className: "fa fa-header fa-header-x fa-header-smaller",
-        title: "Smaller Heading"
+        className: 'fa fa-header fa-header-x fa-header-smaller',
+        title: 'Smaller Heading'
     },
-    "heading-bigger": {
-        name: "heading-bigger",
+    'heading-bigger': {
+        name: 'heading-bigger',
         action: toggleHeadingBigger,
-        className: "fa fa-header fa-header-x fa-header-bigger",
-        title: "Bigger Heading"
+        className: 'fa fa-header fa-header-x fa-header-bigger',
+        title: 'Bigger Heading'
     },
-    "heading-1": {
-        name: "heading-1",
+    'heading-1': {
+        name: 'heading-1',
         action: toggleHeading1,
-        className: "fa fa-header fa-header-x fa-header-1",
-        title: "Big Heading"
+        className: 'fa fa-header fa-header-x fa-header-1',
+        title: 'Big Heading'
     },
-    "heading-2": {
-        name: "heading-2",
+    'heading-2': {
+        name: 'heading-2',
         action: toggleHeading2,
-        className: "fa fa-header fa-header-x fa-header-2",
-        title: "Medium Heading"
+        className: 'fa fa-header fa-header-x fa-header-2',
+        title: 'Medium Heading'
     },
-    "heading-3": {
-        name: "heading-3",
+    'heading-3': {
+        name: 'heading-3',
         action: toggleHeading3,
-        className: "fa fa-header fa-header-x fa-header-3",
-        title: "Small Heading"
+        className: 'fa fa-header fa-header-x fa-header-3',
+        title: 'Small Heading'
     },
-    "separator-1": {
-        name: "separator-1"
+    'separator-1': {
+        name: 'separator-1'
     },
-    "code": {
-        name: "code",
+    'code': {
+        name: 'code',
         action: toggleCodeBlock,
-        className: "fa fa-code",
-        title: "Code"
+        className: 'fa fa-code',
+        title: 'Code'
     },
-    "quote": {
-        name: "quote",
+    'quote': {
+        name: 'quote',
         action: toggleBlockquote,
-        className: "fa fa-quote-left",
-        title: "Quote",
+        className: 'fa fa-quote-left',
+        title: 'Quote',
         default: true
     },
-    "unordered-list": {
-        name: "unordered-list",
+    'unordered-list': {
+        name: 'unordered-list',
         action: toggleUnorderedList,
-        className: "fa fa-list-ul",
-        title: "Generic List",
+        className: 'fa fa-list-ul',
+        title: 'Generic List',
         default: true
     },
-    "ordered-list": {
-        name: "ordered-list",
+    'ordered-list': {
+        name: 'ordered-list',
         action: toggleOrderedList,
-        className: "fa fa-list-ol",
-        title: "Numbered List",
+        className: 'fa fa-list-ol',
+        title: 'Numbered List',
         default: true
     },
-    "clean-block": {
-        name: "clean-block",
+    'clean-block': {
+        name: 'clean-block',
         action: cleanBlock,
-        className: "fa fa-eraser fa-clean-block",
-        title: "Clean block"
+        className: 'fa fa-eraser fa-clean-block',
+        title: 'Clean block'
     },
-    "separator-2": {
-        name: "separator-2"
+    'separator-2': {
+        name: 'separator-2'
     },
-    "link": {
-        name: "link",
+    'link': {
+        name: 'link',
         action: drawLink,
-        className: "fa fa-link",
-        title: "Create Link",
+        className: 'fa fa-link',
+        title: 'Create Link',
         default: true
     },
-    "image": {
-        name: "image",
+    'image': {
+        name: 'image',
         action: drawImage,
-        className: "fa fa-image",
-        title: "Insert Image",
+        className: 'fa fa-image',
+        title: 'Insert Image',
         default: true
     },
-    "table": {
-        name: "table",
+    'table': {
+        name: 'table',
         action: drawTable,
-        className: "fa fa-table",
-        title: "Insert Table"
+        className: 'fa fa-table',
+        title: 'Insert Table'
     },
-    "horizontal-rule": {
-        name: "horizontal-rule",
+    'horizontal-rule': {
+        name: 'horizontal-rule',
         action: drawHorizontalRule,
-        className: "fa fa-minus",
-        title: "Insert Horizontal Line"
+        className: 'fa fa-minus',
+        title: 'Insert Horizontal Line'
     },
-    "separator-3": {
-        name: "separator-3"
+    'separator-3': {
+        name: 'separator-3'
     },
-    "preview": {
-        name: "preview",
+    'preview': {
+        name: 'preview',
         action: togglePreview,
-        className: "fa fa-eye",
+        className: 'fa fa-eye',
         noDisable: true,
-        title: "Toggle Preview",
+        title: 'Toggle Preview',
         default: true
     },
-    "side-by-side": {
-        name: "side-by-side",
+    'side-by-side': {
+        name: 'side-by-side',
         action: toggleSideBySide,
-        className: "fa fa-columns",
+        className: 'fa fa-columns',
         noDisable: true,
         noMobile: true,
-        title: "Toggle Side by Side",
+        title: 'Toggle Side by Side',
         default: true
     },
-    "fullscreen": {
-        name: "fullscreen",
+    'fullscreen': {
+        name: 'fullscreen',
         action: toggleFullScreen,
-        className: "fa fa-arrows-alt",
+        className: 'fa fa-arrows-alt',
         noDisable: true,
         noMobile: true,
-        title: "Toggle Fullscreen",
+        title: 'Toggle Fullscreen',
         default: true
     },
-    "separator-4": {
-        name: "separator-4"
+    'separator-4': {
+        name: 'separator-4'
     },
-    "guide": {
-        name: "guide",
-        action: "https://simplemde.com/markdown-guide",
-        className: "fa fa-question-circle",
+    'guide': {
+        name: 'guide',
+        action: 'https://simplemde.com/markdown-guide',
+        className: 'fa fa-question-circle',
         noDisable: true,
-        title: "Markdown Guide",
+        title: 'Markdown Guide',
         default: true
     },
-    "separator-5": {
-        name: "separator-5"
+    'separator-5': {
+        name: 'separator-5'
     },
-    "undo": {
-        name: "undo",
+    'undo': {
+        name: 'undo',
         action: undo,
-        className: "fa fa-undo",
+        className: 'fa fa-undo',
         noDisable: true,
-        title: "Undo"
+        title: 'Undo'
     },
-    "redo": {
-        name: "redo",
+    'redo': {
+        name: 'redo',
         action: redo,
-        className: "fa fa-repeat",
+        className: 'fa fa-repeat',
         noDisable: true,
-        title: "Redo"
+        title: 'Redo'
     }
 };
 
 var insertTexts = {
-    link: ["[", "](#url#)"],
-    image: ["![](", "#url#)"],
-    table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
-    horizontalRule: ["", "\n\n-----\n\n"]
+    link: ['[', '](#url#)'],
+    image: ['![](', '#url#)'],
+    table: ['', '\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n'],
+    horizontalRule: ['', '\n\n-----\n\n']
 };
 
 var promptTexts = {
-    link: "URL for the link:",
-    image: "URL of the image:"
+    link: 'URL for the link:',
+    image: 'URL of the image:'
 };
 
 var blockStyles = {
-    "bold": "**",
-    "code": "```",
-    "italic": "*"
+    'bold': '**',
+    'code': '```',
+    'italic': '*'
 };
 
 /**
@@ -17344,17 +17344,17 @@ function SimpleMDE(options) {
             if (!styleSheets[i].href)
                 continue;
 
-            if (styleSheets[i].href.indexOf("//maxcdn.bootstrapcdn.com/font-awesome/") > -1) {
+            if (styleSheets[i].href.indexOf('//maxcdn.bootstrapcdn.com/font-awesome/') > -1) {
                 autoDownloadFA = false;
             }
         }
     }
 
     if (autoDownloadFA) {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
-        document.getElementsByTagName("head")[0].appendChild(link);
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
     }
 
 
@@ -17363,7 +17363,7 @@ function SimpleMDE(options) {
         this.element = options.element;
     } else if (options.element === null) {
         // This means that the element option was specified, but no element was found
-        console.log("SimpleMDE: Error. No element was found.");
+        console.log('SimpleMDE: Error. No element was found.');
         return;
     }
 
@@ -17377,8 +17377,8 @@ function SimpleMDE(options) {
         // Loop over the built in buttons, to get the preferred order
         for (var key in toolbarBuiltInButtons) {
             if (toolbarBuiltInButtons.hasOwnProperty(key)) {
-                if (key.indexOf("separator-") != -1) {
-                    options.toolbar.push("|");
+                if (key.indexOf('separator-') != -1) {
+                    options.toolbar.push('|');
                 }
 
                 if (toolbarBuiltInButtons[key].default === true || (options.showIcons && options.showIcons.constructor === Array && options.showIcons.indexOf(key) != -1)) {
@@ -17390,8 +17390,8 @@ function SimpleMDE(options) {
 
 
     // Handle status bar
-    if (!options.hasOwnProperty("status")) {
-        options.status = ["autosave", "lines", "words", "cursor"];
+    if (!options.hasOwnProperty('status')) {
+        options.status = ['autosave', 'lines', 'words', 'cursor'];
     }
 
 
@@ -17425,11 +17425,11 @@ function SimpleMDE(options) {
     // Merging the shortcuts, with the given options
     options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
 
-    options.minHeight = options.minHeight || "300px";
+    options.minHeight = options.minHeight || '300px';
 
 
     // Change unique_id to uniqueId for backwards compatibility
-    if (options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != "")
+    if (options.autosave != undefined && options.autosave.unique_id != undefined && options.autosave.unique_id != '')
         options.autosave.uniqueId = options.autosave.unique_id;
 
 
@@ -17497,7 +17497,7 @@ SimpleMDE.prototype.markdown = function (text) {
  */
 SimpleMDE.prototype.render = function (el) {
     if (!el) {
-        el = this.element || document.getElementsByTagName("textarea")[0];
+        el = this.element || document.getElementsByTagName('textarea')[0];
     }
 
     if (this._rendered && this._rendered === el) {
@@ -17522,26 +17522,26 @@ SimpleMDE.prototype.render = function (el) {
         }
     }
 
-    keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
-    keyMaps["Tab"] = "tabAndIndentMarkdownList";
-    keyMaps["Shift-Tab"] = "shiftTabAndUnindentMarkdownList";
-    keyMaps["Esc"] = function (cm) {
-        if (cm.getOption("fullScreen")) toggleFullScreen(self);
+    keyMaps['Enter'] = 'newlineAndIndentContinueMarkdownList';
+    keyMaps['Tab'] = 'tabAndIndentMarkdownList';
+    keyMaps['Shift-Tab'] = 'shiftTabAndUnindentMarkdownList';
+    keyMaps['Esc'] = function (cm) {
+        if (cm.getOption('fullScreen')) toggleFullScreen(self);
     };
 
-    document.addEventListener("keydown", function (e) {
+    document.addEventListener('keydown', function (e) {
         e = e || window.event;
 
         if (e.keyCode == 27) {
-            if (self.codemirror.getOption("fullScreen")) toggleFullScreen(self);
+            if (self.codemirror.getOption('fullScreen')) toggleFullScreen(self);
         }
     }, false);
 
     var mode, backdrop;
     if (options.spellChecker !== false) {
-        mode = "spell-checker";
+        mode = 'spell-checker';
         backdrop = options.parsingConfig;
-        backdrop.name = "gfm";
+        backdrop.name = 'gfm';
         backdrop.gitHubSpice = false;
 
         CodeMirrorSpellChecker({
@@ -17549,14 +17549,14 @@ SimpleMDE.prototype.render = function (el) {
         });
     } else {
         mode = options.parsingConfig;
-        mode.name = "gfm";
+        mode.name = 'gfm';
         mode.gitHubSpice = false;
     }
 
     this.codemirror = CodeMirror.fromTextArea(el, {
         mode: mode,
         backdrop: backdrop,
-        theme: "paper",
+        theme: 'paper',
         tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
         indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
         indentWithTabs: (options.indentWithTabs === false) ? false : true,
@@ -17564,8 +17564,8 @@ SimpleMDE.prototype.render = function (el) {
         autofocus: (options.autofocus === true) ? true : false,
         extraKeys: keyMaps,
         lineWrapping: (options.lineWrapping === false) ? false : true,
-        allowDropFileTypes: ["text/plain"],
-        placeholder: options.placeholder || el.getAttribute("placeholder") || "",
+        allowDropFileTypes: ['text/plain'],
+        placeholder: options.placeholder || el.getAttribute('placeholder') || '',
         styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : !isMobile(),
     });
 
@@ -17573,7 +17573,7 @@ SimpleMDE.prototype.render = function (el) {
 
     if (options.forceSync === true) {
         var cm = this.codemirror;
-        cm.on("change", function () {
+        cm.on('change', function () {
             cm.save();
         });
     }
@@ -17604,10 +17604,10 @@ SimpleMDE.prototype.render = function (el) {
 
 // Safari, in Private Browsing Mode, looks like it supports localStorage but all calls to setItem throw QuotaExceededError. We're going to detect this and set a variable accordingly.
 function isLocalStorageAvailable() {
-    if (typeof localStorage === "object") {
+    if (typeof localStorage === 'object') {
         try {
-            localStorage.setItem("smde_localStorage", 1);
-            localStorage.removeItem("smde_localStorage");
+            localStorage.setItem('smde_localStorage', 1);
+            localStorage.removeItem('smde_localStorage');
         } catch (e) {
             return false;
         }
@@ -17622,65 +17622,65 @@ SimpleMDE.prototype.autosave = function () {
     if (isLocalStorageAvailable()) {
         var simplemde = this;
 
-        if (this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-            console.log("SimpleMDE: You must set a uniqueId to use the autosave feature");
+        if (this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == '') {
+            console.log('SimpleMDE: You must set a uniqueId to use the autosave feature');
             return;
         }
 
         if (simplemde.element.form != null && simplemde.element.form != undefined) {
-            simplemde.element.form.addEventListener("submit", function () {
-                localStorage.removeItem("smde_" + simplemde.options.autosave.uniqueId);
+            simplemde.element.form.addEventListener('submit', function () {
+                localStorage.removeItem('smde_' + simplemde.options.autosave.uniqueId);
             });
         }
 
         if (this.options.autosave.loaded !== true) {
-            if (typeof localStorage.getItem("smde_" + this.options.autosave.uniqueId) == "string" && localStorage.getItem("smde_" + this.options.autosave.uniqueId) != "") {
-                this.codemirror.setValue(localStorage.getItem("smde_" + this.options.autosave.uniqueId));
+            if (typeof localStorage.getItem('smde_' + this.options.autosave.uniqueId) == 'string' && localStorage.getItem('smde_' + this.options.autosave.uniqueId) != '') {
+                this.codemirror.setValue(localStorage.getItem('smde_' + this.options.autosave.uniqueId));
                 this.options.autosave.foundSavedValue = true;
             }
 
             this.options.autosave.loaded = true;
         }
 
-        localStorage.setItem("smde_" + this.options.autosave.uniqueId, simplemde.value());
+        localStorage.setItem('smde_' + this.options.autosave.uniqueId, simplemde.value());
 
-        var el = document.getElementById("autosaved");
-        if (el != null && el != undefined && el != "") {
+        var el = document.getElementById('autosaved');
+        if (el != null && el != undefined && el != '') {
             var d = new Date();
             var hh = d.getHours();
             var m = d.getMinutes();
-            var dd = "am";
+            var dd = 'am';
             var h = hh;
             if (h >= 12) {
                 h = hh - 12;
-                dd = "pm";
+                dd = 'pm';
             }
             if (h == 0) {
                 h = 12;
             }
-            m = m < 10 ? "0" + m : m;
+            m = m < 10 ? '0' + m : m;
 
-            el.innerHTML = "Autosaved: " + h + ":" + m + " " + dd;
+            el.innerHTML = 'Autosaved: ' + h + ':' + m + ' ' + dd;
         }
 
         this.autosaveTimeoutId = setTimeout(function () {
             simplemde.autosave();
         }, this.options.autosave.delay || 10000);
     } else {
-        console.log("SimpleMDE: localStorage not available, cannot autosave");
+        console.log('SimpleMDE: localStorage not available, cannot autosave');
     }
 };
 
 SimpleMDE.prototype.clearAutosavedValue = function () {
     if (isLocalStorageAvailable()) {
-        if (this.options.autosave == undefined || this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == "") {
-            console.log("SimpleMDE: You must set a uniqueId to clear the autosave value");
+        if (this.options.autosave == undefined || this.options.autosave.uniqueId == undefined || this.options.autosave.uniqueId == '') {
+            console.log('SimpleMDE: You must set a uniqueId to clear the autosave value');
             return;
         }
 
-        localStorage.removeItem("smde_" + this.options.autosave.uniqueId);
+        localStorage.removeItem('smde_' + this.options.autosave.uniqueId);
     } else {
-        console.log("SimpleMDE: localStorage not available, cannot autosave");
+        console.log('SimpleMDE: localStorage not available, cannot autosave');
     }
 };
 
@@ -17690,8 +17690,8 @@ SimpleMDE.prototype.createSideBySide = function () {
     var preview = wrapper.nextSibling;
 
     if (!preview || !/editor-preview-side/.test(preview.className)) {
-        preview = document.createElement("div");
-        preview.className = "editor-preview-side";
+        preview = document.createElement('div');
+        preview.className = 'editor-preview-side';
         wrapper.parentNode.insertBefore(preview, wrapper.nextSibling);
     }
 
@@ -17699,7 +17699,7 @@ SimpleMDE.prototype.createSideBySide = function () {
     // Syncs scroll  editor -> preview
     var cScroll = false;
     var pScroll = false;
-    cm.on("scroll", function (v) {
+    cm.on('scroll', function (v) {
         if (cScroll) {
             cScroll = false;
             return;
@@ -17739,8 +17739,8 @@ SimpleMDE.prototype.createToolbar = function (items) {
         }
     }
 
-    var bar = document.createElement("div");
-    bar.className = "editor-toolbar";
+    var bar = document.createElement('div');
+    bar.className = 'editor-toolbar';
 
     var self = this;
 
@@ -17748,7 +17748,7 @@ SimpleMDE.prototype.createToolbar = function (items) {
     self.toolbar = items;
 
     for (i = 0; i < items.length; i++) {
-        if (items[i].name == "guide" && self.options.toolbarGuideIcon === false)
+        if (items[i].name == 'guide' && self.options.toolbarGuideIcon === false)
             continue;
 
         if (self.options.hideIcons && self.options.hideIcons.indexOf(items[i].name) != -1)
@@ -17756,16 +17756,16 @@ SimpleMDE.prototype.createToolbar = function (items) {
 
         // Fullscreen does not work well on mobile devices (even tablets)
         // In the future, hopefully this can be resolved
-        if ((items[i].name == "fullscreen" || items[i].name == "side-by-side") && isMobile())
+        if ((items[i].name == 'fullscreen' || items[i].name == 'side-by-side') && isMobile())
             continue;
 
 
         // Don't include trailing separators
-        if (items[i] === "|") {
+        if (items[i] === '|') {
             var nonSeparatorIconsFollow = false;
 
             for (var x = (i + 1); x < items.length; x++) {
-                if (items[x] !== "|" && (!self.options.hideIcons || self.options.hideIcons.indexOf(items[x].name) == -1)) {
+                if (items[x] !== '|' && (!self.options.hideIcons || self.options.hideIcons.indexOf(items[x].name) == -1)) {
                     nonSeparatorIconsFollow = true;
                 }
             }
@@ -17778,7 +17778,7 @@ SimpleMDE.prototype.createToolbar = function (items) {
         // Create the icon and append to the toolbar
         (function (item) {
             var el;
-            if (item === "|") {
+            if (item === '|') {
                 el = createSep();
             } else {
                 el = createIcon(item, self.options.toolbarTips, self.options.shortcuts);
@@ -17786,14 +17786,14 @@ SimpleMDE.prototype.createToolbar = function (items) {
 
             // bind events, special for info
             if (item.action) {
-                if (typeof item.action === "function") {
+                if (typeof item.action === 'function') {
                     el.onclick = function (e) {
                         e.preventDefault();
                         item.action(self);
                     };
-                } else if (typeof item.action === "string") {
+                } else if (typeof item.action === 'string') {
                     el.href = item.action;
-                    el.target = "_blank";
+                    el.target = '_blank';
                 }
             }
 
@@ -17805,16 +17805,16 @@ SimpleMDE.prototype.createToolbar = function (items) {
     self.toolbarElements = toolbarData;
 
     var cm = this.codemirror;
-    cm.on("cursorActivity", function () {
+    cm.on('cursorActivity', function () {
         var stat = getState(cm);
 
         for (var key in toolbarData) {
             (function (key) {
                 var el = toolbarData[key];
                 if (stat[key]) {
-                    el.className += " active";
-                } else if (key != "fullscreen" && key != "side-by-side") {
-                    el.className = el.className.replace(/\s*active\s*/g, "");
+                    el.className += ' active';
+                } else if (key != 'fullscreen' && key != 'side-by-side') {
+                    el.className = el.className.replace(/\s*active\s*/g, '');
                 }
             })(key);
         }
@@ -17848,7 +17848,7 @@ SimpleMDE.prototype.createStatusbar = function (status) {
 
 
         // Handle if custom or not
-        if (typeof status[i] === "object") {
+        if (typeof status[i] === 'object') {
             items.push({
                 className: status[i].className,
                 defaultValue: status[i].defaultValue,
@@ -17857,32 +17857,32 @@ SimpleMDE.prototype.createStatusbar = function (status) {
         } else {
             var name = status[i];
 
-            if (name === "words") {
+            if (name === 'words') {
                 defaultValue = function (el) {
                     el.innerHTML = wordCount(cm.getValue());
                 };
                 onUpdate = function (el) {
                     el.innerHTML = wordCount(cm.getValue());
                 };
-            } else if (name === "lines") {
+            } else if (name === 'lines') {
                 defaultValue = function (el) {
                     el.innerHTML = cm.lineCount();
                 };
                 onUpdate = function (el) {
                     el.innerHTML = cm.lineCount();
                 };
-            } else if (name === "cursor") {
+            } else if (name === 'cursor') {
                 defaultValue = function (el) {
-                    el.innerHTML = "0:0";
+                    el.innerHTML = '0:0';
                 };
                 onUpdate = function (el) {
                     var pos = cm.getCursor();
-                    el.innerHTML = pos.line + ":" + pos.ch;
+                    el.innerHTML = pos.line + ':' + pos.ch;
                 };
-            } else if (name === "autosave") {
+            } else if (name === 'autosave') {
                 defaultValue = function (el) {
                     if (options.autosave != undefined && options.autosave.enabled === true) {
-                        el.setAttribute("id", "autosaved");
+                        el.setAttribute('id', 'autosaved');
                     }
                 };
             }
@@ -17897,8 +17897,8 @@ SimpleMDE.prototype.createStatusbar = function (status) {
 
 
     // Create element for the status bar
-    var bar = document.createElement("div");
-    bar.className = "editor-statusbar";
+    var bar = document.createElement('div');
+    bar.className = 'editor-statusbar';
 
 
     // Create a new span for each item
@@ -17908,20 +17908,20 @@ SimpleMDE.prototype.createStatusbar = function (status) {
 
 
         // Create span element
-        var el = document.createElement("span");
+        var el = document.createElement('span');
         el.className = item.className;
 
 
         // Ensure the defaultValue is a function
-        if (typeof item.defaultValue === "function") {
+        if (typeof item.defaultValue === 'function') {
             item.defaultValue(el);
         }
 
 
         // Ensure the onUpdate is a function
-        if (typeof item.onUpdate === "function") {
+        if (typeof item.onUpdate === 'function') {
             // Create a closure around the span of the current action, then execute the onUpdate handler
-            this.codemirror.on("update", (function (el, item) {
+            this.codemirror.on('update', (function (el, item) {
                 return function () {
                     item.onUpdate(el);
                 };
@@ -18074,7 +18074,7 @@ SimpleMDE.prototype.isSideBySideActive = function () {
 SimpleMDE.prototype.isFullscreenActive = function () {
     var cm = this.codemirror;
 
-    return cm.getOption("fullScreen");
+    return cm.getOption('fullScreen');
 };
 
 SimpleMDE.prototype.getState = function () {

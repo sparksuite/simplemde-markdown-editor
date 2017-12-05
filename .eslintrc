@@ -3,11 +3,11 @@
         "strict": 0,
         "no-console": 0,
         "quotes": [
-            2,
-            "double"
+            "error",
+            "single"
         ],
         "semi": [
-            2,
+            "error",
             "always"
         ]
     },
