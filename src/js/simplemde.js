@@ -1787,8 +1787,10 @@ SimpleMDE.prototype.createToolbar = function (items) {
                         item.action(self);
                     };
                 } else if (typeof item.action === 'string') {
-                    el.href = item.action;
-                    el.target = '_blank';
+                    el.onclick = function (e) {
+                        e.preventDefault();
+                        window.open(item.action, '_blank');
+                    };
                 }
             }
 
