@@ -112,7 +112,7 @@
     background: transparent;
     display: inline-block;
     text-align: center;
-    text-decoration: none!important;
+    text-decoration: none !important;
     width: 30px;
     height: 30px;
     margin: 0;
@@ -247,8 +247,8 @@
     display: block
 }
 
-.editor-preview>p,
-.editor-preview-side>p {
+.editor-preview > p,
+.editor-preview-side > p {
     margin-top: 0
 }
 

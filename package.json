@@ -1,40 +1,40 @@
 {
-  "name": "simplemde",
-  "version": "1.11.2",
-  "description": "A simple, beautiful, and embeddable JavaScript Markdown editor. Features autosaving and spell checking.",
-  "keywords": [
-    "embeddable",
-    "markdown",
-    "editor",
-    "javascript",
-    "fontawesome"
-  ],
-  "main": "./src/js/simplemde.js",
-  "license": "MIT",
-  "author": "Jeroen Akkerman",
-  "bugs": {
-    "url": "https://github.com/ionaru/simplemde-markdown-editor/issues"
-  },
-  "dependencies": {
-    "codemirror": "^5.32.0",
-    "codemirror-spell-checker": "^1.1.2",
-    "marked": "^0.3.7"
-  },
-  "devDependencies": {
-    "browserify": "^14.5.0",
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.9.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-debug": "^3.1.0",
-    "gulp-eslint": "^4.0.0",
-    "gulp-header": "^1.8.9",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ionaru/simplemde-markdown-editor"
-  }
+    "name": "simplemde",
+    "version": "1.11.2",
+    "description": "A simple, beautiful, and embeddable JavaScript Markdown editor. Features autosaving and spell checking.",
+    "keywords": [
+        "embeddable",
+        "markdown",
+        "editor",
+        "javascript",
+        "fontawesome"
+    ],
+    "main": "./src/js/simplemde.js",
+    "license": "MIT",
+    "author": "Jeroen Akkerman",
+    "bugs": {
+        "url": "https://github.com/ionaru/simplemde-markdown-editor/issues"
+    },
+    "dependencies": {
+        "codemirror": "^5.32.0",
+        "codemirror-spell-checker": "^1.1.2",
+        "marked": "^0.3.7"
+    },
+    "devDependencies": {
+        "browserify": "^14.5.0",
+        "gulp": "^3.9.1",
+        "gulp-clean-css": "^3.9.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-debug": "^3.1.0",
+        "gulp-eslint": "^4.0.0",
+        "gulp-header": "^1.8.9",
+        "gulp-rename": "^1.2.2",
+        "gulp-uglify": "^3.0.0",
+        "vinyl-buffer": "^1.0.0",
+        "vinyl-source-stream": "^1.1.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ionaru/simplemde-markdown-editor"
+    }
 }

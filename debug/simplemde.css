@@ -465,7 +465,7 @@ span.CodeMirror-selectedtext { background: none; }
     background: transparent;
     display: inline-block;
     text-align: center;
-    text-decoration: none!important;
+    text-decoration: none !important;
     width: 30px;
     height: 30px;
     margin: 0;
@@ -600,8 +600,8 @@ span.CodeMirror-selectedtext { background: none; }
     display: block
 }
 
-.editor-preview>p,
-.editor-preview-side>p {
+.editor-preview > p,
+.editor-preview-side > p {
     margin-top: 0
 }
 
@@ -675,6 +675,7 @@ span.CodeMirror-selectedtext { background: none; }
 .CodeMirror .CodeMirror-placeholder {
     opacity: .5;
 }
+
 .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
     background: rgba(255, 0, 0, .15);
 }
