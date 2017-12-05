@@ -28,7 +28,6 @@
     "gulp-debug": "^3.1.0",
     "gulp-eslint": "^4.0.0",
     "gulp-header": "^1.8.9",
-    "gulp-jsbeautifier": "^2.1.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "vinyl-buffer": "^1.0.0",
