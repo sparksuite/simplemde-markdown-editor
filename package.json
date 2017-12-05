@@ -7,18 +7,13 @@
     "markdown",
     "editor",
     "javascript",
-    "wysiwyg"
+    "fontawesome"
   ],
-  "homepage": "https://github.com/sparksuite/simplemde-markdown-editor",
   "main": "./src/js/simplemde.js",
   "license": "MIT",
-  "company": "Sparksuite, Inc.",
-  "author": {
-    "name": "Wes Cossick",
-    "url": "http://www.WesCossick.com"
-  },
+  "author": "Jeroen Akkerman",
   "bugs": {
-    "url": "https://github.com/sparksuite/simplemde-markdown-editor/issues"
+    "url": "https://github.com/ionaru/simplemde-markdown-editor/issues"
   },
   "dependencies": {
     "codemirror": "^5.32.0",
@@ -41,6 +36,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sparksuite/simplemde-markdown-editor"
+    "url": "https://github.com/ionaru/simplemde-markdown-editor"
   }
 }
