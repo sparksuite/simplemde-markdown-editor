@@ -10,6 +10,10 @@
     word-wrap: break-word;
 }
 
+.CodeMirror-scroll {
+    cursor: text;
+}
+
 .CodeMirror-fullscreen {
     background: #fff;
     position: fixed !important;
