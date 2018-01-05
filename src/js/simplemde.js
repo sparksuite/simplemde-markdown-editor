@@ -1408,6 +1408,31 @@ SimpleMDE.prototype.markdown = function(text) {
 			};
 		}
 
+		markedOptions.renderer = new marked.Renderer();
+		markedOptions.renderer.link = function(href, title, text) {
+			if (this.options.sanitize) {
+				try {
+					var prot = decodeURIComponent(unescape(href))
+						.replace(/[^\w:]/g, '')
+						.toLowerCase();
+			    	} catch (e) {
+					return '';
+				}
+				if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
+					return '';
+				}
+			}
+			if (this.options.baseUrl && !originIndependentUrl.test(href)) {
+				href = resolveUrl(this.options.baseUrl, href);
+			}
+			var out = '<a href="' + href + '"';
+			if (title) {
+				out += ' title="' + title + '"';
+			}
+			out += ' target="_blank">' + text + '</a>';
+			return out;
+		};
+
 
 		// Set options
 		marked.setOptions(markedOptions);
