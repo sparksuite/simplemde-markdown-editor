@@ -16,9 +16,9 @@
         "url": "https://github.com/ionaru/simplemde-markdown-editor/issues"
     },
     "dependencies": {
-        "codemirror": "^5.32.0",
-        "codemirror-spell-checker": "^1.1.2",
-        "marked": "^0.3.7"
+        "codemirror": "5.36.0",
+        "codemirror-spell-checker": "1.1.2",
+        "marked": "0.3.19"
     },
     "devDependencies": {
         "browserify": "^14.5.0",
