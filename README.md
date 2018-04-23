@@ -1,3 +1,26 @@
+# EasyMDE is a fork of SimpleMDE
+This repository is a fork of [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
+
+I originally made this fork to implement FontAwesome 5 compatibility into SimpleMDE. When that was done I submitted a [pull request](https://github.com/sparksuite/simplemde-markdown-editor/pull/666), which has not been accepted yet. This, and the project being inactive since May 2017, triggered me to make more changes and try to put new life into the project.
+
+Changes include:
+* FontAwesome 5 compatibility
+* Guide button works when editor is in preview mode
+* Links are now `https://` by default
+* Small styling changes
+* Node 8 and Node 9 support
+* Lots of refactored code
+
+My intention is to continue development on this project, improving it and keeping it alive.
+
+## Install EasyMDE
+Via [npm](https://www.npmjs.com/package/easymde).
+```
+npm install easymde --save
+```
+
+Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE pending.
+
 # SimpleMDE - Markdown Editor
 A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown. The WYSIWYG-esque editor allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts. In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc. SimpleMDE is one of the first editors to feature both built-in autosaving and spell checking.
 
@@ -15,16 +38,11 @@ Via [npm](https://www.npmjs.com/package/simplemde).
 npm install simplemde --save
 ```
 
-Via [bower](https://www.bower.io).
-```
-bower install simplemde --save
-```
-
-Via [jsDelivr](https://www.jsdelivr.com/#!simplemde). *Please note, jsDelivr may take a few days to update to the latest release.*
+Via [jsDelivr](https://www.jsdelivr.com/).
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.js"></script>
 ```
 
 ## Quick start
@@ -74,9 +92,9 @@ simplemde.value("This text will appear in the editor");
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
   - **uniqueId**: You must set a unique string identifier so that SimpleMDE can autosave. Something that separates this from other instances of SimpleMDE elsewhere on your website.
 - **blockStyles**: Customize how certain buttons that style blocks of text behave.
-  - **bold** Can be set to `**` or `__`. Defaults to `**`.
-  - **code** Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
-  - **italic** Can be set to `*` or `_`. Defaults to `*`.
+  - **bold**: Can be set to `**` or `__`. Defaults to `**`.
+  - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
+  - **italic**: Can be set to `*` or `_`. Defaults to `*`.
 - **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
 - **forceSync**: If set to `true`, force text changes made in SimpleMDE to be immediately stored in original textarea. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
@@ -88,22 +106,29 @@ simplemde.value("This text will appear in the editor");
   - link
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
+- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Dafaults to `"300px"`.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
   - **strikethrough**: If set to `false`, will not process GFM strikethrough syntax. Defaults to `true`.
   - **underscoresBreakWords**: If set to `true`, let underscores be a delimiter for separating words. Defaults to `false`.
-- **placeholder**: Custom placeholder that should be displayed
+- **placeholder**: If set, displays a custom placeholder message.
 - **previewRender**: Custom function for parsing the plaintext Markdown and returning HTML. Used when user previews.
 - **promptURLs**: If set to `true`, a JS alert window appears asking for the link or image URL. Defaults to `false`.
+- **promptTexts**: Customize the text used to prompt for URLs.
+  - **image**: The text to use when prompting for an image's URL.  Defaults to `URL of the image:`.
+  - **link**: The text to use when prompting for a link's URL. Defaults to `URL for the link:`.
 - **renderingConfig**: Adjust settings for parsing the Markdown during previewing (not editing).
+  - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page or pass in using the `hljs` option. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
+  - **hljs**: An injectible instance of [highlight.js](https://github.com/isagalaev/highlight.js). If you don't want to rely on the global namespace (`window.hljs`), you can provide an instance here. Defaults to `undefined`.
+  - **markedOptions**: Set the internal Markdown renderer's [options](https://github.com/chjj/marked#options-1). Other `renderingConfig` options will take precedence.
   - **singleLineBreaks**: If set to `false`, disable parsing GFM single line breaks. Defaults to `true`.
-  - **codeSyntaxHighlighting**: If set to `true`, will highlight using [highlight.js](https://github.com/isagalaev/highlight.js). Defaults to `false`. To use this feature you must include highlight.js on your page. For example, include the script and the CSS files like:<br>`<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>`<br>`<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">`
 - **shortcuts**: Keyboard shortcuts associated with this instance. Defaults to the [array of shortcuts](#keyboard-shortcuts).
 - **showIcons**: An array of icon names to show. Can be used to show specific icons hidden by default without completely customizing the toolbar.
 - **spellChecker**: If set to `false`, disable the spell checker. Defaults to `true`.
 - **status**: If set to `false`, hide the status bar. Defaults to the array of built-in status bar items.
   - Optionally, you can set an array of status bar items to include, and in what order. You can even define your own custom status bar items.
 - **styleSelectedText**: If set to `false`, remove the `CodeMirror-selectedtext` class from selected lines. Defaults to `true`.
+- **syncSideBySidePreviewScroll**: If set to `false`, disable syncing scroll in side by side mode. Defaults to `true`.
 - **tabSize**: If set, customize the tab size. Defaults to `2`.
 - **toolbar**: If set to `false`, hide the toolbar. Defaults to the [array of icons](#toolbar-icons).
 - **toolbarTips**: If set to `false`, disable toolbar button tips. Defaults to `true`.
@@ -133,6 +158,7 @@ var simplemde = new SimpleMDE({
 		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
 	},
 	lineWrapping: false,
+	minHeight: "500px",
 	parsingConfig: {
 		allowAtxHeaderWithoutSpace: true,
 		strikethrough: false,
@@ -150,6 +176,10 @@ var simplemde = new SimpleMDE({
 		return "Loading...";
 	},
 	promptURLs: true,
+	promptTexts: {
+		image: "Custom prompt for URL:",
+		link: "Custom prompt for URL:",
+	},
 	renderingConfig: {
 		singleLineBreaks: false,
 		codeSyntaxHighlighting: true,
@@ -172,6 +202,7 @@ var simplemde = new SimpleMDE({
 		}
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	styleSelectedText: false,
+	syncSideBySidePreviewScroll: false,
 	tabSize: 4,
 	toolbar: false,
 	toolbarTips: false,
@@ -275,24 +306,6 @@ var simplemde = new SimpleMDE({
 Shortcuts are automatically converted between platforms. If you define a shortcut as "Cmd-B", on PC that shortcut will be changed to "Ctrl-B". Conversely, a shortcut defined as "Ctrl-B" will become "Cmd-B" for Mac users.
 
 The list of actions that can be bound is the same as the list of built-in actions available for [toolbar buttons](#toolbar-icons).
-
-#### Height
-
-To change the minimum height (before it starts auto-growing):
-
-```CSS
-.CodeMirror, .CodeMirror-scroll {
-	min-height: 200px;
-}
-```
-
-Or, you can keep the height static:
-
-```CSS
-.CodeMirror {
-	height: 300px;
-}
-```
 
 ## Event handling
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events

@@ -1,8 +1,7 @@
-localtesting/
+# NPM files
 node_modules/
-bower_components/
 
-#For IDE
+# IDE files
 *.iml
 *.ipr
 *.iws
