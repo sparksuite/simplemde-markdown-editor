@@ -10,4 +10,4 @@
 
 ### Version information
 Browser type and version:
-SimpleMDE version:
+EasyMDE version:

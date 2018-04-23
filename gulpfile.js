@@ -28,8 +28,8 @@ gulp.task('lint', function () {
 });
 
 gulp.task('scripts', ['lint'], function () {
-    return browserify({entries: './src/js/simplemde.js', standalone: 'SimpleMDE'}).bundle()
-        .pipe(source('simplemde.min.js'))
+    return browserify({entries: './src/js/easymde.js', standalone: 'EasyMDE'}).bundle()
+        .pipe(source('easymde.min.js'))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(header(banner, {pkg: pkg}))
@@ -44,9 +44,9 @@ gulp.task('styles', function () {
     ];
 
     return gulp.src(css_files)
-        .pipe(concat('simplemde.css'))
+        .pipe(concat('easymde.css'))
         .pipe(minifycss())
-        .pipe(rename('simplemde.min.css'))
+        .pipe(rename('easymde.min.css'))
         .pipe(buffer())
         .pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest('./dist/'));

@@ -1,4 +1,4 @@
-# Fork of SimpleMDE
+# EasyMDE is a fork of SimpleMDE
 This repository is a fork of [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
 
 I originally made this fork to implement FontAwesome 5 compatibility into SimpleMDE. When that was done I submitted a [pull request](https://github.com/sparksuite/simplemde-markdown-editor/pull/666), which has not been accepted yet. This, and the project being inactive since May 2017, triggered me to make more changes and try to put new life into the project.
@@ -13,7 +13,13 @@ Changes include:
 
 My intention is to continue development on this project, improving it and keeping it alive.
 
-Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/)
+## Install EasyMDE
+Via [npm](https://www.npmjs.com/package/easymde).
+```
+npm install easymde --save
+```
+
+Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE pending.
 
 # SimpleMDE - Markdown Editor
 A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown. The WYSIWYG-esque editor allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts. In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc. SimpleMDE is one of the first editors to feature both built-in autosaving and spell checking.

@@ -1,5 +1,5 @@
 ### Overview
-First of all, thanks for your interest in helping make SimpleMDE even better. Contributions help resolve rare bugs, accomplish neat new features, polish the code, and improve the documentation.
+First of all, thanks for your interest in helping make EasyMDE even better. Contributions help resolve rare bugs, accomplish neat new features, polish the code, and improve the documentation.
 
 ### Guidelines for contributing
 - The *most important* guideline for contributing is to compare against the `development` branch when creating a pull request. This allows time to test and modify code changes before merging them into the stable master branch with the next release.

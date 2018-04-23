@@ -1,7 +1,7 @@
 {
-    "name": "simplemde",
-    "version": "1.11.2",
-    "description": "A simple, beautiful, and embeddable JavaScript Markdown editor. Features autosaving and spell checking.",
+    "name": "easymde",
+    "version": "1.0.0",
+    "description": "A simple, beautiful, and embeddable JavaScript Markdown editor that easy to use. Features include autosaving and spell checking.",
     "keywords": [
         "embeddable",
         "markdown",
@@ -13,27 +13,27 @@
     "license": "MIT",
     "author": "Jeroen Akkerman",
     "bugs": {
-        "url": "https://github.com/ionaru/simplemde-markdown-editor/issues"
+        "url": "https://github.com/ionaru/easy-markdown-editor/issues"
     },
     "dependencies": {
-        "codemirror": "5.36.0",
+        "codemirror": "^5.37.0",
         "codemirror-spell-checker": "1.1.2",
         "marked": "0.3.19"
     },
     "devDependencies": {
-        "browserify": "^14.5.0",
+        "browserify": "^16.2.0",
         "gulp": "^3.9.1",
         "gulp-clean-css": "^3.9.0",
         "gulp-concat": "^2.6.1",
         "gulp-eslint": "^4.0.0",
-        "gulp-header": "^1.8.9",
+        "gulp-header": "^2.0.5",
         "gulp-rename": "^1.2.2",
         "gulp-uglify": "^3.0.0",
         "vinyl-buffer": "^1.0.0",
-        "vinyl-source-stream": "^1.1.0"
+        "vinyl-source-stream": "^2.0.0"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ionaru/simplemde-markdown-editor"
+        "url": "https://github.com/ionaru/easy-markdown-editor"
     }
 }
