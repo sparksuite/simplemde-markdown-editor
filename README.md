@@ -22,7 +22,58 @@ Via [npm](https://www.npmjs.com/package/easymde).
 npm install easymde --save
 ```
 
-Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE pending.
+Via the UNPKG CDN.
+```html
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+```
+
+## How to use
+
+#### Loading the editor
+
+After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the webpage.
+```html
+<textarea></textarea>
+<script>
+var easyMDE = new EasyMDE();
+</script>
+```
+
+Alternatively you can select a specific TextArea, via Javascript.
+```html
+<textarea id="my-text-area"></textarea>
+<script>
+var easyMDE = new EasyMDE({element: document.getElementById('my-text-area')});
+</script>
+```
+
+Or via jQuery.
+```html
+<textarea id="my-text-area"></textarea>
+<script>
+var easyMDE = new EasyMDE({element: $('#my-text-area')});
+</script>
+```
+
+#### Editor functions
+
+Use EasyMDE.value() to get the content of the editor.
+```html
+<script>
+easyMDE.value();
+</script>
+```
+
+Use EasyMDE.value(val) to set the content of the editor.
+```html
+<script>
+easyMDE.value('New input for **EasyMDE**');
+</script>
+```
+
+
+Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE in progress.
 
 # SimpleMDE - Markdown Editor
 A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown. The WYSIWYG-esque editor allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts. In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc. SimpleMDE is one of the first editors to feature both built-in autosaving and spell checking.
