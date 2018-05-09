@@ -52,7 +52,7 @@ Or via jQuery.
 ```html
 <textarea id="my-text-area"></textarea>
 <script>
-var easyMDE = new EasyMDE({element: $('#my-text-area')});
+var easyMDE = new EasyMDE({element: $('#my-text-area')[0]});
 </script>
 ```
 
