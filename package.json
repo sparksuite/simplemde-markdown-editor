@@ -21,9 +21,9 @@
         "marked": "0.3.19"
     },
     "devDependencies": {
-        "browserify": "^16.2.0",
-        "gulp": "^3.9.1",
-        "gulp-clean-css": "^3.9.0",
+        "browserify": "^16.2.2",
+        "gulp": "^4.0.0",
+        "gulp-clean-css": "^3.9.4",
         "gulp-concat": "^2.6.1",
         "gulp-eslint": "^4.0.0",
         "gulp-header": "^2.0.5",
