@@ -8,7 +8,7 @@ Changes include:
 * Guide button works when editor is in preview mode
 * Links are now `https://` by default
 * Small styling changes
-* Node 8 and Node 9 support
+* Support for Node 8 and beyond
 * Lots of refactored code
 
 My intention is to continue development on this project, improving it and keeping it alive.
@@ -22,7 +22,58 @@ Via [npm](https://www.npmjs.com/package/easymde).
 npm install easymde --save
 ```
 
-Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE pending.
+Via the UNPKG CDN.
+```html
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+```
+
+## How to use
+
+#### Loading the editor
+
+After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the webpage.
+```html
+<textarea></textarea>
+<script>
+var easyMDE = new EasyMDE();
+</script>
+```
+
+Alternatively you can select a specific TextArea, via Javascript.
+```html
+<textarea id="my-text-area"></textarea>
+<script>
+var easyMDE = new EasyMDE({element: document.getElementById('my-text-area')});
+</script>
+```
+
+Or via jQuery.
+```html
+<textarea id="my-text-area"></textarea>
+<script>
+var easyMDE = new EasyMDE({element: $('#my-text-area')[0]});
+</script>
+```
+
+#### Editor functions
+
+Use EasyMDE.value() to get the content of the editor.
+```html
+<script>
+easyMDE.value();
+</script>
+```
+
+Use EasyMDE.value(val) to set the content of the editor.
+```html
+<script>
+easyMDE.value('New input for **EasyMDE**');
+</script>
+```
+
+
+Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE in progress.
 
 # SimpleMDE - Markdown Editor
 A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown. The WYSIWYG-esque editor allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts. In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc. SimpleMDE is one of the first editors to feature both built-in autosaving and spell checking.
@@ -277,22 +328,22 @@ var simplemde = new SimpleMDE({
 
 SimpleMDE comes with an array of predefined keyboard shortcuts, but they can be altered with a configuration option. The list of default ones is as follows:
 
-Shortcut | Action
-:------- | :-----
-*Cmd-'* | "toggleBlockquote"
-*Cmd-B* | "toggleBold"
-*Cmd-E* | "cleanBlock"
-*Cmd-H* | "toggleHeadingSmaller"
-*Cmd-I* | "toggleItalic"
-*Cmd-K* | "drawLink"
-*Cmd-L* | "toggleUnorderedList"
-*Cmd-P* | "togglePreview"
-*Cmd-Alt-C* | "toggleCodeBlock"
-*Cmd-Alt-I* | "drawImage"
-*Cmd-Alt-L* | "toggleOrderedList"
-*Shift-Cmd-H* | "toggleHeadingBigger"
-*F9* | "toggleSideBySide"
-*F11* | "toggleFullScreen"
+Shortcut (Windows / Linux) | Shortcut (macOS) | Action
+:--- | :--- | :---
+*Ctrl-'* | *Cmd-'* | "toggleBlockquote"
+*Ctrl-B* | *Cmd-B* | "toggleBold"
+*Ctrl-E* | *Cmd-E* | "cleanBlock"
+*Ctrl-H* | *Cmd-H* | "toggleHeadingSmaller"
+*Ctrl-I* | *Cmd-I* | "toggleItalic"
+*Ctrl-K* | *Cmd-K* | "drawLink"
+*Ctrl-L* | *Cmd-L* | "toggleUnorderedList"
+*Ctrl-P* | *Cmd-P* | "togglePreview"
+*Ctrl-Alt-C* | *Cmd-Alt-C* | "toggleCodeBlock"
+*Ctrl-Alt-I* | *Cmd-Alt-I* | "drawImage"
+*Ctrl-Alt-L* | *Cmd-Alt-L* | "toggleOrderedList"
+*Shift-Ctrl-H* | *Shift-Cmd-H* | "toggleHeadingBigger"
+*F9* | *F9* | "toggleSideBySide"
+*F11* | *F11* | "toggleFullScreen"
 
 Here is how you can change a few, while leaving others untouched:
 
