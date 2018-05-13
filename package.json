@@ -1,6 +1,6 @@
 {
     "name": "easymde",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "A simple, beautiful, and embeddable JavaScript Markdown editor that easy to use. Features include autosaving and spell checking.",
     "keywords": [
         "embeddable",
@@ -35,5 +35,8 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/ionaru/easy-markdown-editor"
+    },
+    "scripts": {
+        "prepublishOnly ": "gulp"
     }
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var minifycss = require('gulp-clean-css');
+var cleanCSS = require('gulp-clean-css');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var header = require('gulp-header');
@@ -45,7 +45,7 @@ function styles() {
 
     return gulp.src(css_files)
         .pipe(concat('easymde.css'))
-        .pipe(minifycss())
+        .pipe(cleanCSS())
         .pipe(rename('easymde.min.css'))
         .pipe(buffer())
         .pipe(header(banner, {pkg: pkg}))
