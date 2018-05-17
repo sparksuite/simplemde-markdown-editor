@@ -9,7 +9,7 @@
         "javascript",
         "fontawesome"
     ],
-    "main": "./src/js/simplemde.js",
+    "main": "./src/js/easymde.js",
     "license": "MIT",
     "author": "Jeroen Akkerman",
     "bugs": {
