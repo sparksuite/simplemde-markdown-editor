@@ -1571,6 +1571,13 @@ EasyMDE.prototype.render = function (el) {
         mode.gitHubSpice = false;
     }
 
+    // eslint-disable-next-line no-unused-vars
+    function configureMouse(cm, repeat, event) {
+        return {
+            addNew: false
+        };
+    }
+
     this.codemirror = CodeMirror.fromTextArea(el, {
         mode: mode,
         backdrop: backdrop,
@@ -1585,6 +1592,7 @@ EasyMDE.prototype.render = function (el) {
         allowDropFileTypes: ['text/plain'],
         placeholder: options.placeholder || el.getAttribute('placeholder') || '',
         styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : !isMobile(),
+        configureMouse: configureMouse
     });
 
     this.codemirror.getScrollerElement().style.minHeight = options.minHeight;

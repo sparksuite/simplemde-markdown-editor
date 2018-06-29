@@ -7,3 +7,4 @@ node_modules/
 *.iws
 .idea/
 .vscode/
+dev_test/
