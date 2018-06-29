@@ -1,6 +1,6 @@
 {
     "name": "easymde",
-    "version": "2.0.1",
+    "version": "2.2.1",
     "description": "A simple, beautiful, and embeddable JavaScript Markdown editor that easy to use. Features include autosaving and spell checking.",
     "keywords": [
         "embeddable",
@@ -9,16 +9,16 @@
         "javascript",
         "fontawesome"
     ],
-    "main": "./src/js/simplemde.js",
+    "main": "./src/js/easymde.js",
     "license": "MIT",
     "author": "Jeroen Akkerman",
     "bugs": {
         "url": "https://github.com/ionaru/easy-markdown-editor/issues"
     },
     "dependencies": {
-        "codemirror": "^5.37.0",
+        "codemirror": "^5.39.0",
         "codemirror-spell-checker": "1.1.2",
-        "marked": "0.3.19"
+        "marked": "^0.4.0"
     },
     "devDependencies": {
         "browserify": "^16.2.2",
@@ -27,7 +27,7 @@
         "gulp-concat": "^2.6.1",
         "gulp-eslint": "^4.0.0",
         "gulp-header": "^2.0.5",
-        "gulp-rename": "^1.2.2",
+        "gulp-rename": "^1.2.3",
         "gulp-uglify": "^3.0.0",
         "vinyl-buffer": "^1.0.0",
         "vinyl-source-stream": "^2.0.0"

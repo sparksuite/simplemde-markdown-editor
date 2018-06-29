@@ -16,6 +16,7 @@ var marked = require('marked');
 
 // Some variables
 var isMac = /Mac/.test(navigator.platform);
+var anchorToExternalRegex = new RegExp(/(<a.*?https?:\/\/.*?[^a]>)+?/g);
 
 // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
 var bindings = {
@@ -76,6 +77,25 @@ var isMobile = function () {
     })(navigator.userAgent || navigator.vendor || window.opera);
     return check;
 };
+
+/**
+ * Modify HTML to add 'target="_blank"' to links so they open in new tabs by default.
+ * @param {string} htmlText - HTML to be modified.
+ * @return {string} The modified HTML text.
+ */
+function addAnchorTargetBlank(htmlText) {
+    var match;
+    while ((match = anchorToExternalRegex.exec(htmlText)) !== null) {
+        // With only one capture group in the RegExp, we can safely take the first index from the match.
+        var linkString = match[0];
+
+        if (linkString.indexOf('target=') === -1) {
+            var fixedLinkString = linkString.replace(/>$/, ' target="_blank">');
+            htmlText = htmlText.replace(linkString, fixedLinkString);
+        }
+    }
+    return htmlText;
+}
 
 
 /**
@@ -1477,13 +1497,16 @@ EasyMDE.prototype.markdown = function (text) {
             }
         }
 
-
         // Set options
         marked.setOptions(markedOptions);
 
+        // Convert the markdown to HTML
+        var htmlText = marked(text);
 
-        // Return
-        return marked(text);
+        // Edit the HTML anchors to add 'target="_blank"' by default.
+        htmlText = addAnchorTargetBlank(htmlText);
+
+        return htmlText;
     }
 };
 
@@ -1548,6 +1571,13 @@ EasyMDE.prototype.render = function (el) {
         mode.gitHubSpice = false;
     }
 
+    // eslint-disable-next-line no-unused-vars
+    function configureMouse(cm, repeat, event) {
+        return {
+            addNew: false
+        };
+    }
+
     this.codemirror = CodeMirror.fromTextArea(el, {
         mode: mode,
         backdrop: backdrop,
@@ -1562,6 +1592,7 @@ EasyMDE.prototype.render = function (el) {
         allowDropFileTypes: ['text/plain'],
         placeholder: options.placeholder || el.getAttribute('placeholder') || '',
         styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : !isMobile(),
+        configureMouse: configureMouse
     });
 
     this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
