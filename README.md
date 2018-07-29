@@ -185,6 +185,7 @@ simplemde.value("This text will appear in the editor");
 - **styleSelectedText**: If set to `false`, remove the `CodeMirror-selectedtext` class from selected lines. Defaults to `true`.
 - **syncSideBySidePreviewScroll**: If set to `false`, disable syncing scroll in side by side mode. Defaults to `true`.
 - **tabSize**: If set, customize the tab size. Defaults to `2`.
+- **theme**: Override the theme. Defaults to `easymde`.
 - **toolbar**: If set to `false`, hide the toolbar. Defaults to the [array of icons](#toolbar-icons).
 - **toolbarTips**: If set to `false`, disable toolbar button tips. Defaults to `true`.
 
