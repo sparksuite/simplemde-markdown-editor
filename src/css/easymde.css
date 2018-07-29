@@ -31,6 +31,14 @@
     width: 50% !important;
 }
 
+.CodeMirror-placeholder {
+    opacity: .5;
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+    background: #d9d9d9;
+}
+
 .editor-toolbar {
     position: relative;
     -webkit-user-select: none;
@@ -262,59 +270,52 @@
     padding: 5px;
 }
 
-.CodeMirror .CodeMirror-code .cm-tag {
+.cm-s-easymde .cm-tag {
     color: #63a35c;
 }
 
-.CodeMirror .CodeMirror-code .cm-attribute {
+.cm-s-easymde .cm-attribute {
     color: #795da3;
 }
 
-.CodeMirror .CodeMirror-code .cm-string {
+.cm-s-easymde .cm-string {
     color: #183691;
 }
 
-.CodeMirror .CodeMirror-selected {
-    background: #d9d9d9;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-1 {
+.cm-s-easymde .cm-header-1 {
     font-size: 200%;
     line-height: 200%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-2 {
+.cm-s-easymde .cm-header-2 {
     font-size: 160%;
     line-height: 160%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-3 {
+.cm-s-easymde .cm-header-3 {
     font-size: 125%;
     line-height: 125%;
 }
 
-.CodeMirror .CodeMirror-code .cm-header-4 {
+.cm-s-easymde .cm-header-4 {
     font-size: 110%;
     line-height: 110%;
 }
 
-.CodeMirror .CodeMirror-code .cm-comment {
+.cm-s-easymde .cm-comment {
     background: rgba(0, 0, 0, .05);
     border-radius: 2px;
 }
 
-.CodeMirror .CodeMirror-code .cm-link {
+.cm-s-easymde .cm-link {
     color: #7f8c8d;
 }
 
-.CodeMirror .CodeMirror-code .cm-url {
+.cm-s-easymde .cm-url {
     color: #aab2b3;
 }
 
-.CodeMirror .CodeMirror-code .cm-strikethrough {
-    text-decoration: line-through;
-}
-
-.CodeMirror .CodeMirror-placeholder {
-    opacity: .5;
+.cm-s-easymde .cm-quote {
+    color     : #7f8c8d;
+    font-style: italic;
 }
