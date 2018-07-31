@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-- '10'
-- '8'
-- '6'
+- '10' # EOL: April 2021
+- '8' # EOL: December 2019
+- '6' # EOL: April 2019
 before_script:
 - npm install -g gulp
 script: gulp
@@ -12,6 +12,7 @@ deploy:
   api_key:
     secure: VswGN/y8Tu9as13qQRd/zKcMRo7lpa9BWYYyw+LN4uRaustVzmFY0akOPInaajGyxvHvn9A8hY+ASNeUnpRcnVfHSNdtBlLltMm62dXVxqrWZl5cI07rXc1yerL5YcnuC8jEO9bm3lbkXL6fUt7pgk59wgEdZjUPaIpELY/1/H33RLpLGJ1P8JeIzUwuV6RqJcoULoEFoJruXWEjM+OkaJQt1z+/1JgXVxhGS/6NnKmf0pyZM+ULvgmF1l5YGwUfQl4miB8I7+GeWuYvPSDqL3YgLpxrmnw2uW4a120XtMf30awpGTF9iPZqc5VIQyOJ/8A2myGmm/r2RWXyn3WWQUYwmb4HDIuvbIGTGhW9Zd1X3Kjb14DFeD26ZB11ynOwGZPQC51rF0chK+O3PF56QKMsu8Qx56g8+pU4g3qP2txwAQjh89fTsx8I04Om/XwyoZ3eSQLkX/12oD1FcE7Fv30bVEiegN+hH3SiIofWBhhV0tUJjlrCHGgxMXb2e6XnJh9ePuvUOTW9AeWwYEQRpqnM1n6zIPci/dwGDNP9sYGBRsRMGdHlExP8FecM5/vL/3XHidk2PuRNM0BLDLibDVkwzwnHNQkpPuzrr57MKcScYy6VyLxErk88VGzNb8oZ6NFRQYmWgjX6bdFBfZFo5snB49tgRpWpCbiF5SBMNnQ=
   on:
+    node: 10
     branch: master
     repo: Ionaru/easy-markdown-editor
 - provider: npm
@@ -20,5 +21,6 @@ deploy:
     secure: VswGN/y8Tu9as13qQRd/zKcMRo7lpa9BWYYyw+LN4uRaustVzmFY0akOPInaajGyxvHvn9A8hY+ASNeUnpRcnVfHSNdtBlLltMm62dXVxqrWZl5cI07rXc1yerL5YcnuC8jEO9bm3lbkXL6fUt7pgk59wgEdZjUPaIpELY/1/H33RLpLGJ1P8JeIzUwuV6RqJcoULoEFoJruXWEjM+OkaJQt1z+/1JgXVxhGS/6NnKmf0pyZM+ULvgmF1l5YGwUfQl4miB8I7+GeWuYvPSDqL3YgLpxrmnw2uW4a120XtMf30awpGTF9iPZqc5VIQyOJ/8A2myGmm/r2RWXyn3WWQUYwmb4HDIuvbIGTGhW9Zd1X3Kjb14DFeD26ZB11ynOwGZPQC51rF0chK+O3PF56QKMsu8Qx56g8+pU4g3qP2txwAQjh89fTsx8I04Om/XwyoZ3eSQLkX/12oD1FcE7Fv30bVEiegN+hH3SiIofWBhhV0tUJjlrCHGgxMXb2e6XnJh9ePuvUOTW9AeWwYEQRpqnM1n6zIPci/dwGDNP9sYGBRsRMGdHlExP8FecM5/vL/3XHidk2PuRNM0BLDLibDVkwzwnHNQkpPuzrr57MKcScYy6VyLxErk88VGzNb8oZ6NFRQYmWgjX6bdFBfZFo5snB49tgRpWpCbiF5SBMNnQ=
   tag: next
   on:
+    node: 10
     branch: development
     repo: Ionaru/easy-markdown-editor

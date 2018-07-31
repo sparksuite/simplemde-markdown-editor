@@ -1,6 +1,6 @@
 {
     "name": "easymde",
-    "version": "2.2.2",
+    "version": "2.3.0",
     "description": "A simple, beautiful, and embeddable JavaScript Markdown editor that easy to use. Features include autosaving and spell checking.",
     "keywords": [
         "embeddable",
@@ -16,7 +16,7 @@
         "url": "https://github.com/ionaru/easy-markdown-editor/issues"
     },
     "dependencies": {
-        "codemirror": "^5.39.0",
+        "codemirror": "^5.39.2",
         "codemirror-spell-checker": "1.1.2",
         "marked": "^0.4.0"
     },
@@ -25,10 +25,10 @@
         "gulp": "^4.0.0",
         "gulp-clean-css": "^3.9.4",
         "gulp-concat": "^2.6.1",
-        "gulp-eslint": "^4.0.0",
+        "gulp-eslint": "^5.0.0",
         "gulp-header": "^2.0.5",
-        "gulp-rename": "^1.2.3",
-        "gulp-uglify": "^3.0.0",
+        "gulp-rename": "^1.4.0",
+        "gulp-uglify": "^3.0.1",
         "vinyl-buffer": "^1.0.0",
         "vinyl-source-stream": "^2.0.0"
     },
@@ -37,6 +37,6 @@
         "url": "https://github.com/ionaru/easy-markdown-editor"
     },
     "scripts": {
-        "prepublishOnly ": "gulp"
+        "prepublish": "gulp"
     }
 }

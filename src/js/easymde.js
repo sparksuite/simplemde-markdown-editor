@@ -261,8 +261,9 @@ function toggleFullScreen(editor) {
     if (/editor-preview-active-side/.test(sidebyside.className))
         toggleSideBySide(editor);
 
-	if(editor.options.onToggleFullScreen)
-		editor.options.onToggleFullScreen(cm.getOption("fullScreen") || false);
+	if (editor.options.onToggleFullScreen) {
+        editor.options.onToggleFullScreen(cm.getOption('fullScreen') || false);
+    }
 }
 
 
@@ -1345,10 +1346,8 @@ function EasyMDE(options) {
     // Handle options parameter
     options = options || {};
 
-
     // Used later to refer to it"s parent
     options.parent = this;
-
 
     // Check if Font Awesome needs to be auto downloaded
     var autoDownloadFA = true;
