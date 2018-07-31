@@ -14,7 +14,8 @@ Changes include:
 
 My intention is to continue development on this project, improving it and keeping it alive.
 
-[![npm version](https://badge.fury.io/js/easymde.svg)](https://badge.fury.io/js/easymde)
+[![npm version](https://img.shields.io/npm/v/easymde.svg)](https://www.npmjs.com/package/easymde)
+[![npm version](https://img.shields.io/npm/v/easymde/next.svg)](https://www.npmjs.com/package/easymde/v/next)
 [![Build Status](https://travis-ci.org/Ionaru/easy-markdown-editor.svg?branch=development)](https://travis-ci.org/Ionaru/easy-markdown-editor)
 
 ## Install EasyMDE
