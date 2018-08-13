@@ -245,7 +245,7 @@ function toggleFullScreen(editor) {
 
 
     // Update toolbar button
-    if (editor.toolbarElements.fullscreen) {
+    if (editor.toolbarElements && editor.toolbarElements.fullscreen) {
         var toolbarButton = editor.toolbarElements.fullscreen;
 
         if (!/active/.test(toolbarButton.className)) {
@@ -732,13 +732,13 @@ function toggleSideBySide(editor) {
     var cm = editor.codemirror;
     var wrapper = cm.getWrapperElement();
     var preview = wrapper.nextSibling;
-    var toolbarButton = editor.toolbarElements['side-by-side'];
+    var toolbarButton = editor.toolbarElements && editor.toolbarElements['side-by-side'];
     var useSideBySideListener = false;
     if (/editor-preview-active-side/.test(preview.className)) {
         preview.className = preview.className.replace(
             /\s*editor-preview-active-side\s*/g, ''
         );
-        toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
+        if (toolbarButton) toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
         wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, ' ');
     } else {
         // When the preview button is clicked for the first time,
@@ -749,7 +749,7 @@ function toggleSideBySide(editor) {
                 toggleFullScreen(editor);
             preview.className += ' editor-preview-active-side';
         }, 1);
-        toolbarButton.className += ' active';
+        if (toolbarButton) toolbarButton.className += ' active';
         wrapper.className += ' CodeMirror-sided';
         useSideBySideListener = true;
     }
