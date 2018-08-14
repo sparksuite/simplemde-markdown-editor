@@ -8,6 +8,7 @@ require('codemirror/mode/markdown/markdown.js');
 require('codemirror/addon/mode/overlay.js');
 require('codemirror/addon/display/placeholder.js');
 require('codemirror/addon/selection/mark-selection.js');
+require('codemirror/addon/search/searchcursor.js');
 require('codemirror/mode/gfm/gfm.js');
 require('codemirror/mode/xml/xml.js');
 var CodeMirrorSpellChecker = require('codemirror-spell-checker');
@@ -244,7 +245,7 @@ function toggleFullScreen(editor) {
 
 
     // Update toolbar button
-    if (editor.toolbarElements.fullscreen) {
+    if (editor.toolbarElements && editor.toolbarElements.fullscreen) {
         var toolbarButton = editor.toolbarElements.fullscreen;
 
         if (!/active/.test(toolbarButton.className)) {
@@ -259,6 +260,10 @@ function toggleFullScreen(editor) {
     var sidebyside = cm.getWrapperElement().nextSibling;
     if (/editor-preview-active-side/.test(sidebyside.className))
         toggleSideBySide(editor);
+
+	if (editor.options.onToggleFullScreen) {
+        editor.options.onToggleFullScreen(cm.getOption('fullScreen') || false);
+    }
 }
 
 
@@ -727,13 +732,13 @@ function toggleSideBySide(editor) {
     var cm = editor.codemirror;
     var wrapper = cm.getWrapperElement();
     var preview = wrapper.nextSibling;
-    var toolbarButton = editor.toolbarElements['side-by-side'];
+    var toolbarButton = editor.toolbarElements && editor.toolbarElements['side-by-side'];
     var useSideBySideListener = false;
     if (/editor-preview-active-side/.test(preview.className)) {
         preview.className = preview.className.replace(
             /\s*editor-preview-active-side\s*/g, ''
         );
-        toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
+        if (toolbarButton) toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, '');
         wrapper.className = wrapper.className.replace(/\s*CodeMirror-sided\s*/g, ' ');
     } else {
         // When the preview button is clicked for the first time,
@@ -744,7 +749,7 @@ function toggleSideBySide(editor) {
                 toggleFullScreen(editor);
             preview.className += ' editor-preview-active-side';
         }, 1);
-        toolbarButton.className += ' active';
+        if (toolbarButton) toolbarButton.className += ' active';
         wrapper.className += ' CodeMirror-sided';
         useSideBySideListener = true;
     }
@@ -1341,10 +1346,8 @@ function EasyMDE(options) {
     // Handle options parameter
     options = options || {};
 
-
     // Used later to refer to it"s parent
     options.parent = this;
-
 
     // Check if Font Awesome needs to be auto downloaded
     var autoDownloadFA = true;
