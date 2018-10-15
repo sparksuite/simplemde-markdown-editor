@@ -1315,7 +1315,7 @@ var toolbarBuiltInButtons = {
     'redo': {
         name: 'redo',
         action: redo,
-        className: 'fa fa-repeat',
+        className: 'fa fa-repeat fa-redo',
         noDisable: true,
         title: 'Redo'
     }
