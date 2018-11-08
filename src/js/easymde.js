@@ -1655,11 +1655,23 @@ EasyMDE.prototype.autosave = function () {
             console.log('EasyMDE: You must set a uniqueId to use the autosave feature');
             return;
         }
-
-        if (easyMDE.element.form != null && easyMDE.element.form != undefined) {
-            easyMDE.element.form.addEventListener('submit', function () {
-                localStorage.removeItem('smde_' + easyMDE.options.autosave.uniqueId);
-            });
+        
+        if(this.options.autosave.binded !== true) {
+          if (easyMDE.element.form != null && easyMDE.element.form != undefined) {
+              easyMDE.element.form.addEventListener('submit', function () {
+                  clearTimeout(easyMDE.autosaveTimeoutId);
+                  easyMDE.autosaveTimeoutId = undefined;
+                
+                  localStorage.removeItem('smde_' + easyMDE.options.autosave.uniqueId);
+                  
+                  // Restart autosaving in case the submit will be cancelled down the line
+                  setTimeout(function() {
+                    easyMDE.autosave();
+                  }, 10000);
+              });
+          }
+          
+          this.options.autosave.binded = true;
         }
 
         if (this.options.autosave.loaded !== true) {
