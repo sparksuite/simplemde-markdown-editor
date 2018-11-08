@@ -1667,7 +1667,7 @@ EasyMDE.prototype.autosave = function () {
                   // Restart autosaving in case the submit will be cancelled down the line
                   setTimeout(function() {
                     easyMDE.autosave();
-                  }, 10000);
+                  }, easyMDE.options.autosave.delay || 10000);
               });
           }
           
