@@ -288,7 +288,7 @@ code | toggleCodeBlock | Code<br>fa fa-code
 quote | toggleBlockquote | Quote<br>fa fa-quote-left
 unordered-list | toggleUnorderedList | Generic List<br>fa fa-list-ul
 ordered-list | toggleOrderedList | Numbered List<br>fa fa-list-ol
-clean-block | cleanBlock | Clean block<br>fa fa-eraser fa-clean-block
+clean-block | cleanBlock | Clean block<br>fa fa-eraser
 link | drawLink | Create Link<br>fa fa-link
 image | drawImage | Insert Image<br>fa fa-picture-o
 table | drawTable | Insert Table<br>fa fa-table

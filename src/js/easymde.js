@@ -1231,7 +1231,7 @@ var toolbarBuiltInButtons = {
     'clean-block': {
         name: 'clean-block',
         action: cleanBlock,
-        className: 'fa fa-eraser fa-clean-block',
+        className: 'fa fa-eraser',
         title: 'Clean block'
     },
     'separator-2': {
