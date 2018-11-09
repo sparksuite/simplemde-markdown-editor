@@ -37,6 +37,6 @@
         "url": "https://github.com/ionaru/easy-markdown-editor"
     },
     "scripts": {
-        "prepublish": "gulp"
+        "prepare": "gulp"
     }
 }
