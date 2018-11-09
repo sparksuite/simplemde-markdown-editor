@@ -118,6 +118,7 @@ function fixShortcut(name) {
 function createIcon(options, enableTooltips, shortcuts) {
     options = options || {};
     var el = document.createElement('button');
+    el.className = options.name;
     enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
     if (options.title && enableTooltips) {
@@ -1170,31 +1171,31 @@ var toolbarBuiltInButtons = {
     'heading-smaller': {
         name: 'heading-smaller',
         action: toggleHeadingSmaller,
-        className: 'fa fa-header fa-heading fa-header-x fa-header-smaller',
+        className: 'fa fa-header fa-heading header-smaller',
         title: 'Smaller Heading'
     },
     'heading-bigger': {
         name: 'heading-bigger',
         action: toggleHeadingBigger,
-        className: 'fa fa-header fa-heading fa-header-x fa-header-bigger',
+        className: 'fa fa-header fa-heading header-bigger',
         title: 'Bigger Heading'
     },
     'heading-1': {
         name: 'heading-1',
         action: toggleHeading1,
-        className: 'fa fa-header fa-heading fa-header-x fa-header-1',
+        className: 'fa fa-header fa-heading header-1',
         title: 'Big Heading'
     },
     'heading-2': {
         name: 'heading-2',
         action: toggleHeading2,
-        className: 'fa fa-header fa-heading fa-header-x fa-header-2',
+        className: 'fa fa-header fa-heading header-2',
         title: 'Medium Heading'
     },
     'heading-3': {
         name: 'heading-3',
         action: toggleHeading3,
-        className: 'fa fa-header fa-heading fa-header-x fa-header-3',
+        className: 'fa fa-header fa-heading header-3',
         title: 'Small Heading'
     },
     'separator-1': {
