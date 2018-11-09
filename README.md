@@ -281,9 +281,9 @@ strikethrough | toggleStrikethrough | Strikethrough<br>fa fa-strikethrough
 heading | toggleHeadingSmaller | Heading<br>fa fa-header
 heading-smaller | toggleHeadingSmaller | Smaller Heading<br>fa fa-header
 heading-bigger | toggleHeadingBigger | Bigger Heading<br>fa fa-lg fa-header
-heading-1 | toggleHeading1 | Big Heading<br>fa fa-header fa-header-x fa-header-1
-heading-2 | toggleHeading2 | Medium Heading<br>fa fa-header fa-header-x fa-header-2
-heading-3 | toggleHeading3 | Small Heading<br>fa fa-header fa-header-x fa-header-3
+heading-1 | toggleHeading1 | Big Heading<br>fa fa-header header-1
+heading-2 | toggleHeading2 | Medium Heading<br>fa fa-header header-2
+heading-3 | toggleHeading3 | Small Heading<br>fa fa-header header-3
 code | toggleCodeBlock | Code<br>fa fa-code
 quote | toggleBlockquote | Quote<br>fa fa-quote-left
 unordered-list | toggleUnorderedList | Generic List<br>fa fa-list-ul

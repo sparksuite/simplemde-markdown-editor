@@ -149,7 +149,7 @@
     margin: 0 6px;
 }
 
-.editor-toolbar i.fa-header-x:after {
+.editor-toolbar button:after {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 65%;
     vertical-align: text-bottom;
@@ -157,23 +157,23 @@
     top: 2px;
 }
 
-.editor-toolbar i.fa-header-1:after {
+.editor-toolbar button.heading-1:after {
     content: "1";
 }
 
-.editor-toolbar i.fa-header-2:after {
+.editor-toolbar button.heading-2:after {
     content: "2";
 }
 
-.editor-toolbar i.fa-header-3:after {
+.editor-toolbar button.heading-3:after {
     content: "3";
 }
 
-.editor-toolbar i.fa-header-bigger:after {
+.editor-toolbar button.heading-bigger:after {
     content: "▲";
 }
 
-.editor-toolbar i.fa-header-smaller:after {
+.editor-toolbar button.heading-smaller:after {
     content: "▼";
 }
 
