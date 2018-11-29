@@ -679,9 +679,13 @@ function uploadImage(editor) {
 		xmlhttp.send(formData);
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				var res = JSON.parse(xmlhttp.responseText);
-				if(res.url) {
-					editor.codemirror.replaceSelection("![" + (res.name || file.name) + "](" + res.url + ")");
+				try {
+					var res = JSON.parse(xmlhttp.responseText);
+					if(res.url) {
+						editor.codemirror.replaceSelection("![" + (res.name || file.name) + "](" + res.url + ")");
+					}
+				} catch (e) {
+					editor.codemirror.replaceSelection("![]()");
 				}
 			}
 		};
