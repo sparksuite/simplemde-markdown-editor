@@ -25,6 +25,7 @@ var bindings = {
 	"toggleHeadingSmaller": toggleHeadingSmaller,
 	"toggleHeadingBigger": toggleHeadingBigger,
 	"drawImage": drawImage,
+	"uploadImage": uploadImage,
 	"toggleBlockquote": toggleBlockquote,
 	"toggleOrderedList": toggleOrderedList,
 	"toggleUnorderedList": toggleUnorderedList,
@@ -645,6 +646,59 @@ function drawImage(editor) {
 }
 
 /**
+ * Action for upload an img.
+ * 
+ */
+function uploadImage(editor) {
+
+	var _input_id = "simplemde-editor-upload-image-input-id";
+
+	var _history = document.getElementById(_input_id);
+	if(_history) {
+		editor.options.element.parentNode.removeChild(_history);
+	}
+
+	var _html = document.createElement("input");
+	_html.setAttribute("type", "file");
+	_html.setAttribute("accept", "image/gif,image/jpeg,image/jpg,image/png,image/svg");
+	_html.setAttribute("id", _input_id);
+	_html.setAttribute("style", "display:none");
+
+	editor.options.element.parentNode.appendChild(_html);
+
+	var _input = document.getElementById(_input_id);
+
+	_input.onchange = function() {
+		var url = editor.options.uploadUrl || "/upload";
+		var file = _input.files[0];
+		var formData = new FormData();
+		formData.append("image", file);
+
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", url, true);
+		xmlhttp.send(formData);
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var res = JSON.parse(xmlhttp.responseText);
+				if(res.url) {
+					editor.codemirror.replaceSelection("![" + (res.name || file.name) + "](" + res.url + ")");
+				}
+			}
+		};
+
+		editor.options.element.parentNode.removeChild(_input);
+	};
+
+	if(document.all) {
+		_input.click();
+	} else {
+		var e = document.createEvent("MouseEvents");
+		e.initEvent("click", false, true);
+		_input.dispatchEvent(e);
+	}
+}
+
+/**
  * Action for drawing a table.
  */
 function drawTable(editor) {
@@ -1176,6 +1230,12 @@ var toolbarBuiltInButtons = {
 		className: "fa fa-picture-o",
 		title: "Insert Image",
 		default: true
+	},
+	"upload-image": {
+		name: "upload-image",
+		action: uploadImage,
+		className: "fa fa-file-image-o",
+		title: "Upload Image"
 	},
 	"table": {
 		name: "table",
@@ -1894,6 +1954,7 @@ SimpleMDE.toggleOrderedList = toggleOrderedList;
 SimpleMDE.cleanBlock = cleanBlock;
 SimpleMDE.drawLink = drawLink;
 SimpleMDE.drawImage = drawImage;
+SimpleMDE.uploadImage = uploadImage;
 SimpleMDE.drawTable = drawTable;
 SimpleMDE.drawHorizontalRule = drawHorizontalRule;
 SimpleMDE.undo = undo;
@@ -1949,6 +2010,9 @@ SimpleMDE.prototype.drawLink = function() {
 };
 SimpleMDE.prototype.drawImage = function() {
 	drawImage(this);
+};
+SimpleMDE.prototype.uploadImage = function() {
+	uploadImage(this);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
