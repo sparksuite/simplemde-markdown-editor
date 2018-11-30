@@ -1365,7 +1365,7 @@ function SimpleMDE(options) {
 
 	// Handle status bar
 	if(!options.hasOwnProperty("status")) {
-		options.status = ["autosave", "lines", "words", "cursor"];
+		options.status = ["autosave", "lines", "words", "cursor", "characters"];
 	}
 
 
@@ -1859,7 +1859,14 @@ SimpleMDE.prototype.createStatusbar = function(status) {
 						el.setAttribute("id", "autosaved");
 					}
 				};
-			}
+			} else if(name === "characters") {
+        defaultValue = function(el) {
+          el.innerHTML = "0"
+        };
+        onUpdate = function(el) {
+          el.innerHTML = cm.getValue().length;
+        };
+      }
 
 			items.push({
 				className: name,
