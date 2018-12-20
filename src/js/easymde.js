@@ -119,6 +119,7 @@ function createIcon(options, enableTooltips, shortcuts) {
     options = options || {};
     var el = document.createElement('button');
     el.className = options.name;
+    el.setAttribute('role', 'button');
     enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
     if (options.title && enableTooltips) {
