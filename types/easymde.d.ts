@@ -108,6 +108,8 @@ declare namespace EasyMDE {
         tabSize?: number;
         toolbar?: boolean|ReadonlyArray<string|ToolbarIcon>;
         toolbarTips?: boolean;
+        onToggleFullScreen?: (goingIntoFullScreen: boolean) => void;
+        theme?: string;
     }
 }
 
