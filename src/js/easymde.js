@@ -119,6 +119,7 @@ function createIcon(options, enableTooltips, shortcuts) {
     options = options || {};
     var el = document.createElement('button');
     el.className = options.name;
+    el.setAttribute('role', 'button');
     enableTooltips = (enableTooltips == undefined) ? true : enableTooltips;
 
     if (options.title && enableTooltips) {
@@ -1231,7 +1232,7 @@ var toolbarBuiltInButtons = {
     'clean-block': {
         name: 'clean-block',
         action: cleanBlock,
-        className: 'fa fa-eraser fa-clean-block',
+        className: 'fa fa-eraser',
         title: 'Clean block'
     },
     'separator-2': {
