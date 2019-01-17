@@ -8,7 +8,7 @@ before_script:
 - npm install -g gulp
 script:
 - gulp
-- test:types
+- npm run test:types
 deploy:
 - provider: npm
   email: info@saturnserver.org
