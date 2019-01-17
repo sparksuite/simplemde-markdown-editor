@@ -11,6 +11,7 @@ Changes include:
 * Support for Node 8 and beyond
 * Lots of refactored code
 * Links in preview will open in a new tab by default
+* Typescript support
 
 My intention is to continue development on this project, improving it and keeping it alive.
 
