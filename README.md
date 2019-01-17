@@ -1,5 +1,15 @@
-# EasyMDE is a fork of SimpleMDE
+# EasyMDE - Markdown Editor
 This repository is a fork of [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
+
+A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown.
+EasyMDE allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts.
+In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc.
+EasyMDE also features both built-in autosaving and spell checking.
+The editor is entirely customizable, from theming to toolbar buttons and javascript hooks.
+
+[**Demo**](https://easymde.tk/)
+
+[![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
 
 I originally made this fork to implement FontAwesome 5 compatibility into SimpleMDE. When that was done I submitted a [pull request](https://github.com/sparksuite/simplemde-markdown-editor/pull/666), which has not been accepted yet. This, and the project being inactive since May 2017, triggered me to make more changes and try to put new life into the project.
 
@@ -75,71 +85,6 @@ easyMDE.value('New input for **EasyMDE**');
 </script>
 ```
 
-
-Below is the original [README](https://github.com/sparksuite/simplemde-markdown-editor/), rewrite for EasyMDE in progress.
-
-# SimpleMDE - Markdown Editor
-A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown. The WYSIWYG-esque editor allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts. In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc. SimpleMDE is one of the first editors to feature both built-in autosaving and spell checking.
-
-[**Demo**](https://simplemde.com)
-
-[![Preview](http://i.imgur.com/zqWfJwO.png)](https://simplemde.com)
-
-## Why not a WYSIWYG editor or pure Markdown?
-WYSIWYG editors that produce HTML are often complex and buggy. Markdown solves this problem in many ways, plus Markdown can be rendered natively on more platforms than HTML. However, Markdown is not a syntax that an average user will be familiar with, nor is it visually clear while editing. In otherwords, for an unfamiliar user, the syntax they write will make little sense until they click the preview button. SimpleMDE has been designed to bridge this gap for non-technical users who are less familiar with or just learning Markdown syntax.
-
-## Install
-
-Via [npm](https://www.npmjs.com/package/simplemde).
-```
-npm install simplemde --save
-```
-
-Via [jsDelivr](https://www.jsdelivr.com/).
-
-```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/gh/sparksuite/simplemde-markdown-editor@1/dist/simplemde.min.js"></script>
-```
-
-## Quick start
-
-After installing, load SimpleMDE on the first textarea on a page
-
-```HTML
-<script>
-var simplemde = new SimpleMDE();
-</script>
-```
-
-#### Using a specific textarea
-
-Pure JavaScript method
-
-```HTML
-<script>
-var simplemde = new SimpleMDE({ element: document.getElementById("MyID") });
-</script>
-```
-
-jQuery method
-
-```HTML
-<script>
-var simplemde = new SimpleMDE({ element: $("#MyID")[0] });
-</script>
-```
-
-## Get/set the content
-
-```JavaScript
-simplemde.value();
-```
-
-```JavaScript
-simplemde.value("This text will appear in the editor");
-```
-
 ## Configuration
 
 - **autoDownloadFontAwesome**: If set to `true`, force downloads Font Awesome (used for icons). If set to `false`, prevents downloading. Defaults to `undefined`, which will intelligently check whether Font Awesome has already been included, then download accordingly.
@@ -147,13 +92,13 @@ simplemde.value("This text will appear in the editor");
 - **autosave**: *Saves the text that's being written and will load it back in the future. It will forget the text when the form it's contained in is submitted.*
   - **enabled**: If set to `true`, autosave the text. Defaults to `false`.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
-  - **uniqueId**: You must set a unique string identifier so that SimpleMDE can autosave. Something that separates this from other instances of SimpleMDE elsewhere on your website.
+  - **uniqueId**: You must set a unique string identifier so that EasyMDE can autosave. Something that separates this from other instances of EasyMDE elsewhere on your website.
 - **blockStyles**: Customize how certain buttons that style blocks of text behave.
   - **bold**: Can be set to `**` or `__`. Defaults to `**`.
   - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic**: Can be set to `*` or `_`. Defaults to `*`.
 - **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
-- **forceSync**: If set to `true`, force text changes made in SimpleMDE to be immediately stored in original textarea. Defaults to `false`.
+- **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original textarea. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
 - **indentWithTabs**: If set to `false`, indent using spaces instead of tabs. Defaults to `true`.
 - **initialValue**: If set, will customize the initial value of the editor.
@@ -194,7 +139,7 @@ simplemde.value("This text will appear in the editor");
 
 ```JavaScript
 // Most options demonstrate the non-default behavior
-var simplemde = new SimpleMDE({
+var editor = new EasyMDE({
 	autofocus: true,
 	autosave: {
 		enabled: true,
@@ -303,15 +248,15 @@ Customize the toolbar using the `toolbar` option like:
 
 ```JavaScript
 // Customize only the order of existing buttons
-var simplemde = new SimpleMDE({
+var easyMDE = new EasyMDE({
 	toolbar: ["bold", "italic", "heading", "|", "quote"],
 });
 
 // Customize all information and/or add your own icons
-var simplemde = new SimpleMDE({
+var easyMDE = new EasyMDE({
 	toolbar: [{
 			name: "bold",
-			action: SimpleMDE.toggleBold,
+			action: EasyMDE.toggleBold,
 			className: "fa fa-bold",
 			title: "Bold",
 		},
@@ -331,7 +276,7 @@ var simplemde = new SimpleMDE({
 
 #### Keyboard shortcuts
 
-SimpleMDE comes with an array of predefined keyboard shortcuts, but they can be altered with a configuration option. The list of default ones is as follows:
+EasyMDE comes with an array of predefined keyboard shortcuts, but they can be altered with a configuration option. The list of default ones is as follows:
 
 Shortcut (Windows / Linux) | Shortcut (macOS) | Action
 :--- | :--- | :---
@@ -353,7 +298,7 @@ Shortcut (Windows / Linux) | Shortcut (macOS) | Action
 Here is how you can change a few, while leaving others untouched:
 
 ```JavaScript
-var simplemde = new SimpleMDE({
+var editor = new EasyMDE({
 	shortcuts: {
 		"toggleOrderedList": "Ctrl-Alt-K", // alter the shortcut for toggleOrderedList
 		"toggleCodeBlock": null, // unbind Ctrl-Alt-C
@@ -370,34 +315,36 @@ The list of actions that can be bound is the same as the list of built-in action
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events
 
 ```JavaScript
-var simplemde = new SimpleMDE();
-simplemde.codemirror.on("change", function(){
-	console.log(simplemde.value());
+var easyMDE = new EasyMDE();
+easyMDE.codemirror.on("change", function(){
+	console.log(easyMDE.value());
 });
 ```
 
-## Removing SimpleMDE from textarea
-You can revert to the initial textarea by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The textarea will retain any text from the destroyed SimpleMDE instance.
+## Removing EasyMDE from textarea
+You can revert to the initial textarea by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The textarea will retain any text from the destroyed EasyMDE instance.
 
 ```JavaScript
-var simplemde = new SimpleMDE();
+var easyMDE = new EasyMDE();
 ...
-simplemde.toTextArea();
-simplemde = null;
+easyMDE.toTextArea();
+easyMDE = null;
 ```
 
 ## Useful methods
-The following self-explanatory methods may be of use while developing with SimpleMDE.
+The following self-explanatory methods may be of use while developing with EasyMDE.
 
 ```js
-var simplemde = new SimpleMDE();
-simplemde.isPreviewActive(); // returns boolean
-simplemde.isSideBySideActive(); // returns boolean
-simplemde.isFullscreenActive(); // returns boolean
-simplemde.clearAutosavedValue(); // no returned value
+var easyMDE = new EasyMDE();
+easyMDE.isPreviewActive(); // returns boolean
+easyMDE.isSideBySideActive(); // returns boolean
+easyMDE.isFullscreenActive(); // returns boolean
+easyMDE.clearAutosavedValue(); // no returned value
 ```
 
 ## How it works
+EasyMDE is a continuation of SimpleMDE.
+
 SimpleMDE began as an improvement of [lepture's Editor project](https://github.com/lepture/editor), but has now taken on an identity of its own. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and depends on [Font Awesome](http://fontawesome.io).
 
 CodeMirror is the backbone of the project and parses much of the Markdown syntax as it's being written. This allows us to add styles to the Markdown that's being written. Additionally, a toolbar and status bar have been added to the top and bottom, respectively. Previews are rendered by [Marked](https://github.com/chjj/marked) using GFM.
