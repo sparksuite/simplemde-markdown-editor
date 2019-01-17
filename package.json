@@ -1,6 +1,6 @@
 {
     "name": "easymde",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "description": "A simple, beautiful, and embeddable JavaScript Markdown editor that easy to use. Features include autosaving and spell checking.",
     "keywords": [
         "embeddable",
