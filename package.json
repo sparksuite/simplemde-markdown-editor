@@ -9,7 +9,7 @@
         "javascript",
         "fontawesome"
     ],
-    "main": "./src/js/easymde.js",
+    "main": "src/js/easymde.js",
     "types": "types/easymde.d.ts",
     "license": "MIT",
     "author": "Jeroen Akkerman",

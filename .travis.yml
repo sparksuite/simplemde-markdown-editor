@@ -6,7 +6,9 @@ node_js:
 - '6' # EOL: April 2019
 before_script:
 - npm install -g gulp
-script: gulp
+script:
+- gulp
+- test:types
 deploy:
 - provider: npm
   email: info@saturnserver.org
