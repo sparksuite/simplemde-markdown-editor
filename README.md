@@ -39,6 +39,7 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
   - [Useful methods](#useful-methods)
 - [How it works](#how-it-works)
 - [SimpleMDE fork](#simplemde-fork)
+- [Contributing](#contributing)
 - [License](#license)
 
 
@@ -414,6 +415,11 @@ Changes include:
 * Typescript support
 
 My intention is to continue development on this project, improving it and keeping it alive.
+
+
+## Contributing
+
+Want to contribute to EasyMDE? Thank you! We have a [contribution guide](./CONTRIBUTING.md) just for you!
 
 
 ## License
