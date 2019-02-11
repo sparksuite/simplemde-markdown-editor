@@ -356,3 +356,10 @@ Changes include:
 * Typescript support
 
 My intention is to continue development on this project, improving it and keeping it alive.
+
+## License
+
+This project is released under the [MIT License](./LICENSE).
+
+- Copyright (c) 2015 Sparksuite, Inc.
+- Copyright (c) 2017 Jeroen Akkerman.
