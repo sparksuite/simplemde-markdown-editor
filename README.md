@@ -124,7 +124,7 @@ easyMDE.value('New input for **EasyMDE**');
   - **bold**: Can be set to `**` or `__`. Defaults to `**`.
   - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic**: Can be set to `*` or `_`. Defaults to `*`.
-- **element**: The DOM element for the text area to use. Defaults to the first text area on the page.
+- **element**: The DOM element for the TextArea to use. Defaults to the first TextArea on the page.
 - **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original text area. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
 - **indentWithTabs**: If set to `false`, indent using spaces instead of tabs. Defaults to `true`.
@@ -175,11 +175,11 @@ var editor = new EasyMDE({
 	autosave: {
 		enabled: true,
 		uniqueId: "MyUniqueID",
-		delay: 1000
+		delay: 1000,
 	},
 	blockStyles: {
 		bold: "__",
-		italic: "_"
+		italic: "_",
 	},
 	element: document.getElementById("MyID"),
 	forceSync: true,
@@ -190,14 +190,14 @@ var editor = new EasyMDE({
 		horizontalRule: ["", "\n\n-----\n\n"],
 		image: ["![](http://", ")"],
 		link: ["[", "](http://)"],
-		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"]
+		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
 	},
 	lineWrapping: false,
 	minHeight: "500px",
 	parsingConfig: {
 		allowAtxHeaderWithoutSpace: true,
 		strikethrough: false,
-		underscoresBreakWords: true
+		underscoresBreakWords: true,
 	},
 	placeholder: "Type here...",
 	previewRender: function(plainText) {
@@ -213,11 +213,11 @@ var editor = new EasyMDE({
 	promptURLs: true,
 	promptTexts: {
 		image: "Custom prompt for URL:",
-		link: "Custom prompt for URL:"
+		link: "Custom prompt for URL:",
 	},
 	renderingConfig: {
 		singleLineBreaks: false,
-		codeSyntaxHighlighting: true
+		codeSyntaxHighlighting: true,
 	},
 	shortcuts: {
 		drawTable: "Cmd-Alt-T"
@@ -234,13 +234,13 @@ var editor = new EasyMDE({
 		},
 		onUpdate: function(el) {
 			el.innerHTML = ++this.keystrokes + " Keystrokes";
-		}
+		},
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	styleSelectedText: false,
 	syncSideBySidePreviewScroll: false,
 	tabSize: 4,
 	toolbar: false,
-	toolbarTips: false
+	toolbarTips: false,
 });
 ```
 
@@ -297,7 +297,7 @@ var easyMDE = new EasyMDE({
 			name: "bold",
 			action: EasyMDE.toggleBold,
 			className: "fa fa-bold",
-			title: "Bold"
+			title: "Bold",
 		},
 		{
 			name: "custom",
@@ -305,7 +305,7 @@ var easyMDE = new EasyMDE({
 				// Add your own code
 			},
 			className: "fa fa-star",
-			title: "Custom Button"
+			title: "Custom Button",
 		},
 		"|" // Separator
 		// [, ...]
@@ -342,7 +342,7 @@ var editor = new EasyMDE({
 	shortcuts: {
 		"toggleOrderedList": "Ctrl-Alt-K", // alter the shortcut for toggleOrderedList
 		"toggleCodeBlock": null, // unbind Ctrl-Alt-C
-		"drawTable": "Cmd-Alt-T" // bind Cmd-Alt-T to drawTable action, which doesn't come with a default shortcut
+		"drawTable": "Cmd-Alt-T", // bind Cmd-Alt-T to drawTable action, which doesn't come with a default shortcut
 	}
 });
 ```

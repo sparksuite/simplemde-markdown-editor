@@ -2,7 +2,7 @@
 
 Hey, welcome to the party! 🎉
 
-Thank you so much to contribute to EasyMDE. 😘
+Thank you so much for contributing to EasyMDE. 😘
 
 
 ## Asking questions, suggesting wonderful ideas or reporting bugs
@@ -12,7 +12,7 @@ You can [submit an issue️](https://github.com/Ionaru/easy-markdown-editor/issu
 
 ## Coding
 
-### 📦 Prerequies
+### 📦 Prerequisites
 
 You need node.js and npm.
 
@@ -39,13 +39,7 @@ git clone https://github.com/Ionaru/easy-markdown-editor.git
 Then install the EasyMDE for development environment with npm:
 
 ```bash
-npm install --save-dev
-```
-
-And check that everything is ok by running Gulp:
-
-```bash
-gulp
+npm install
 ```
 
 Yay! You are ready! 🍾
