@@ -1,5 +1,9 @@
 # EasyMDE - Markdown Editor
 
+[![npm version](https://img.shields.io/npm/v/easymde.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde)
+[![npm version](https://img.shields.io/npm/v/easymde/next.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde/v/next)
+[![Build Status](https://img.shields.io/travis/Ionaru/easy-markdown-editor/development.svg?style=for-the-badge)](https://travis-ci.org/Ionaru/easy-markdown-editor)
+
 > This repository is a fork of
 [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
 Go to the [dedicated section](#simplemde-fork) for more information.
@@ -16,10 +20,6 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
 [**Demo**](https://easymde.tk/)
 
 [![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
-
-[![npm version](https://img.shields.io/npm/v/easymde.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde)
-[![npm version](https://img.shields.io/npm/v/easymde/next.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde/v/next)
-[![Build Status](https://img.shields.io/travis/Ionaru/easy-markdown-editor/development.svg?style=for-the-badge)](https://travis-ci.org/Ionaru/easy-markdown-editor)
 
 ## Install EasyMDE
 Via [npm](https://www.npmjs.com/package/easymde).
