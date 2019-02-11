@@ -8,16 +8,15 @@
 [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
 Go to the [dedicated section](#simplemde-fork) for more information.
 
-This repository is a fork of [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
-
-A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown.
+A drop-in JavaScript text area replacement for writing beautiful and understandable Markdown.
 EasyMDE allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts.
+
 In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc.
 
-EasyMDE also features both built-in autosaving and spell checking.
+EasyMDE also features both built-in auto saving and spell checking.
 The editor is entirely customizable, from theming to toolbar buttons and javascript hooks.
 
-[**Demo**](https://easymde.tk/)
+[**Try the demo**](https://easymde.tk/)
 
 [![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
 
@@ -36,7 +35,7 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
   - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Advanced use](#advanced-use)
   - [Event handling](#event-handling)
-  - [Removing EasyMDE from textarea](#removing-easymde-from-textarea)
+  - [Removing EasyMDE from text area](#removing-easymde-from-text-area)
   - [Useful methods](#useful-methods)
 - [How it works](#how-it-works)
 - [SimpleMDE fork](#simplemde-fork)
@@ -45,12 +44,14 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
 
 ## Install EasyMDE
 
-Via [npm](https://www.npmjs.com/package/easymde).
+Via [npm](https://www.npmjs.com/package/easymde):
+
 ```
 npm install easymde --save
 ```
 
-Via the UNPKG CDN.
+Via the *UNPKG* CDN:
+
 ```html
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
@@ -61,7 +62,8 @@ Via the UNPKG CDN.
 
 ### Loading the editor
 
-After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the webpage.
+After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the web page:
+
 ```html
 <textarea></textarea>
 <script>
@@ -69,7 +71,8 @@ var easyMDE = new EasyMDE();
 </script>
 ```
 
-Alternatively you can select a specific TextArea, via Javascript.
+Alternatively you can select a specific TextArea, via Javascript:
+
 ```html
 <textarea id="my-text-area"></textarea>
 <script>
@@ -77,7 +80,8 @@ var easyMDE = new EasyMDE({element: document.getElementById('my-text-area')});
 </script>
 ```
 
-Or via jQuery.
+Or via jQuery:
+
 ```html
 <textarea id="my-text-area"></textarea>
 <script>
@@ -88,14 +92,16 @@ var easyMDE = new EasyMDE({element: $('#my-text-area')[0]});
 
 ### Editor functions
 
-Use EasyMDE.value() to get the content of the editor.
+Use EasyMDE.value() to get the content of the editor:
+
 ```html
 <script>
 easyMDE.value();
 </script>
 ```
 
-Use EasyMDE.value(val) to set the content of the editor.
+Use EasyMDE.value(val) to set the content of the editor:
+
 ```html
 <script>
 easyMDE.value('New input for **EasyMDE**');
@@ -108,17 +114,17 @@ easyMDE.value('New input for **EasyMDE**');
 ### Options list
 
 - **autoDownloadFontAwesome**: If set to `true`, force downloads Font Awesome (used for icons). If set to `false`, prevents downloading. Defaults to `undefined`, which will intelligently check whether Font Awesome has already been included, then download accordingly.
-- **autofocus**: If set to `true`, autofocuses the editor. Defaults to `false`.
+- **autofocus**: If set to `true`, focuses the editor automatically. Defaults to `false`.
 - **autosave**: *Saves the text that's being written and will load it back in the future. It will forget the text when the form it's contained in is submitted.*
-  - **enabled**: If set to `true`, autosave the text. Defaults to `false`.
+  - **enabled**: If set to `true`, saves the text automatically. Defaults to `false`.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
   - **uniqueId**: You must set a unique string identifier so that EasyMDE can autosave. Something that separates this from other instances of EasyMDE elsewhere on your website.
 - **blockStyles**: Customize how certain buttons that style blocks of text behave.
   - **bold**: Can be set to `**` or `__`. Defaults to `**`.
   - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic**: Can be set to `*` or `_`. Defaults to `*`.
-- **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
-- **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original textarea. Defaults to `false`.
+- **element**: The DOM element for the text area to use. Defaults to the first text area on the page.
+- **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original text area. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
 - **indentWithTabs**: If set to `false`, indent using spaces instead of tabs. Defaults to `true`.
 - **initialValue**: If set, will customize the initial value of the editor.
@@ -128,8 +134,8 @@ easyMDE.value('New input for **EasyMDE**');
   - link
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
-- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Dafaults to `"300px"`.
-- **onToggleFullScreen**: A function that gets called when the editor's fullscreen mode is toggled. The function will be passed a boolean as parameter, `true` when the editor is currently going into fullscreen mode, or `false`.
+- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Defaults to `"300px"`.
+- **onToggleFullScreen**: A function that gets called when the editor's full screen mode is toggled. The function will be passed a boolean as parameter, `true` when the editor is currently going into full screen mode, or `false`.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
   - **strikethrough**: If set to `false`, will not process GFM strikethrough syntax. Defaults to `true`.
@@ -168,7 +174,7 @@ var editor = new EasyMDE({
 	autosave: {
 		enabled: true,
 		uniqueId: "MyUniqueID",
-		delay: 1000,
+		delay: 1000
 	},
 	blockStyles: {
 		bold: "__",
@@ -183,14 +189,14 @@ var editor = new EasyMDE({
 		horizontalRule: ["", "\n\n-----\n\n"],
 		image: ["![](http://", ")"],
 		link: ["[", "](http://)"],
-		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
+		table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"]
 	},
 	lineWrapping: false,
 	minHeight: "500px",
 	parsingConfig: {
 		allowAtxHeaderWithoutSpace: true,
 		strikethrough: false,
-		underscoresBreakWords: true,
+		underscoresBreakWords: true
 	},
 	placeholder: "Type here...",
 	previewRender: function(plainText) {
@@ -206,11 +212,11 @@ var editor = new EasyMDE({
 	promptURLs: true,
 	promptTexts: {
 		image: "Custom prompt for URL:",
-		link: "Custom prompt for URL:",
+		link: "Custom prompt for URL:"
 	},
 	renderingConfig: {
 		singleLineBreaks: false,
-		codeSyntaxHighlighting: true,
+		codeSyntaxHighlighting: true
 	},
 	shortcuts: {
 		drawTable: "Cmd-Alt-T"
@@ -233,14 +239,14 @@ var editor = new EasyMDE({
 	syncSideBySidePreviewScroll: false,
 	tabSize: 4,
 	toolbar: false,
-	toolbarTips: false,
+	toolbarTips: false
 });
 ```
 
 
 ### Toolbar icons
 
-Below are the built-in toolbar icons (only some of which are enabled by default), which can be reorganized however you like. "Name" is the name of the icon, referenced in the JS. "Action" is either a function or a URL to open. "Class" is the class given to the icon. "Tooltip" is the small tooltip that appears via the `title=""` attribute. Note that shortcut hints are added automatically and reflect the specified action if it has a keybind assigned to it (i.e. with the value of `action` set to `bold` and that of `tooltip` set to `Bold`, the final text the user will see would be "Bold (Ctrl-B)").
+Below are the built-in toolbar icons (only some of which are enabled by default), which can be reorganized however you like. "Name" is the name of the icon, referenced in the JS. "Action" is either a function or a URL to open. "Class" is the class given to the icon. "Tooltip" is the small tooltip that appears via the `title=""` attribute. Note that shortcut hints are added automatically and reflect the specified action if it has a key bind assigned to it (i.e. with the value of `action` set to `bold` and that of `tooltip` set to `Bold`, the final text the user will see would be "Bold (Ctrl-B)").
 
 Additionally, you can add a separator between any icons by adding `"|"` to the toolbar array.
 
@@ -278,7 +284,7 @@ Only the order of existing buttons:
 
 ```JavaScript
 var easyMDE = new EasyMDE({
-	toolbar: ["bold", "italic", "heading", "|", "quote"],
+	toolbar: ["bold", "italic", "heading", "|", "quote"]
 });
 ```
 
@@ -290,7 +296,7 @@ var easyMDE = new EasyMDE({
 			name: "bold",
 			action: EasyMDE.toggleBold,
 			className: "fa fa-bold",
-			title: "Bold",
+			title: "Bold"
 		},
 		{
 			name: "custom",
@@ -298,11 +304,11 @@ var easyMDE = new EasyMDE({
 				// Add your own code
 			},
 			className: "fa fa-star",
-			title: "Custom Button",
+			title: "Custom Button"
 		},
-		"|", // Separator
-		...
-	],
+		"|" // Separator
+		// [, ...]
+	]
 });
 ```
 
@@ -359,13 +365,13 @@ easyMDE.codemirror.on("change", function(){
 ```
 
 
-### Removing EasyMDE from textarea
+### Removing EasyMDE from text area
 
-You can revert to the initial textarea by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The textarea will retain any text from the destroyed EasyMDE instance.
+You can revert to the initial text area by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The text area will retain any text from the destroyed EasyMDE instance.
 
 ```JavaScript
 var easyMDE = new EasyMDE();
-...
+// ...
 easyMDE.toTextArea();
 easyMDE = null;
 ```
