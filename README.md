@@ -22,6 +22,27 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
 [![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
 
 
+## Quick access
+
+- [Install EasyMDE](#install-easymde)
+- [How to use](#how-to-use)
+  - [Loading the editor](#loading-the-editor)
+  - [Editor functions](#editor-functions)
+- [Configuration](#configuration)
+  - [Options list](#options-list)
+  - [Options example](#options-example)
+  - [Toolbar icons](#toolbar-icons)
+  - [Toolbar customization](#toolbar-customization)
+  - [Keyboard shortcuts](#keyboard-shortcuts)
+- [Advanced use](#advanced-use)
+  - [Event handling](#event-handling)
+  - [Removing EasyMDE from textarea](#removing-easymde-from-textarea)
+  - [Useful methods](#useful-methods)
+- [How it works](#how-it-works)
+- [SimpleMDE fork](#simplemde-fork)
+- [License](#license)
+
+
 ## Install EasyMDE
 
 Via [npm](https://www.npmjs.com/package/easymde).
