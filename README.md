@@ -21,7 +21,9 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
 
 [![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
 
+
 ## Install EasyMDE
+
 Via [npm](https://www.npmjs.com/package/easymde).
 ```
 npm install easymde --save
@@ -33,9 +35,10 @@ Via the UNPKG CDN.
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
 ```
 
+
 ## How to use
 
-#### Loading the editor
+### Loading the editor
 
 After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the webpage.
 ```html
@@ -61,7 +64,8 @@ var easyMDE = new EasyMDE({element: $('#my-text-area')[0]});
 </script>
 ```
 
-#### Editor functions
+
+### Editor functions
 
 Use EasyMDE.value() to get the content of the editor.
 ```html
@@ -77,7 +81,10 @@ easyMDE.value('New input for **EasyMDE**');
 </script>
 ```
 
+
 ## Configuration
+
+### Options list
 
 - **autoDownloadFontAwesome**: If set to `true`, force downloads Font Awesome (used for icons). If set to `false`, prevents downloading. Defaults to `undefined`, which will intelligently check whether Font Awesome has already been included, then download accordingly.
 - **autofocus**: If set to `true`, autofocuses the editor. Defaults to `false`.
@@ -129,8 +136,12 @@ easyMDE.value('New input for **EasyMDE**');
 - **toolbar**: If set to `false`, hide the toolbar. Defaults to the [array of icons](#toolbar-icons).
 - **toolbarTips**: If set to `false`, disable toolbar button tips. Defaults to `true`.
 
+
+### Options example
+
+Most options demonstrate the non-default behavior:
+
 ```JavaScript
-// Most options demonstrate the non-default behavior
 var editor = new EasyMDE({
 	autofocus: true,
 	autosave: {
@@ -205,7 +216,8 @@ var editor = new EasyMDE({
 });
 ```
 
-#### Toolbar icons
+
+### Toolbar icons
 
 Below are the built-in toolbar icons (only some of which are enabled by default), which can be reorganized however you like. "Name" is the name of the icon, referenced in the JS. "Action" is either a function or a URL to open. "Class" is the class given to the icon. "Tooltip" is the small tooltip that appears via the `title=""` attribute. Note that shortcut hints are added automatically and reflect the specified action if it has a keybind assigned to it (i.e. with the value of `action` set to `bold` and that of `tooltip` set to `Bold`, the final text the user will see would be "Bold (Ctrl-B)").
 
@@ -236,15 +248,22 @@ side-by-side | toggleSideBySide | Toggle Side by Side<br>fa fa-columns no-disabl
 fullscreen | toggleFullScreen | Toggle Fullscreen<br>fa fa-arrows-alt no-disable no-mobile
 guide | [This link](https://simplemde.com/markdown-guide) | Markdown Guide<br>fa fa-question-circle
 
-Customize the toolbar using the `toolbar` option like:
+
+### Toolbar customization
+
+Customize the toolbar using the `toolbar` option.
+
+Only the order of existing buttons:
 
 ```JavaScript
-// Customize only the order of existing buttons
 var easyMDE = new EasyMDE({
 	toolbar: ["bold", "italic", "heading", "|", "quote"],
 });
+```
 
-// Customize all information and/or add your own icons
+All information and/or add your own icons
+
+```Javascript
 var easyMDE = new EasyMDE({
 	toolbar: [{
 			name: "bold",
@@ -266,7 +285,8 @@ var easyMDE = new EasyMDE({
 });
 ```
 
-#### Keyboard shortcuts
+
+### Keyboard shortcuts
 
 EasyMDE comes with an array of predefined keyboard shortcuts, but they can be altered with a configuration option. The list of default ones is as follows:
 
@@ -303,7 +323,11 @@ Shortcuts are automatically converted between platforms. If you define a shortcu
 
 The list of actions that can be bound is the same as the list of built-in actions available for [toolbar buttons](#toolbar-icons).
 
-## Event handling
+
+## Advanced use
+
+### Event handling
+
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events
 
 ```JavaScript
@@ -313,7 +337,9 @@ easyMDE.codemirror.on("change", function(){
 });
 ```
 
-## Removing EasyMDE from textarea
+
+### Removing EasyMDE from textarea
+
 You can revert to the initial textarea by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The textarea will retain any text from the destroyed EasyMDE instance.
 
 ```JavaScript
@@ -323,7 +349,9 @@ easyMDE.toTextArea();
 easyMDE = null;
 ```
 
-## Useful methods
+
+### Useful methods
+
 The following self-explanatory methods may be of use while developing with EasyMDE.
 
 ```js
@@ -334,12 +362,15 @@ easyMDE.isFullscreenActive(); // returns boolean
 easyMDE.clearAutosavedValue(); // no returned value
 ```
 
+
 ## How it works
+
 EasyMDE is a continuation of SimpleMDE.
 
 SimpleMDE began as an improvement of [lepture's Editor project](https://github.com/lepture/editor), but has now taken on an identity of its own. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and depends on [Font Awesome](http://fontawesome.io).
 
 CodeMirror is the backbone of the project and parses much of the Markdown syntax as it's being written. This allows us to add styles to the Markdown that's being written. Additionally, a toolbar and status bar have been added to the top and bottom, respectively. Previews are rendered by [Marked](https://github.com/chjj/marked) using GFM.
+
 
 ## SimpleMDE fork
 
@@ -356,6 +387,7 @@ Changes include:
 * Typescript support
 
 My intention is to continue development on this project, improving it and keeping it alive.
+
 
 ## License
 
