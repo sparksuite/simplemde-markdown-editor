@@ -39,7 +39,7 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
   - [Useful methods](#useful-methods)
 - [How it works](#how-it-works)
 - [SimpleMDE fork](#simplemde-fork)
-- [Hacking EasyMDE](hacking-easymde)
+- [Hacking EasyMDE](#hacking-easymde)
 - [Contributing](#contributing)
 - [License](#license)
 
