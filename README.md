@@ -417,6 +417,16 @@ Changes include:
 My intention is to continue development on this project, improving it and keeping it alive.
 
 
+## Hacking EasyMDE
+
+You may want to edit this library to adapt its behavior to your needs. This can be done in some quick steps:
+
+1. Follow the [prerequisites](./CONTRIBUTING.md#prerequisites) and [installation](./CONTRIBUTING.md#installation) instructions in the contribution guide;
+2. Do your changes;
+3. Run `gulp` command, which will generate files: `dist/easymde.min.css` and `dist/easymde.min.js`;
+4. Copy-paste those files to your code base, and you are done.
+
+
 ## Contributing
 
 Want to contribute to EasyMDE? Thank you! We have a [contribution guide](./CONTRIBUTING.md) just for you!

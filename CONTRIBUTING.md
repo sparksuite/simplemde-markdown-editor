@@ -34,15 +34,17 @@ Here we go! 🤠 First, clone this repository:
 
 ```bash
 git clone https://github.com/Ionaru/easy-markdown-editor.git
+cd easy-markdown-editor
 ```
 
-Then install the EasyMDE for development environment with npm:
+Then install the EasyMDE with npm:
 
 ```bash
 npm install
 ```
 
 Yay! You are ready! 🍾
+
 
 ### ⤴️ Creating a pull request
 
@@ -56,6 +58,6 @@ Yay! You are ready! 🍾
 6. push it to a dedicated branch `git push origin myMergeRequest`;
 7. got to the [main project page](https://github.com/Ionaru/easy-markdown-editor) and click on the button *Compare and pull request*, then fill the description.
 
-If you want to make other pull requests, go back to the development branch (`git checkout development`), update it (`git pull --rebase source development`), then follow the instructions above from step 3.
+If you want to make other pull requests, go back to the master branch (`git checkout master`), update it (`git pull --rebase source master`), then follow the instructions above from step 3.
 
 Thank you! 💜
