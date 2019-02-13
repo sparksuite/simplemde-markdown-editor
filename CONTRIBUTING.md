@@ -19,7 +19,7 @@ You need node.js and npm.
 To install them on Debian-based systems:
 
 ```bash
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 echo -e "nodejs version:\t$(nodejs -v) \nnpm version:\t$(npm -v)"
 # check that you have node.js and npm.
