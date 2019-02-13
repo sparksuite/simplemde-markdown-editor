@@ -50,7 +50,7 @@ Yay! You are ready! 🍾
 
 1. First, [create a fork of this project](https://github.com/Ionaru/easy-markdown-editor/fork), and copy the https URL (*clone or download* button) of your project (something like https://github.com/YOUR_USERNAME/easy-markdown-editor.git );
 2. a) If you already cloned and worked on the project: `git remote add source https://github.com/Ionaru/easy-markdown-editor.git`;
-   b) otherwise, clone your fork: `git clone https://github.com/YOUR_USERNAME/easy-markdown-editor.git`;
+b) otherwise, clone your fork: `git clone https://github.com/YOUR_USERNAME/easy-markdown-editor.git`;
 3. create a new dedicated branch `git checkout -b myMergeRequest`;
 4. write some nice code and commit your work;
 5. check files against the ESLint syntax and build minified versions: `gulp`;
