@@ -1,51 +1,71 @@
 # EasyMDE - Markdown Editor
-This repository is a fork of [SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
-
-A drop-in JavaScript textarea replacement for writing beautiful and understandable Markdown.
-EasyMDE allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts.
-In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc.
-EasyMDE also features both built-in autosaving and spell checking.
-The editor is entirely customizable, from theming to toolbar buttons and javascript hooks.
-
-[**Demo**](https://easymde.tk/)
-
-[![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
-
-I originally made this fork to implement FontAwesome 5 compatibility into SimpleMDE. When that was done I submitted a [pull request](https://github.com/sparksuite/simplemde-markdown-editor/pull/666), which has not been accepted yet. This, and the project being inactive since May 2017, triggered me to make more changes and try to put new life into the project.
-
-Changes include:
-* FontAwesome 5 compatibility
-* Guide button works when editor is in preview mode
-* Links are now `https://` by default
-* Small styling changes
-* Support for Node 8 and beyond
-* Lots of refactored code
-* Links in preview will open in a new tab by default
-* Typescript support
-
-My intention is to continue development on this project, improving it and keeping it alive.
 
 [![npm version](https://img.shields.io/npm/v/easymde.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde)
 [![npm version](https://img.shields.io/npm/v/easymde/next.svg?style=for-the-badge)](https://www.npmjs.com/package/easymde/v/next)
 [![Build Status](https://img.shields.io/travis/Ionaru/easy-markdown-editor/development.svg?style=for-the-badge)](https://travis-ci.org/Ionaru/easy-markdown-editor)
 
+> This repository is a fork of
+[SimpleMDE, made by Sparksuite](https://github.com/sparksuite/simplemde-markdown-editor/).
+Go to the [dedicated section](#simplemde-fork) for more information.
+
+A drop-in JavaScript text area replacement for writing beautiful and understandable Markdown.
+EasyMDE allows users who may be less experienced with Markdown to use familiar toolbar buttons and shortcuts.
+
+In addition, the syntax is rendered while editing to clearly show the expected result. Headings are larger, emphasized words are italicized, links are underlined, etc.
+
+EasyMDE also features both built-in auto saving and spell checking.
+The editor is entirely customizable, from theming to toolbar buttons and javascript hooks.
+
+[**Try the demo**](https://easymde.tk/)
+
+[![Preview](https://user-images.githubusercontent.com/3472373/51319377-26fe6e00-1a5d-11e9-8cc6-3137a566796d.png)](https://easymde.tk/)
+
+
+## Quick access
+
+- [Install EasyMDE](#install-easymde)
+- [How to use](#how-to-use)
+  - [Loading the editor](#loading-the-editor)
+  - [Editor functions](#editor-functions)
+- [Configuration](#configuration)
+  - [Options list](#options-list)
+  - [Options example](#options-example)
+  - [Toolbar icons](#toolbar-icons)
+  - [Toolbar customization](#toolbar-customization)
+  - [Keyboard shortcuts](#keyboard-shortcuts)
+- [Advanced use](#advanced-use)
+  - [Event handling](#event-handling)
+  - [Removing EasyMDE from text area](#removing-easymde-from-text-area)
+  - [Useful methods](#useful-methods)
+- [How it works](#how-it-works)
+- [SimpleMDE fork](#simplemde-fork)
+- [Hacking EasyMDE](#hacking-easymde)
+- [Contributing](#contributing)
+- [License](#license)
+
+
 ## Install EasyMDE
-Via [npm](https://www.npmjs.com/package/easymde).
+
+Via [npm](https://www.npmjs.com/package/easymde):
+
 ```
 npm install easymde --save
 ```
 
-Via the UNPKG CDN.
+Via the *UNPKG* CDN:
+
 ```html
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
 ```
 
+
 ## How to use
 
-#### Loading the editor
+### Loading the editor
 
-After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the webpage.
+After installing and/or importing the module, you can load EasyMDE onto the first TextArea on the web page:
+
 ```html
 <textarea></textarea>
 <script>
@@ -53,7 +73,8 @@ var easyMDE = new EasyMDE();
 </script>
 ```
 
-Alternatively you can select a specific TextArea, via Javascript.
+Alternatively you can select a specific TextArea, via Javascript:
+
 ```html
 <textarea id="my-text-area"></textarea>
 <script>
@@ -61,7 +82,8 @@ var easyMDE = new EasyMDE({element: document.getElementById('my-text-area')});
 </script>
 ```
 
-Or via jQuery.
+Or via jQuery:
+
 ```html
 <textarea id="my-text-area"></textarea>
 <script>
@@ -69,36 +91,42 @@ var easyMDE = new EasyMDE({element: $('#my-text-area')[0]});
 </script>
 ```
 
-#### Editor functions
 
-Use EasyMDE.value() to get the content of the editor.
+### Editor functions
+
+Use EasyMDE.value() to get the content of the editor:
+
 ```html
 <script>
 easyMDE.value();
 </script>
 ```
 
-Use EasyMDE.value(val) to set the content of the editor.
+Use EasyMDE.value(val) to set the content of the editor:
+
 ```html
 <script>
 easyMDE.value('New input for **EasyMDE**');
 </script>
 ```
 
+
 ## Configuration
 
+### Options list
+
 - **autoDownloadFontAwesome**: If set to `true`, force downloads Font Awesome (used for icons). If set to `false`, prevents downloading. Defaults to `undefined`, which will intelligently check whether Font Awesome has already been included, then download accordingly.
-- **autofocus**: If set to `true`, autofocuses the editor. Defaults to `false`.
+- **autofocus**: If set to `true`, focuses the editor automatically. Defaults to `false`.
 - **autosave**: *Saves the text that's being written and will load it back in the future. It will forget the text when the form it's contained in is submitted.*
-  - **enabled**: If set to `true`, autosave the text. Defaults to `false`.
+  - **enabled**: If set to `true`, saves the text automatically. Defaults to `false`.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
   - **uniqueId**: You must set a unique string identifier so that EasyMDE can autosave. Something that separates this from other instances of EasyMDE elsewhere on your website.
 - **blockStyles**: Customize how certain buttons that style blocks of text behave.
   - **bold**: Can be set to `**` or `__`. Defaults to `**`.
   - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
   - **italic**: Can be set to `*` or `_`. Defaults to `*`.
-- **element**: The DOM element for the textarea to use. Defaults to the first textarea on the page.
-- **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original textarea. Defaults to `false`.
+- **element**: The DOM element for the TextArea to use. Defaults to the first TextArea on the page.
+- **forceSync**: If set to `true`, force text changes made in EasyMDE to be immediately stored in original text area. Defaults to `false`.
 - **hideIcons**: An array of icon names to hide. Can be used to hide specific icons shown by default without completely customizing the toolbar.
 - **indentWithTabs**: If set to `false`, indent using spaces instead of tabs. Defaults to `true`.
 - **initialValue**: If set, will customize the initial value of the editor.
@@ -108,8 +136,8 @@ easyMDE.value('New input for **EasyMDE**');
   - link
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
-- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Dafaults to `"300px"`.
-- **onToggleFullScreen**: A function that gets called when the editor's fullscreen mode is toggled. The function will be passed a boolean as parameter, `true` when the editor is currently going into fullscreen mode, or `false`.
+- **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Defaults to `"300px"`.
+- **onToggleFullScreen**: A function that gets called when the editor's full screen mode is toggled. The function will be passed a boolean as parameter, `true` when the editor is currently going into full screen mode, or `false`.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
   - **strikethrough**: If set to `false`, will not process GFM strikethrough syntax. Defaults to `true`.
@@ -137,8 +165,12 @@ easyMDE.value('New input for **EasyMDE**');
 - **toolbar**: If set to `false`, hide the toolbar. Defaults to the [array of icons](#toolbar-icons).
 - **toolbarTips**: If set to `false`, disable toolbar button tips. Defaults to `true`.
 
+
+### Options example
+
+Most options demonstrate the non-default behavior:
+
 ```JavaScript
-// Most options demonstrate the non-default behavior
 var editor = new EasyMDE({
 	autofocus: true,
 	autosave: {
@@ -148,7 +180,7 @@ var editor = new EasyMDE({
 	},
 	blockStyles: {
 		bold: "__",
-		italic: "_"
+		italic: "_",
 	},
 	element: document.getElementById("MyID"),
 	forceSync: true,
@@ -203,7 +235,7 @@ var editor = new EasyMDE({
 		},
 		onUpdate: function(el) {
 			el.innerHTML = ++this.keystrokes + " Keystrokes";
-		}
+		},
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	styleSelectedText: false,
 	syncSideBySidePreviewScroll: false,
@@ -213,9 +245,10 @@ var editor = new EasyMDE({
 });
 ```
 
-#### Toolbar icons
 
-Below are the built-in toolbar icons (only some of which are enabled by default), which can be reorganized however you like. "Name" is the name of the icon, referenced in the JS. "Action" is either a function or a URL to open. "Class" is the class given to the icon. "Tooltip" is the small tooltip that appears via the `title=""` attribute. Note that shortcut hints are added automatically and reflect the specified action if it has a keybind assigned to it (i.e. with the value of `action` set to `bold` and that of `tooltip` set to `Bold`, the final text the user will see would be "Bold (Ctrl-B)").
+### Toolbar icons
+
+Below are the built-in toolbar icons (only some of which are enabled by default), which can be reorganized however you like. "Name" is the name of the icon, referenced in the JS. "Action" is either a function or a URL to open. "Class" is the class given to the icon. "Tooltip" is the small tooltip that appears via the `title=""` attribute. Note that shortcut hints are added automatically and reflect the specified action if it has a key bind assigned to it (i.e. with the value of `action` set to `bold` and that of `tooltip` set to `Bold`, the final text the user will see would be "Bold (Ctrl-B)").
 
 Additionally, you can add a separator between any icons by adding `"|"` to the toolbar array.
 
@@ -244,15 +277,22 @@ side-by-side | toggleSideBySide | Toggle Side by Side<br>fa fa-columns no-disabl
 fullscreen | toggleFullScreen | Toggle Fullscreen<br>fa fa-arrows-alt no-disable no-mobile
 guide | [This link](https://simplemde.com/markdown-guide) | Markdown Guide<br>fa fa-question-circle
 
-Customize the toolbar using the `toolbar` option like:
+
+### Toolbar customization
+
+Customize the toolbar using the `toolbar` option.
+
+Only the order of existing buttons:
 
 ```JavaScript
-// Customize only the order of existing buttons
 var easyMDE = new EasyMDE({
-	toolbar: ["bold", "italic", "heading", "|", "quote"],
+	toolbar: ["bold", "italic", "heading", "|", "quote"]
 });
+```
 
-// Customize all information and/or add your own icons
+All information and/or add your own icons
+
+```Javascript
 var easyMDE = new EasyMDE({
 	toolbar: [{
 			name: "bold",
@@ -268,13 +308,14 @@ var easyMDE = new EasyMDE({
 			className: "fa fa-star",
 			title: "Custom Button",
 		},
-		"|", // Separator
-		...
-	],
+		"|" // Separator
+		// [, ...]
+	]
 });
 ```
 
-#### Keyboard shortcuts
+
+### Keyboard shortcuts
 
 EasyMDE comes with an array of predefined keyboard shortcuts, but they can be altered with a configuration option. The list of default ones is as follows:
 
@@ -302,7 +343,7 @@ var editor = new EasyMDE({
 	shortcuts: {
 		"toggleOrderedList": "Ctrl-Alt-K", // alter the shortcut for toggleOrderedList
 		"toggleCodeBlock": null, // unbind Ctrl-Alt-C
-		"drawTable": "Cmd-Alt-T" // bind Cmd-Alt-T to drawTable action, which doesn't come with a default shortcut
+		"drawTable": "Cmd-Alt-T", // bind Cmd-Alt-T to drawTable action, which doesn't come with a default shortcut
 	}
 });
 ```
@@ -311,7 +352,11 @@ Shortcuts are automatically converted between platforms. If you define a shortcu
 
 The list of actions that can be bound is the same as the list of built-in actions available for [toolbar buttons](#toolbar-icons).
 
-## Event handling
+
+## Advanced use
+
+### Event handling
+
 You can catch the following list of events: https://codemirror.net/doc/manual.html#events
 
 ```JavaScript
@@ -321,17 +366,21 @@ easyMDE.codemirror.on("change", function(){
 });
 ```
 
-## Removing EasyMDE from textarea
-You can revert to the initial textarea by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The textarea will retain any text from the destroyed EasyMDE instance.
+
+### Removing EasyMDE from text area
+
+You can revert to the initial text area by calling the `toTextArea` method. Note that this clears up the autosave (if enabled) associated with it. The text area will retain any text from the destroyed EasyMDE instance.
 
 ```JavaScript
 var easyMDE = new EasyMDE();
-...
+// ...
 easyMDE.toTextArea();
 easyMDE = null;
 ```
 
-## Useful methods
+
+### Useful methods
+
 The following self-explanatory methods may be of use while developing with EasyMDE.
 
 ```js
@@ -342,9 +391,51 @@ easyMDE.isFullscreenActive(); // returns boolean
 easyMDE.clearAutosavedValue(); // no returned value
 ```
 
+
 ## How it works
+
 EasyMDE is a continuation of SimpleMDE.
 
 SimpleMDE began as an improvement of [lepture's Editor project](https://github.com/lepture/editor), but has now taken on an identity of its own. It is bundled with [CodeMirror](https://github.com/codemirror/codemirror) and depends on [Font Awesome](http://fontawesome.io).
 
 CodeMirror is the backbone of the project and parses much of the Markdown syntax as it's being written. This allows us to add styles to the Markdown that's being written. Additionally, a toolbar and status bar have been added to the top and bottom, respectively. Previews are rendered by [Marked](https://github.com/chjj/marked) using GFM.
+
+
+## SimpleMDE fork
+
+I originally made this fork to implement FontAwesome 5 compatibility into SimpleMDE. When that was done I submitted a [pull request](https://github.com/sparksuite/simplemde-markdown-editor/pull/666), which has not been accepted yet. This, and the project being inactive since May 2017, triggered me to make more changes and try to put new life into the project.
+
+Changes include:
+* FontAwesome 5 compatibility
+* Guide button works when editor is in preview mode
+* Links are now `https://` by default
+* Small styling changes
+* Support for Node 8 and beyond
+* Lots of refactored code
+* Links in preview will open in a new tab by default
+* Typescript support
+
+My intention is to continue development on this project, improving it and keeping it alive.
+
+
+## Hacking EasyMDE
+
+You may want to edit this library to adapt its behavior to your needs. This can be done in some quick steps:
+
+1. Follow the [prerequisites](./CONTRIBUTING.md#prerequisites) and [installation](./CONTRIBUTING.md#installation) instructions in the contribution guide;
+2. Do your changes;
+3. Run `gulp` command, which will generate files: `dist/easymde.min.css` and `dist/easymde.min.js`;
+4. Copy-paste those files to your code base, and you are done.
+
+
+## Contributing
+
+Want to contribute to EasyMDE? Thank you! We have a [contribution guide](./CONTRIBUTING.md) just for you!
+
+
+## License
+
+This project is released under the [MIT License](./LICENSE).
+
+- Copyright (c) 2015 Sparksuite, Inc.
+- Copyright (c) 2017 Jeroen Akkerman.
