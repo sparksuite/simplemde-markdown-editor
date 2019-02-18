@@ -5,7 +5,7 @@ node_js:
   - '8' # EOL: December 2019
   - '6' # EOL: April 2019
 script:
-  - npx gulp
+  - npm run prepare
   - npm run test:types
 before_deploy:
   - if [ "$TRAVIS_BRANCH" = master ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then npm version prerelease --no-git-tag-version --preid "$TRAVIS_BUILD_NUMBER"; fi
