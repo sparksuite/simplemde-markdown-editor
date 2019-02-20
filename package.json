@@ -17,12 +17,12 @@
         "url": "https://github.com/ionaru/easy-markdown-editor/issues"
     },
     "dependencies": {
-        "codemirror": "^5.42.2",
+        "codemirror": "^5.43.0",
         "codemirror-spell-checker": "1.1.2",
-        "marked": "^0.6.0"
+        "marked": "^0.6.1"
     },
     "devDependencies": {
-        "@types/codemirror": "0.0.71",
+        "@types/codemirror": "0.0.72",
         "browserify": "^16.2.3",
         "gulp": "^4.0.0",
         "gulp-clean-css": "^4.0.0",
@@ -31,7 +31,7 @@
         "gulp-header": "^2.0.7",
         "gulp-rename": "^1.4.0",
         "gulp-uglify": "^3.0.1",
-        "typescript": "^3.2.2",
+        "typescript": "^3.3.3",
         "vinyl-buffer": "^1.0.0",
         "vinyl-source-stream": "^2.0.0"
     },
