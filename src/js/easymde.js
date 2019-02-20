@@ -131,19 +131,36 @@ function createIcon(options, enableTooltips, shortcuts) {
         }
     }
 
-    if (options.noDisable) {
+    if (options.noDisable || options.className.indexOf('no-disable') !== -1) {
         el.classList.add('no-disable');
     }
 
-    if (options.noMobile) {
+    if (options.noMobile || options.className.indexOf('no-mobile') !== -1) {
         el.classList.add('no-mobile');
+    }
+
+    // Provide backwards compatibility with simple-markdown-editor by adding custom classes to the button.
+    var classNameParts = options.className.split(' ');
+    var iconClasses = [];
+    for (var classNameIndex = 0; classNameIndex < classNameParts.length; classNameIndex++) {
+        var classNamePart = classNameParts[classNameIndex];
+        // Split icon classes from the button.
+        // Regex will detect "fa" and "fa-something", but not "fanfare".
+        if (classNamePart.match(/^fa((-.*)|$)/)) {
+            iconClasses.push(classNamePart);
+        } else {
+            el.classList.add(classNamePart);
+        }
     }
 
     el.tabIndex = -1;
 
     // Create icon element and append as a child to the button
     var icon = document.createElement('i');
-    icon.className = options.className;
+    for (var iconClassIndex = 0; iconClassIndex < iconClasses.length; iconClassIndex++) {
+        var iconClass = iconClasses[iconClassIndex];
+        icon.classList.add(iconClass)
+    }
     el.appendChild(icon);
 
     return el;
