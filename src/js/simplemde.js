@@ -108,6 +108,7 @@ function createIcon(options, enableTooltips, shortcuts) {
 		}
 	}
 
+	el.innerHMTL = options.name;
 	el.tabIndex = -1;
 	el.className = options.className;
 	return el;
