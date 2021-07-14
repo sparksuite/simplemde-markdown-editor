@@ -65,6 +65,30 @@ simplemde.value();
 simplemde.value("This text will appear in the editor");
 ```
 
+## Security
+
+By default simpleMDE does not sanitize user input before rendering markdown to html. This can result in cross site scripting (XSS) vulnerabilities.
+Here is an example of using DOMPurify and Markdown to sanitize the HTML before rendering.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js" integrity="sha512-AD+GG1nJKO4Je/Q8QsY1gM9/7o1QjpGe9W2Lrg1oGtEID/RX8bMKKZGgw/KOODkPXL6j74c6eJWAhE/3F2kKjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.0/purify.min.js" integrity="sha512-FJzrdtFBVzaaehq9mzbhljqwJ7+jE0GyTa8UBxZdMsMUjflR25f5lJSGD0lmQPHnhQfnctG0B1TNQsObwyJUzA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<textarea id="mde"></textarea>
+
+<script>
+var simplemde = new SimpleMDE({
+    element: document.getElementById('mde'), 
+    previewRender: function(plain) {
+        return DOMPurify.sanitize(marked(plain) , {USE_PROFILES: {html: true}} );
+    },
+});
+</script>
+```
+
 ## Configuration
 
 - **autoDownloadFontAwesome**: If set to `true`, force downloads Font Awesome (used for icons). If set to `false`, prevents downloading. Defaults to `undefined`, which will intelligently check whether Font Awesome has already been included, then download accordingly.
