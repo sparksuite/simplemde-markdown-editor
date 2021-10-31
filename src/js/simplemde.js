@@ -634,14 +634,49 @@ function drawImage(editor) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
-	if(options.promptURLs) {
-		url = prompt(options.promptTexts.image);
-		if(!url) {
-			return false;
-		}
-	}
-	_replaceSelection(cm, stat.image, options.insertTexts.image, url);
+        var altText = cm.getSelection();
+        if(altText == ""){
+          altText="image";
+        }
+
+    var imgDialog = $('<form class="image-dialog"><table border="0"><tr><td colspan="3"><label>Enter alternative text for image</label><input type="text" class="altText" value="' + altText + '"></td><tr><td><label>Enter image address</label><br/><input type="text" class="url" value="paste URL here"></td><td style="width:80px; text-align: center;"><h1> or </h1></td><td><label>Upload your image:</label><br/><input type="file" accept="image/*" class="file-input"></td></tr></form>').dialog({
+          open: function(event, ui) {
+              $(".ui-dialog-titlebar-close").hide();
+          },
+          dialogClass: "image-dialog",
+          title: "Insert picture",
+          minWidth: 630,
+          modal: true,
+          buttons: {
+            'Insert': function () {
+               var altTxt = $(this).find('.altText').val();
+               cm.replaceSelection("![" + altTxt);
+               var url = $(this).find('.url').val();
+               var file = $(this).find('.file-input').val();
+               if(file != ""){
+                   var reader = new FileReader();
+                   file = $(this).find('.file-input').prop('files')[0];
+                   reader.readAsDataURL(file);
+                   reader.onload = function() {
+                      url = reader.result;
+                      _replaceSelection(cm, stat.image, options.insertTexts.image, url);
+                      imgDialog.dialog('close');
+                  };
+                  reader.onerror = function (error) {
+                      alert('Error: ', error);
+                      _replaceSelection(cm, stat.image, options.insertTexts.image, "");
+                      imgDialog.dialog('close');
+                  };
+               }else{
+                   _replaceSelection(cm, stat.image, options.insertTexts.image, url);
+                   $(this).dialog('close');
+               }
+            },
+            'Cancel': function () {
+              $(this).dialog('close');
+            }
+          }
+        });
 }
 
 /**
@@ -1242,7 +1277,7 @@ var toolbarBuiltInButtons = {
 
 var insertTexts = {
 	link: ["[", "](#url#)"],
-	image: ["![](", "#url#)"],
+	image: ["]", "(#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
